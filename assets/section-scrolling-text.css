@@ -58,8 +58,8 @@
 }
 
 .scrolling-text__separator {
-  display: inline-block;
-  margin-left: 2.4rem;
+  display: inline-flex;
+  align-items: center;
   opacity: 0.45;
   line-height: 1;
 }
