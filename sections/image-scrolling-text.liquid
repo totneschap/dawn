@@ -1,0 +1,374 @@
+{{ 'section-image-scrolling-text.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign duration = section.settings.speed | times: -8 | plus: 88
+  assign overlay_decimal = section.settings.overlay_opacity | times: 0.01
+  assign strip_decimal = section.settings.strip_opacity | times: 0.01
+
+  case section.settings.strip_style
+    when 'dark'
+      assign strip_bg = '#000000'
+    when 'light'
+      assign strip_bg = '#ffffff'
+    when 'none'
+      assign strip_bg = '#000000'
+      assign strip_decimal = 0
+  endcase
+
+  case section.settings.image_position
+    when 'top'
+      assign img_position = 'top'
+    when 'bottom'
+      assign img_position = 'bottom'
+    else
+      assign img_position = 'center'
+  endcase
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  #ImageScrollingText-{{ section.id }} {
+    height: {{ section.settings.image_height | times: 0.65 | round: 0 }}px;
+    --ist-image-position: {{ img_position }};
+    --ist-overlay: {{ overlay_decimal }};
+    --ist-strip-bg: {{ strip_bg }};
+    --ist-strip-opacity: {{ strip_decimal }};
+    --ist-text-color: {{ section.settings.text_color }};
+    --ist-duration: {{ duration }}s;
+  }
+  @media screen and (min-width: 750px) {
+    #ImageScrollingText-{{ section.id }} {
+      height: {{ section.settings.image_height }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="image-scrolling-text-section section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient">
+  <div class="image-scrolling-text" id="ImageScrollingText-{{ section.id }}">
+
+    <!-- Background image -->
+    <div class="image-scrolling-text__bg">
+      {%- if section.settings.image != blank -%}
+        {%- assign bg_alt = section.settings.image.alt | escape -%}
+        {{ section.settings.image | image_url: width: 2400 | image_tag:
+          loading: 'lazy',
+          widths: '800, 1200, 1600, 2000, 2400',
+          alt: bg_alt,
+          fetchpriority: 'auto'
+        }}
+      {%- else -%}
+        {{ 'lifestyle-2' | placeholder_svg_tag }}
+      {%- endif -%}
+    </div>
+
+    <!-- Overlay -->
+    <div class="image-scrolling-text__overlay" aria-hidden="true"></div>
+
+    <!-- Text overlay content -->
+    {%- if section.settings.title != blank or section.settings.link_label != blank -%}
+      <div
+        class="image-scrolling-text__content image-scrolling-text__content--{{ section.settings.content_position }}"
+        style="text-align: {{ section.settings.content_alignment }};"
+      >
+        {%- if section.settings.title != blank -%}
+          <h2 class="image-scrolling-text__title inline-richtext {{ section.settings.heading_size }}">
+            {{- section.settings.title -}}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.link_label != blank -%}
+          <a
+            href="{{ section.settings.link | default: '#' }}"
+            class="image-scrolling-text__btn button"
+          >
+            {{- section.settings.link_label -}}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <!-- Scrolling text strip -->
+    {%- if section.blocks.size > 0 -%}
+      <div class="image-scrolling-text__strip-wrapper image-scrolling-text__strip-wrapper--{{ section.settings.strip_position }}">
+        <ul
+          class="image-scrolling-text__track image-scrolling-text__track--{{ section.settings.direction }} image-scrolling-text__track--{{ section.settings.font_size }} list-unstyled"
+          role="list"
+        >
+          {%- for block in section.blocks -%}
+            <li class="image-scrolling-text__item" {{ block.shopify_attributes }}>
+              <span class="image-scrolling-text__text">{{ block.settings.text }}</span>
+              {%- if section.settings.separator != blank -%}
+                <span class="image-scrolling-text__separator" aria-hidden="true">{{ section.settings.separator }}</span>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+          {%- for block in section.blocks -%}
+            <li class="image-scrolling-text__item" aria-hidden="true">
+              <span class="image-scrolling-text__text">{{ block.settings.text }}</span>
+              {%- if section.settings.separator != blank -%}
+                <span class="image-scrolling-text__separator" aria-hidden="true">{{ section.settings.separator }}</span>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image with scrolling text",
+  "class": "section",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "label": "Image height",
+      "min": 300,
+      "max": 800,
+      "step": 50,
+      "unit": "px",
+      "default": 500
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image focal point",
+      "options": [
+        { "value": "top",    "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Image overlay",
+      "info": "Darkens the image to improve text readability.",
+      "min": 0,
+      "max": 80,
+      "step": 10,
+      "unit": "%",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Text overlay"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "Text position",
+      "options": [
+        { "value": "top",    "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center",
+      "info": "Tip: set the scrolling strip to a different position to avoid overlap."
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link",
+      "info": "Works with collection, page, or product URLs."
+    },
+    {
+      "type": "header",
+      "content": "Scrolling text strip"
+    },
+    {
+      "type": "select",
+      "id": "strip_position",
+      "label": "Strip position",
+      "options": [
+        { "value": "top",    "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "strip_style",
+      "label": "Strip background",
+      "options": [
+        { "value": "dark",  "label": "Dark" },
+        { "value": "light", "label": "Light" },
+        { "value": "none",  "label": "None (transparent)" }
+      ],
+      "default": "dark"
+    },
+    {
+      "type": "range",
+      "id": "strip_opacity",
+      "label": "Strip opacity",
+      "info": "Only applies when Strip background is Dark or Light.",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "default": 60
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Text settings"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Scroll speed",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "info": "1 = slowest, 10 = fastest"
+    },
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Scroll direction",
+      "options": [
+        { "value": "left",  "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "font_size",
+      "label": "Text size",
+      "options": [
+        { "value": "small",  "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large",  "label": "Large" },
+        { "value": "xlarge", "label": "Extra large" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "text",
+      "id": "separator",
+      "label": "Separator",
+      "default": "✦",
+      "info": "Character shown between items. Leave blank to remove."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text_item",
+      "name": "Text item",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "New collection out now"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with scrolling text",
+      "blocks": [
+        { "type": "text_item" },
+        { "type": "text_item", "settings": { "text": "Shop the latest looks" } },
+        { "type": "text_item", "settings": { "text": "Free delivery over £50" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

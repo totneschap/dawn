@@ -1,0 +1,127 @@
+/* ============================================================
+   SECTION: TEXT COLUMNS WITH ICONS
+   ============================================================ */
+
+/* ---- Section header ---- */
+
+.text-icon-cols__header {
+  margin-bottom: 4rem;
+}
+
+.text-icon-cols__heading {
+  margin: 0 0 1rem;
+}
+
+.text-icon-cols__description {
+  margin: 0;
+  opacity: 0.7;
+}
+
+.text-icon-cols__header.center .text-icon-cols__description {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 64rem;
+}
+
+/* ---- Column list ---- */
+
+.text-icon-cols__list {
+  --tic-gap: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tic-gap);
+  margin: 0;
+  padding: 0;
+}
+
+/* ---- Column items ---- */
+
+.text-icon-cols__item {
+  width: calc((100% - var(--tic-gap) * var(--tic-gap-count-mobile)) / var(--tic-cols-mobile));
+  min-width: 0;
+}
+
+@media screen and (min-width: 990px) {
+  .text-icon-cols__item {
+    width: calc((100% - var(--tic-gap) * var(--tic-gap-count)) / var(--tic-cols));
+  }
+}
+
+/* ---- Icon wrapper ---- */
+
+.text-icon-cols__icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.text-icon-cols__icon-wrapper--circle {
+  background-color: rgba(var(--color-foreground), 0.07);
+  border-radius: 50%;
+  padding: 1.4rem;
+}
+
+.text-icon-cols__icon-wrapper--square {
+  background-color: rgba(var(--color-foreground), 0.07);
+  border-radius: 1.2rem;
+  padding: 1.4rem;
+}
+
+/* ---- Icon image ---- */
+
+.text-icon-cols__icon {
+  display: block;
+  width: var(--tic-icon-size, 4.8rem);
+  height: var(--tic-icon-size, 4.8rem);
+  object-fit: contain;
+}
+
+/* ---- Emoji fallback ---- */
+
+.text-icon-cols__emoji {
+  display: block;
+  font-size: var(--tic-icon-size, 4.8rem);
+  line-height: 1;
+}
+
+/* ---- Column body ---- */
+
+.text-icon-cols__item-heading {
+  margin: 0 0 1rem;
+}
+
+.text-icon-cols__item-text {
+  margin: 0;
+  opacity: 0.75;
+}
+
+.text-icon-cols__item-text > p:first-child { margin-top: 0; }
+.text-icon-cols__item-text > p:last-child  { margin-bottom: 0; }
+
+/* ---- CTA link ---- */
+
+.text-icon-cols__item-link {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 1.4rem;
+}
+
+/* ---- Divider style ---- */
+
+.text-icon-cols__item--divider {
+  padding-top: 3rem;
+  border-top: 1px solid rgba(var(--color-foreground), 0.1);
+}
+
+/* ---- Alignment ---- */
+
+.text-icon-cols__item.center {
+  text-align: center;
+}
+
+.text-icon-cols__item.center .text-icon-cols__icon-wrapper {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}

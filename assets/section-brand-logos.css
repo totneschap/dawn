@@ -1,0 +1,106 @@
+/* ============================================================
+   SECTION: BRAND LOGOS
+   ============================================================ */
+
+/* ---- Heading ---- */
+
+.brand-logos__heading {
+  text-align: center;
+  margin: 0 0 2.8rem;
+}
+
+/* ---- Viewport ---- */
+
+.brand-logos__viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+/* ---- Track ---- */
+
+.brand-logos__track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  margin: 0;
+  padding: 0;
+}
+
+.brand-logos__track--left {
+  animation: bl-scroll-left var(--bl-duration, 50s) linear infinite;
+}
+
+.brand-logos__track--right {
+  animation: bl-scroll-right var(--bl-duration, 50s) linear infinite;
+}
+
+@keyframes bl-scroll-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes bl-scroll-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+/* ---- Pause on hover ---- */
+
+.brand-logos__viewport:hover .brand-logos__track {
+  animation-play-state: paused;
+}
+
+/* ---- Items ---- */
+
+.brand-logos__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3.6rem;
+  flex-shrink: 0;
+}
+
+/* ---- Logo image ---- */
+
+.brand-logos__img {
+  display: block;
+  height: var(--bl-logo-height, 5rem);
+  width: auto;
+  max-width: none;
+  transition: filter 0.35s ease, opacity 0.35s ease;
+}
+
+/* ---- Greyscale mode ---- */
+
+.brand-logos__track--grayscale .brand-logos__img {
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+
+.brand-logos__track--grayscale .brand-logos__item:hover .brand-logos__img {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+/* ---- Link wrapper ---- */
+
+.brand-logos__link {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ---- Reduced motion fallback ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-logos__track {
+    animation: none;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    gap: 4rem;
+  }
+
+  .brand-logos__item {
+    padding: 0;
+  }
+}

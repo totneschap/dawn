@@ -1,0 +1,206 @@
+/* ============================================================
+   VIDEO BANNER SECTION
+   ============================================================ */
+
+/* ---- Container — CSS grid stacks all layers ---- */
+
+.video-banner {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+}
+
+.video-banner__media,
+.video-banner__overlay,
+.video-banner__content {
+  grid-area: 1 / 1;
+}
+
+/* ---- Height variants ---- */
+
+.video-banner--small  { min-height: 38vh; }
+.video-banner--medium { min-height: 55vh; }
+.video-banner--large  { min-height: 72vh; }
+.video-banner--full   { min-height: 100svh; min-height: 100vh; }
+
+@media screen and (max-width: 749px) {
+  .video-banner--small  { min-height: 30vh; }
+  .video-banner--medium { min-height: 46vh; }
+  .video-banner--large  { min-height: 60vh; }
+}
+
+/* ---- Media layer ---- */
+
+.video-banner__media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.video-banner__video,
+.video-banner__image,
+.video-banner__poster,
+.video-banner__placeholder {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Poster sits behind the <video> and fades out once video plays */
+.video-banner__poster {
+  z-index: 0;
+}
+
+.video-banner__video {
+  z-index: 1;
+}
+
+/* iframe (YouTube / Vimeo) — oversized so controls stay off-screen */
+.video-banner__iframe {
+  border: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Maintain 16:9 and always cover the container */
+  width: max(100%, calc(100vh * (16 / 9)));
+  height: max(100%, calc(100vw * (9 / 16)));
+  min-width: 100%;
+  min-height: 100%;
+  pointer-events: none;
+}
+
+.video-banner__placeholder {
+  object-fit: cover;
+}
+
+/* ---- Overlay ---- */
+
+.video-banner__overlay {
+  background-color: #000;
+  z-index: 2;
+}
+
+/* ---- Content layer ---- */
+
+.video-banner__content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  width: 100%;
+  min-height: inherit;
+  /* default: middle-center */
+  align-items: center;
+  justify-content: center;
+}
+
+/* 9-position variants */
+.video-banner__content--top-left      { align-items: flex-start; justify-content: flex-start; }
+.video-banner__content--top-center    { align-items: flex-start; justify-content: center;     }
+.video-banner__content--top-right     { align-items: flex-start; justify-content: flex-end;   }
+.video-banner__content--middle-left   { align-items: center;     justify-content: flex-start; }
+.video-banner__content--middle-center { align-items: center;     justify-content: center;     }
+.video-banner__content--middle-right  { align-items: center;     justify-content: flex-end;   }
+.video-banner__content--bottom-left   { align-items: flex-end;   justify-content: flex-start; }
+.video-banner__content--bottom-center { align-items: flex-end;   justify-content: center;     }
+.video-banner__content--bottom-right  { align-items: flex-end;   justify-content: flex-end;   }
+
+/* Mobile alignment overrides */
+@media screen and (max-width: 749px) {
+  .video-banner__content--mobile-left   { justify-content: flex-start; }
+  .video-banner__content--mobile-center { justify-content: center;     }
+  .video-banner__content--mobile-right  { justify-content: flex-end;   }
+}
+
+/* ---- Text wrapper ---- */
+
+.video-banner__text {
+  max-width: 72rem;
+  color: #fff;
+}
+
+.video-banner__text--left   { text-align: left;   }
+.video-banner__text--center { text-align: center; }
+.video-banner__text--right  { text-align: right;  }
+
+/* ---- Subheading ---- */
+
+.video-banner__subheading {
+  display: block;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin: 0 0 1.4rem;
+}
+
+/* ---- Heading ---- */
+
+.video-banner__heading {
+  color: #fff;
+  margin: 0 0 1.8rem;
+  line-height: 1.08;
+}
+
+/* ---- Body text ---- */
+
+.video-banner__body {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1.7rem;
+  line-height: 1.6;
+  margin: 0 0 2.8rem;
+  max-width: 54rem;
+}
+
+.video-banner__text--center .video-banner__body {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.video-banner__text--right .video-banner__body {
+  margin-left: auto;
+}
+
+/* ---- Buttons ---- */
+
+.video-banner__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+}
+
+.video-banner__text--center .video-banner__buttons { justify-content: center; }
+.video-banner__text--right  .video-banner__buttons { justify-content: flex-end; }
+
+/* Ensure buttons are legible over dark video */
+.video-banner__btn.button--secondary {
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #fff;
+  background: transparent;
+}
+
+.video-banner__btn.button--secondary:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ---- Mobile ---- */
+
+@media screen and (max-width: 749px) {
+  .video-banner__text {
+    max-width: 100%;
+  }
+
+  .video-banner__heading {
+    margin-bottom: 1.4rem;
+  }
+
+  .video-banner__body {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+}

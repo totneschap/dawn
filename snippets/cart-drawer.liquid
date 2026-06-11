@@ -31,7 +31,6 @@
         <div class="drawer__inner-empty">
           <div class="cart-drawer__warnings center{% if settings.cart_drawer_collection != blank %} cart-drawer__warnings--has-collection{% endif %}">
             <div class="cart-drawer__empty-content">
-              <h2 class="cart__empty-text">{{ 'sections.cart.empty' | t }}</h2>
               <button
                 class="drawer__close"
                 type="button"
@@ -42,6 +41,11 @@
                   {{- 'icon-close.svg' | inline_asset_content -}}
                 </span>
               </button>
+              <div class="cart-drawer__empty-icon">
+                <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
+              </div>
+              <h2 class="cart__empty-text">{{ 'sections.cart.empty' | t }}</h2>
+              <p class="cart-drawer__empty-subtext">Looks like you haven't added anything yet.</p>
               <a href="{{ routes.all_products_collection_url }}" class="button">
                 {{ 'general.continue_shopping' | t }}
               </a>
@@ -61,8 +65,16 @@
           {%- endif -%}
         </div>
       {%- endif -%}
+
       <div class="drawer__header">
-        <h2 class="drawer__heading">{{ 'sections.cart.title' | t }}</h2>
+        <div class="drawer__header-left">
+          <h2 class="drawer__heading">
+            {{ 'sections.cart.title' | t }}
+            {%- if cart.item_count > 0 -%}
+              <span class="drawer__item-count">({{ cart.item_count }})</span>
+            {%- endif -%}
+          </h2>
+        </div>
         <button
           class="drawer__close"
           type="button"
@@ -74,6 +86,7 @@
           </span>
         </button>
       </div>
+
       <cart-drawer-items
         {% if cart == empty %}
           class=" is-empty"
@@ -132,7 +145,6 @@
                           headers="CartDrawer-ColumnProductImage"
                         >
                           {% if item.image %}
-                            {% comment %} Leave empty space due to a:empty CSS display: none rule {% endcomment %}
                             <a href="{{ item.url }}" class="cart-item__link" tabindex="-1" aria-hidden="true"> </a>
                             <img
                               class="cart-item__image"
@@ -474,6 +486,7 @@
           <div id="CartDrawer-CartErrors" role="alert"></div>
         </form>
       </cart-drawer-items>
+
       <div class="drawer__footer">
         {%- if settings.show_cart_note -%}
           <details id="Details-CartDrawer">
@@ -494,9 +507,6 @@
             </cart-note>
           </details>
         {%- endif -%}
-
-        <!-- Start blocks -->
-        <!-- Subtotals -->
 
         <div class="cart-drawer__footer" {{ block.shopify_attributes }}>
           <div>
@@ -559,8 +569,6 @@
           </small>
         </div>
 
-        <!-- CTAs -->
-
         <div class="cart__ctas" {{ block.shopify_attributes }}>
           <button
             type="submit"
@@ -574,6 +582,12 @@
           >
             {{ 'sections.cart.checkout' | t }}
           </button>
+          <a
+            href="{{ routes.cart_url }}"
+            class="cart-drawer__view-cart link"
+          >
+            View full basket
+          </a>
         </div>
       </div>
     </div>

@@ -1,0 +1,412 @@
+{{ 'section-nested-slideshow.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-nested-slideshow.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  #NestedSlideshow-{{ section.id }} {
+    --slide-speed: {{ section.settings.change_slides_speed }}s;
+  }
+{%- endstyle -%}
+
+<nested-slideshow
+  id="NestedSlideshow-{{ section.id }}"
+  class="nested-slideshow nested-slideshow--{{ section.settings.slide_height }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+  data-autoplay="{{ section.settings.auto_rotate }}"
+  data-speed="{{ section.settings.change_slides_speed }}"
+>
+
+  {%- comment -%} ===== MAIN SLIDES ===== {%- endcomment -%}
+  <div class="nested-slideshow__track" aria-live="polite" aria-atomic="true">
+    {%- for block in section.blocks -%}
+      {%- style -%}
+        #Slide-{{ section.id }}-{{ forloop.index }} .nested-slideshow__overlay {
+          opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
+        }
+      {%- endstyle -%}
+      <div
+        id="Slide-{{ section.id }}-{{ forloop.index }}"
+        class="nested-slideshow__slide{% if forloop.first %} is-active{% endif %}"
+        data-index="{{ forloop.index0 }}"
+        role="group"
+        aria-roledescription="slide"
+        aria-label="{{ forloop.index }} of {{ forloop.length }}"
+        {{ block.shopify_attributes }}
+      >
+        {%- comment -%} Background image {%- endcomment -%}
+        <div class="nested-slideshow__media" aria-hidden="true">
+          {%- liquid
+            assign fetch_priority = 'auto'
+            if section.index == 1 and forloop.first
+              assign fetch_priority = 'high'
+            endif
+            assign img_loading = 'lazy'
+            if forloop.first
+              assign img_loading = 'eager'
+            endif
+            assign has_desktop = false
+            assign has_mobile  = false
+            if block.settings.image != blank
+              assign has_desktop = true
+            endif
+            if block.settings.mobile_image != blank
+              assign has_mobile = true
+            endif
+          -%}
+          {%- if has_desktop or has_mobile -%}
+            {%- if has_desktop and has_mobile -%}
+              {%- assign img_height = block.settings.image.width | divided_by: block.settings.image.aspect_ratio | round -%}
+              <picture>
+                <source
+                  media="(max-width: 749px)"
+                  srcset="{{ block.settings.mobile_image | image_url: width: 375 }} 375w, {{ block.settings.mobile_image | image_url: width: 550 }} 550w, {{ block.settings.mobile_image | image_url: width: 750 }} 750w"
+                  sizes="100vw"
+                >
+                {{
+                  block.settings.image
+                  | image_url: width: 3840
+                  | image_tag:
+                    width: block.settings.image.width,
+                    height: img_height,
+                    sizes: '100vw',
+                    widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+                    fetchpriority: fetch_priority,
+                    loading: img_loading
+                }}
+              </picture>
+            {%- elsif has_mobile -%}
+              {{
+                block.settings.mobile_image
+                | image_url: width: 750
+                | image_tag:
+                  sizes: '100vw',
+                  widths: '375, 550, 750',
+                  fetchpriority: fetch_priority,
+                  loading: img_loading
+              }}
+            {%- else -%}
+              {%- assign img_height = block.settings.image.width | divided_by: block.settings.image.aspect_ratio | round -%}
+              {{
+                block.settings.image
+                | image_url: width: 3840
+                | image_tag:
+                  width: block.settings.image.width,
+                  height: img_height,
+                  sizes: '100vw',
+                  widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+                  fetchpriority: fetch_priority,
+                  loading: img_loading
+              }}
+            {%- endif -%}
+          {%- else -%}
+            {%- assign placeholder_index = forloop.index | modulo: 2 | plus: 1 -%}
+            {{ 'hero-apparel-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg nested-slideshow__placeholder' }}
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Dark overlay {%- endcomment -%}
+        <div class="nested-slideshow__overlay" aria-hidden="true"></div>
+
+        {%- comment -%} Text content {%- endcomment -%}
+        <div
+          class="nested-slideshow__content page-width nested-slideshow__content--{{ block.settings.content_position }}"
+        >
+          <div class="nested-slideshow__text nested-slideshow__text--{{ block.settings.text_alignment }}{% if settings.animations_reveal_on_scroll and forloop.first %} scroll-trigger animate--slide-in{% endif %}">
+            {%- unless block.settings.subheading == blank -%}
+              <p class="nested-slideshow__subheading">{{ block.settings.subheading | escape }}</p>
+            {%- endunless -%}
+
+            {%- unless block.settings.heading == blank -%}
+              <h2 class="nested-slideshow__heading {{ block.settings.heading_size }}">
+                {{ block.settings.heading }}
+              </h2>
+            {%- endunless -%}
+
+            {%- unless block.settings.text == blank -%}
+              <div class="nested-slideshow__body rte">{{ block.settings.text }}</div>
+            {%- endunless -%}
+
+            {%- unless block.settings.button_label == blank -%}
+              <div class="nested-slideshow__cta">
+                <a
+                  href="{{ block.settings.button_link | default: '#' }}"
+                  class="button{% if block.settings.button_style_secondary %} button--secondary nested-slideshow__btn-outline{% else %} button--primary{% endif %}"
+                >
+                  {{ block.settings.button_label | escape }}
+                </a>
+              </div>
+            {%- endunless -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%} ===== PREV / NEXT ARROWS ===== {%- endcomment -%}
+  {%- if section.blocks.size > 1 -%}
+    <button
+      type="button"
+      class="nested-slideshow__arrow nested-slideshow__arrow--prev"
+      aria-label="Previous slide"
+      aria-controls="NestedSlideshow-{{ section.id }}"
+    >
+      <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+    </button>
+    <button
+      type="button"
+      class="nested-slideshow__arrow nested-slideshow__arrow--next"
+      aria-label="Next slide"
+      aria-controls="NestedSlideshow-{{ section.id }}"
+    >
+      <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+    </button>
+  {%- endif -%}
+
+  {%- comment -%} ===== THUMBNAIL STRIP ===== {%- endcomment -%}
+  {%- if section.settings.show_thumbnails and section.blocks.size > 1 -%}
+    <div class="nested-slideshow__thumbs-wrap" aria-hidden="true">
+      <div class="nested-slideshow__thumbs page-width">
+        {%- for block in section.blocks -%}
+          <button
+            type="button"
+            class="nested-slideshow__thumb{% if forloop.first %} is-active{% endif %}"
+            data-index="{{ forloop.index0 }}"
+            tabindex="-1"
+          >
+            <div class="nested-slideshow__thumb-img">
+              {%- if block.settings.image != blank -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 400
+                  | image_tag: loading: 'lazy', widths: '200, 300, 400'
+                }}
+              {%- elsif block.settings.mobile_image != blank -%}
+                {{
+                  block.settings.mobile_image
+                  | image_url: width: 400
+                  | image_tag: loading: 'lazy', widths: '200, 300, 400'
+                }}
+              {%- else -%}
+                {%- assign placeholder_index = forloop.index | modulo: 2 | plus: 1 -%}
+                {{ 'hero-apparel-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </div>
+            {%- unless block.settings.label == blank -%}
+              <span class="nested-slideshow__thumb-label">{{ block.settings.label | escape }}</span>
+            {%- endunless -%}
+          </button>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- elsif section.blocks.size > 1 -%}
+    {%- comment -%} Fallback dot navigation when thumbnails are hidden {%- endcomment -%}
+    <div class="nested-slideshow__dots" role="tablist" aria-label="Slide navigation">
+      {%- for block in section.blocks -%}
+        <button
+          type="button"
+          class="nested-slideshow__dot{% if forloop.first %} is-active{% endif %}"
+          data-index="{{ forloop.index0 }}"
+          role="tab"
+          aria-selected="{{ forloop.first }}"
+          aria-label="Slide {{ forloop.index }}"
+        ></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+</nested-slideshow>
+
+{%- if request.design_mode -%}
+  <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Nested slideshow",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "slide_height",
+      "label": "Slide height",
+      "options": [
+        { "value": "small",  "label": "Small"       },
+        { "value": "medium", "label": "Medium"      },
+        { "value": "large",  "label": "Large"       },
+        { "value": "full",   "label": "Full screen" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_thumbnails",
+      "label": "Show thumbnail navigation",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Auto-rotate"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "change_slides_speed",
+      "label": "Seconds per slide",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "default": 6
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile image",
+          "info": "Optional. Shown on screens below 750px. Falls back to the main image if left blank."
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Overlay opacity",
+          "min": 0,
+          "max": 75,
+          "step": 5,
+          "unit": "%",
+          "default": 35
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Thumbnail label",
+          "info": "Short label shown on the thumbnail strip."
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "New season"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Slide heading"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "options": [
+            { "value": "h2",   "label": "Small"       },
+            { "value": "h1",   "label": "Medium"      },
+            { "value": "h0",   "label": "Large"       },
+            { "value": "hxl",  "label": "Extra large" },
+            { "value": "hxxl", "label": "Huge"        }
+          ],
+          "default": "h0"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "header",
+          "content": "Button"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Label",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_style_secondary",
+          "label": "Outline style",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "select",
+          "id": "content_position",
+          "label": "Content position",
+          "options": [
+            { "value": "top-left",      "label": "Top left"      },
+            { "value": "top-center",    "label": "Top center"    },
+            { "value": "top-right",     "label": "Top right"     },
+            { "value": "middle-left",   "label": "Middle left"   },
+            { "value": "middle-center", "label": "Middle center" },
+            { "value": "middle-right",  "label": "Middle right"  },
+            { "value": "bottom-left",   "label": "Bottom left"   },
+            { "value": "bottom-center", "label": "Bottom center" },
+            { "value": "bottom-right",  "label": "Bottom right"  }
+          ],
+          "default": "middle-center"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Text alignment",
+          "options": [
+            { "value": "left",   "label": "Left"   },
+            { "value": "center", "label": "Center" },
+            { "value": "right",  "label": "Right"  }
+          ],
+          "default": "center"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nested slideshow",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": { "label": "Slide 1", "heading": "First slide", "subheading": "New season" }
+        },
+        {
+          "type": "slide",
+          "settings": { "label": "Slide 2", "heading": "Second slide", "subheading": "Explore more" }
+        },
+        {
+          "type": "slide",
+          "settings": { "label": "Slide 3", "heading": "Third slide", "subheading": "Discover" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

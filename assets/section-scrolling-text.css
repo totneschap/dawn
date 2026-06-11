@@ -1,0 +1,115 @@
+/* ============================================================
+   SECTION: SCROLLING TEXT
+   ============================================================ */
+
+.scrolling-text {
+  overflow: hidden;
+}
+
+/* ---- Optional heading ---- */
+
+.scrolling-text__heading {
+  text-align: center;
+  margin: 0 0 3.2rem;
+}
+
+.scrolling-text__viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+/* ---- Track ---- */
+
+.scrolling-text__track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  white-space: nowrap;
+}
+
+.scrolling-text__track--left {
+  animation: st-scroll-left var(--st-duration, 40s) linear infinite;
+}
+
+.scrolling-text__track--right {
+  animation: st-scroll-right var(--st-duration, 40s) linear infinite;
+}
+
+@keyframes st-scroll-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes st-scroll-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+/* ---- Items ---- */
+
+.scrolling-text__item {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 2.4rem;
+}
+
+.scrolling-text__text {
+  display: inline;
+}
+
+.scrolling-text__separator {
+  display: inline-block;
+  margin-left: 2.4rem;
+  opacity: 0.45;
+  line-height: 1;
+}
+
+/* ---- Font sizes ---- */
+
+.scrolling-text__track--small  {
+  font-size: 1.3rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.scrolling-text__track--medium {
+  font-size: 2rem;
+  letter-spacing: 0.02em;
+}
+
+.scrolling-text__track--large {
+  font-size: 3.6rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.scrolling-text__track--xlarge {
+  font-size: 6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+/* ---- Pause on hover ---- */
+
+.scrolling-text__viewport:hover .scrolling-text__track {
+  animation-play-state: paused;
+}
+
+/* ---- Reduced motion ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .scrolling-text__track {
+    animation: none;
+    flex-wrap: wrap;
+    white-space: normal;
+    width: 100%;
+    justify-content: center;
+    padding: 1rem 0;
+  }
+
+  .scrolling-text__item {
+    padding: 0.4rem 1.6rem;
+  }
+}

@@ -1,0 +1,315 @@
+{{ 'section-social-feed.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  case section.settings.image_gap
+    when 'none'
+      assign gap_px = '0px'
+    when 'small'
+      assign gap_px = '2px'
+    when 'medium'
+      assign gap_px = '4px'
+    when 'large'
+      assign gap_px = '8px'
+  endcase
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  #SocialFeed-{{ section.id }} {
+    --smf-cols:        {{ section.settings.columns_desktop }};
+    --smf-cols-mobile: {{ section.settings.columns_mobile }};
+    --smf-gap:         {{ gap_px }};
+  }
+{%- endstyle -%}
+
+{%- liquid
+  case section.settings.platform
+    when 'instagram'
+      assign platform_icon = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.25" fill="currentColor"/></svg>'
+    when 'tiktok'
+      assign platform_icon = '<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.79a8.18 8.18 0 004.77 1.52V6.86a4.85 4.85 0 01-1-.17z"/></svg>'
+    when 'pinterest'
+      assign platform_icon = '<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>'
+    when 'facebook'
+      assign platform_icon = '<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>'
+    when 'x'
+      assign platform_icon = '<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>'
+  endcase
+-%}
+
+<div
+  class="social-feed color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+  id="SocialFeed-{{ section.id }}"
+>
+  <div class="page-width">
+
+    {%- if section.settings.title != blank or section.settings.username != blank -%}
+      <div class="smf__header smf__header--{{ section.settings.header_alignment }}">
+        <div class="smf__header-text">
+          {%- if section.settings.title != blank -%}
+            <h2 class="smf__heading inline-richtext {{ section.settings.heading_size }}">
+              {{- section.settings.title -}}
+            </h2>
+          {%- endif -%}
+          {%- if section.settings.username != blank -%}
+            <p class="smf__username">
+              {%- if section.settings.profile_url != blank -%}
+                <a
+                  href="{{ section.settings.profile_url }}"
+                  class="smf__username-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >{{ section.settings.username }}</a>
+              {%- else -%}
+                {{ section.settings.username }}
+              {%- endif -%}
+            </p>
+          {%- endif -%}
+        </div>
+
+        {%- if section.settings.button_label != blank and section.settings.profile_url != blank -%}
+          <a
+            href="{{ section.settings.profile_url }}"
+            class="smf__follow-btn button button--secondary"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {{- section.settings.button_label -}}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="smf__grid list-unstyled" role="list">
+        {%- for block in section.blocks -%}
+          {%- assign post_alt = block.settings.image.alt | default: block.settings.caption | default: 'Social media post' | escape -%}
+          <li class="smf__item" {{ block.shopify_attributes }}>
+            <a
+              href="{{ block.settings.link | default: section.settings.profile_url | default: '#' }}"
+              class="smf__link"
+              {% if block.settings.link != blank or section.settings.profile_url != blank %}
+                target="_blank"
+                rel="noopener noreferrer"
+              {% endif %}
+              aria-label="{{ post_alt }}"
+            >
+              {%- if block.settings.image != blank -%}
+                {%- assign img_alt = block.settings.image.alt | escape -%}
+                {{ block.settings.image | image_url: width: 600 | image_tag:
+                  loading: 'lazy',
+                  widths: '150, 250, 350, 450, 600',
+                  class: 'smf__img',
+                  alt: img_alt
+                }}
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'smf__img smf__img--placeholder' }}
+              {%- endif -%}
+
+              <div class="smf__overlay">
+                <span class="smf__icon">{{ platform_icon }}</span>
+              </div>
+
+              {%- if section.settings.show_caption and block.settings.caption != blank -%}
+                <span class="smf__caption">{{ block.settings.caption | truncate: 100 }}</span>
+              {%- endif -%}
+
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Social media feed",
+  "class": "section",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "Follow us on Instagram"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "text",
+      "id": "username",
+      "label": "Username",
+      "default": "@yourbrand",
+      "info": "Displayed below the heading as a clickable handle."
+    },
+    {
+      "type": "url",
+      "id": "profile_url",
+      "label": "Profile URL",
+      "info": "Link to your social media profile page."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Follow button label",
+      "default": "Follow us"
+    },
+    {
+      "type": "select",
+      "id": "header_alignment",
+      "label": "Header alignment",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Grid"
+    },
+    {
+      "type": "select",
+      "id": "platform",
+      "label": "Platform",
+      "info": "Determines the icon shown on hover.",
+      "options": [
+        { "value": "instagram", "label": "Instagram" },
+        { "value": "tiktok",    "label": "TikTok" },
+        { "value": "pinterest", "label": "Pinterest" },
+        { "value": "facebook",  "label": "Facebook" },
+        { "value": "x",         "label": "X / Twitter" }
+      ],
+      "default": "instagram"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 3,
+      "max": 8,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "select",
+      "id": "image_gap",
+      "label": "Gap between images",
+      "options": [
+        { "value": "none",   "label": "None" },
+        { "value": "small",  "label": "Small (2px)" },
+        { "value": "medium", "label": "Medium (4px)" },
+        { "value": "large",  "label": "Large (8px)" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_caption",
+      "label": "Show captions on hover",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "post",
+      "name": "Post",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption",
+          "info": "Shown on hover when captions are enabled."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Post link",
+          "info": "Link to the individual post. Leave blank to use the profile URL."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social media feed",
+      "blocks": [
+        { "type": "post" },
+        { "type": "post" },
+        { "type": "post" },
+        { "type": "post" },
+        { "type": "post" },
+        { "type": "post" }
+      ]
+    }
+  ]
+}
+{% endschema %}

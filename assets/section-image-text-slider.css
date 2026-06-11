@@ -1,0 +1,219 @@
+/* ============================================================
+   SECTION: IMAGE WITH TEXT SLIDER
+   ============================================================ */
+
+/* ---- Outer wrapper / width modes ---- */
+
+.its-outer--padded {
+  padding-left: clamp(1.6rem, 4vw, 6rem);
+  padding-right: clamp(1.6rem, 4vw, 6rem);
+}
+
+/* ---- Inner grid (image + text panel) ---- */
+
+.its__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: var(--its-desktop-height, 60rem);
+}
+
+/* text-left: image moves to the right */
+.its__inner--text-left .its__image-col  { order: 2; }
+.its__inner--text-left .its__content-col { order: 1; }
+
+/* ---- Image column ---- */
+
+.its__image-col {
+  overflow: hidden;
+  position: relative;
+}
+
+.its__image-col img,
+.its__image-col svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--its-image-position, center);
+}
+
+.its__image-col svg {
+  background-color: rgba(var(--color-foreground), 0.04);
+}
+
+/* ---- Content column ---- */
+
+.its__content-col {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* clips the sliding text track */
+  min-height: 0;
+}
+
+/* ---- Text track outer (fills remaining height above controls) ---- */
+
+.its__text-track-outer {
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+  position: relative;
+}
+
+/* ---- Text track (flex row of slides) ---- */
+
+.its__text-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+/* ---- Individual text slide ---- */
+
+.its__text-slide {
+  flex: 0 0 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem clamp(2.4rem, 6%, 7.2rem);
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* ---- Content elements ---- */
+
+.its__subheading {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-bottom: 1.2rem;
+}
+
+.its__heading {
+  margin: 0 0 1.6rem;
+}
+
+.its__text {
+  margin: 0 0 2.4rem;
+  opacity: 0.8;
+  line-height: 1.7;
+}
+
+.its__text > p:first-child { margin-top: 0; }
+.its__text > p:last-child  { margin-bottom: 0; }
+
+.its__button.button {
+  align-self: flex-start;
+}
+
+/* ---- Controls bar (pinned at bottom of content column) ---- */
+
+.its__controls {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6rem;
+  padding: 2.4rem clamp(2.4rem, 6%, 7.2rem);
+  border-top: 1px solid rgba(var(--color-foreground), 0.1);
+}
+
+.its__nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.6rem;
+  height: 3.6rem;
+  flex-shrink: 0;
+  border: 1px solid rgba(var(--color-foreground), 0.2);
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  color: rgb(var(--color-foreground));
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.its__nav-btn:hover {
+  background-color: rgba(var(--color-foreground), 0.06);
+  border-color: rgba(var(--color-foreground), 0.4);
+}
+
+.its__dots {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.its__dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(var(--color-foreground), 0.2);
+  cursor: pointer;
+  transition: background-color 0.25s, transform 0.25s;
+}
+
+.its__dot.is-active {
+  background: rgb(var(--color-foreground));
+  transform: scale(1.4);
+}
+
+/* ---- Mobile ---- */
+
+@media screen and (max-width: 749px) {
+  .its__inner {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .its__image-col {
+    height: var(--its-mobile-height, 36rem);
+    order: 0 !important;
+  }
+
+  .its__content-col {
+    order: 1 !important;
+    height: auto;
+    overflow: visible;
+  }
+
+  .its__text-track-outer {
+    overflow: visible;
+    height: auto;
+  }
+
+  /* On mobile: stack text slides, show only active one */
+  .its__text-track {
+    height: auto;
+    transition: none;
+  }
+
+  .its__text-slide {
+    display: none;
+    height: auto;
+    padding: 3.2rem 2.4rem 2rem;
+  }
+
+  .its__text-slide.is-active {
+    display: flex;
+  }
+
+  .its-outer--padded {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* ---- Reduced motion ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .its__text-track {
+    transition: none;
+  }
+}

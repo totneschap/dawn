@@ -1,0 +1,223 @@
+{{ 'section-faq-accordion.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="faq-accordion color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+
+    {%- if section.settings.title != blank or section.settings.description != blank -%}
+      <div class="faq-accordion__header {{ section.settings.header_alignment }}">
+        {%- if section.settings.title != blank -%}
+          <h2 class="faq-accordion__heading inline-richtext {{ section.settings.heading_size }}">
+            {{- section.settings.title -}}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.description != blank -%}
+          <div class="faq-accordion__description rte">{{ section.settings.description }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div
+        class="faq-accordion__list faq-accordion__list--narrow {{ section.settings.header_alignment }}"
+        id="FaqAccordion-{{ section.id }}"
+        role="list"
+      >
+        {%- for block in section.blocks -%}
+          {%- assign answer_id = 'faq-' | append: section.id | append: '-' | append: forloop.index -%}
+          {%- assign start_open = false -%}
+          {%- if section.settings.open_first and forloop.first -%}
+            {%- assign start_open = true -%}
+          {%- endif -%}
+
+          <div class="faq__item" role="listitem" {{ block.shopify_attributes }}>
+
+            <button
+              class="faq__question"
+              aria-expanded="{{ start_open }}"
+              aria-controls="{{ answer_id }}"
+            >
+              <span>{{ block.settings.question }}</span>
+              <span class="faq__question-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+
+            <div
+              class="faq__answer{% if start_open %} is-open{% endif %}"
+              id="{{ answer_id }}"
+              role="region"
+              aria-label="{{ block.settings.question | escape }}"
+            >
+              <div class="faq__answer-inner">
+                <div class="faq__answer-content rte">{{ block.settings.answer }}</div>
+              </div>
+            </div>
+
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+<script>
+  (function () {
+    var list = document.getElementById('FaqAccordion-{{ section.id }}');
+    if (!list) return;
+
+    list.querySelectorAll('.faq__question').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var expanded = btn.getAttribute('aria-expanded') === 'true';
+        var answer = document.getElementById(btn.getAttribute('aria-controls'));
+
+        btn.setAttribute('aria-expanded', String(!expanded));
+        answer.classList.toggle('is-open', !expanded);
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "FAQ accordion",
+  "class": "section",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "Frequently asked questions"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "select",
+      "id": "header_alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first",
+      "label": "Open first item by default",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "What is your returns policy?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>We offer free returns within 30 days of purchase. Items must be in their original condition and packaging.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ accordion",
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is your returns policy?",
+            "answer": "<p>We offer free returns within 30 days of purchase. Items must be in their original condition and packaging.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long does delivery take?",
+            "answer": "<p>Standard delivery takes 3–5 working days. Express delivery (1–2 days) is available at checkout.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "<p>Yes, we ship to most countries worldwide. International shipping times and costs vary by destination.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

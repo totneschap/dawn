@@ -1,0 +1,410 @@
+{{ 'section-video-banner.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  #VideoBanner-{{ section.id }} .video-banner__overlay {
+    opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+  }
+
+  #VideoBanner-{{ section.id }} .video-banner__content {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    #VideoBanner-{{ section.id }} .video-banner__content {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign has_video    = false
+  assign has_ext_video = false
+
+  if section.settings.video != blank
+    assign has_video = true
+  elsif section.settings.video_url != blank
+    assign has_ext_video = true
+    assign video_id = section.settings.video_url.id
+  endif
+-%}
+
+<div
+  id="VideoBanner-{{ section.id }}"
+  class="video-banner video-banner--{{ section.settings.section_height }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+>
+
+  {%- comment -%} ---- Media layer ---- {%- endcomment -%}
+  <div class="video-banner__media" aria-hidden="true">
+
+    {%- if has_video -%}
+      {{
+        section.settings.video
+        | video_tag:
+          image_size: '1100x',
+          autoplay: true,
+          loop: true,
+          muted: true,
+          controls: false,
+          class: 'video-banner__video'
+      }}
+
+    {%- elsif has_ext_video -%}
+      {%- liquid
+        if section.settings.video_url.type == 'youtube'
+          assign embed_src = 'https://www.youtube.com/embed/' | append: video_id | append: '?autoplay=1&mute=1&loop=1&playlist=' | append: video_id | append: '&controls=0&disablekb=1&playsinline=1&rel=0&enablejsapi=1'
+        else
+          assign embed_src = 'https://player.vimeo.com/video/' | append: video_id | append: '?autoplay=1&muted=1&loop=1&background=1'
+        endif
+      -%}
+      <iframe
+        class="video-banner__iframe"
+        src="{{ embed_src }}"
+        frameborder="0"
+        allow="autoplay; fullscreen"
+        title="{{ section.settings.video_alt | escape }}"
+      ></iframe>
+
+    {%- elsif section.settings.cover_image != blank -%}
+      {{
+        section.settings.cover_image
+        | image_url: width: 3840
+        | image_tag:
+          class: 'video-banner__image',
+          widths: '375, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+          sizes: '100vw',
+          fetchpriority: 'high'
+      }}
+
+    {%- else -%}
+      {{ 'hero-apparel-3' | placeholder_svg_tag: 'placeholder-svg video-banner__placeholder' }}
+    {%- endif -%}
+
+    {%- comment -%} Poster image sits behind the video while it loads {%- endcomment -%}
+    {%- if section.settings.cover_image != blank and has_video -%}
+      {{
+        section.settings.cover_image
+        | image_url: width: 3840
+        | image_tag:
+          class: 'video-banner__poster',
+          widths: '375, 750, 1100, 1500, 1780, 2000, 3840',
+          sizes: '100vw'
+      }}
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} ---- Darkening overlay ---- {%- endcomment -%}
+  <div class="video-banner__overlay" aria-hidden="true"></div>
+
+  {%- comment -%} ---- Text overlay ---- {%- endcomment -%}
+  <div class="video-banner__content page-width video-banner__content--{{ section.settings.desktop_content_position }} video-banner__content--mobile-{{ section.settings.mobile_content_alignment }}">
+    <div class="video-banner__text video-banner__text--{{ section.settings.desktop_content_alignment }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+
+          {%- when 'subheading' -%}
+            {%- unless block.settings.text == blank -%}
+              <p class="video-banner__subheading" {{ block.shopify_attributes }}>
+                {{ block.settings.text | escape }}
+              </p>
+            {%- endunless -%}
+
+          {%- when 'heading' -%}
+            {%- unless block.settings.heading == blank -%}
+              <h2 class="video-banner__heading {{ block.settings.heading_size }}" {{ block.shopify_attributes }}>
+                {{ block.settings.heading }}
+              </h2>
+            {%- endunless -%}
+
+          {%- when 'text' -%}
+            {%- unless block.settings.text == blank -%}
+              <div class="video-banner__body rte" {{ block.shopify_attributes }}>
+                {{ block.settings.text }}
+              </div>
+            {%- endunless -%}
+
+          {%- when 'buttons' -%}
+            <div
+              class="video-banner__buttons{% if block.settings.button_label_1 != blank and block.settings.button_label_2 != blank %} video-banner__buttons--multiple{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              {%- if block.settings.button_label_1 != blank -%}
+                <a
+                  href="{{ block.settings.button_link_1 | default: '#' }}"
+                  class="button{% if block.settings.button_style_secondary_1 %} button--secondary{% else %} button--primary{% endif %} video-banner__btn"
+                >
+                  {{ block.settings.button_label_1 | escape }}
+                </a>
+              {%- endif -%}
+              {%- if block.settings.button_label_2 != blank -%}
+                <a
+                  href="{{ block.settings.button_link_2 | default: '#' }}"
+                  class="button{% if block.settings.button_style_secondary_2 %} button--secondary{% else %} button--primary{% endif %} video-banner__btn"
+                >
+                  {{ block.settings.button_label_2 | escape }}
+                </a>
+              {%- endif -%}
+            </div>
+
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Video banner",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Shopify-hosted video"
+    },
+    {
+      "type": "header",
+      "content": "Or use an external video"
+    },
+    {
+      "type": "paragraph",
+      "content": "YouTube and Vimeo videos will autoplay muted as a background loop."
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "accept": ["youtube", "vimeo"],
+      "label": "YouTube or Vimeo URL"
+    },
+    {
+      "type": "text",
+      "id": "video_alt",
+      "label": "Video description",
+      "info": "Describe the video for accessibility."
+    },
+    {
+      "type": "image_picker",
+      "id": "cover_image",
+      "label": "Cover / poster image",
+      "info": "Shown while the video loads, or as a fallback."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "section_height",
+      "label": "Section height",
+      "options": [
+        { "value": "small",  "label": "Small"       },
+        { "value": "medium", "label": "Medium"      },
+        { "value": "large",  "label": "Large"       },
+        { "value": "full",   "label": "Full screen" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Content position"
+    },
+    {
+      "type": "select",
+      "id": "desktop_content_position",
+      "label": "Desktop position",
+      "options": [
+        { "value": "top-left",      "label": "Top left"      },
+        { "value": "top-center",    "label": "Top center"    },
+        { "value": "top-right",     "label": "Top right"     },
+        { "value": "middle-left",   "label": "Middle left"   },
+        { "value": "middle-center", "label": "Middle center" },
+        { "value": "middle-right",  "label": "Middle right"  },
+        { "value": "bottom-left",   "label": "Bottom left"   },
+        { "value": "bottom-center", "label": "Bottom center" },
+        { "value": "bottom-right",  "label": "Bottom right"  }
+      ],
+      "default": "middle-center"
+    },
+    {
+      "type": "select",
+      "id": "desktop_content_alignment",
+      "label": "Desktop text alignment",
+      "options": [
+        { "value": "left",   "label": "Left"   },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right"  }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "mobile_content_alignment",
+      "label": "Mobile text alignment",
+      "options": [
+        { "value": "left",   "label": "Left"   },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right"  }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "subheading",
+      "name": "Subheading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "default": "New collection",
+          "label": "Text"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Bold statement here",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "options": [
+            { "value": "h2",   "label": "Small"       },
+            { "value": "h1",   "label": "Medium"      },
+            { "value": "h0",   "label": "Large"       },
+            { "value": "hxl",  "label": "Extra large" },
+            { "value": "hxxl", "label": "Huge"        }
+          ],
+          "default": "h0"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Pair large text with a video to highlight your brand.</p>",
+          "label": "Text"
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Button 1"
+        },
+        {
+          "type": "text",
+          "id": "button_label_1",
+          "default": "Shop now",
+          "label": "Label",
+          "info": "Leave blank to hide."
+        },
+        {
+          "type": "url",
+          "id": "button_link_1",
+          "label": "Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_style_secondary_1",
+          "default": false,
+          "label": "Use outline style"
+        },
+        {
+          "type": "header",
+          "content": "Button 2"
+        },
+        {
+          "type": "text",
+          "id": "button_label_2",
+          "label": "Label",
+          "info": "Leave blank to hide."
+        },
+        {
+          "type": "url",
+          "id": "button_link_2",
+          "label": "Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_style_secondary_2",
+          "default": true,
+          "label": "Use outline style"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video banner",
+      "blocks": [
+        { "type": "subheading" },
+        { "type": "heading"    },
+        { "type": "buttons"    }
+      ]
+    }
+  ]
+}
+{% endschema %}

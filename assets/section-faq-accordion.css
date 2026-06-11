@@ -1,0 +1,121 @@
+/* ============================================================
+   SECTION: FAQ ACCORDION
+   ============================================================ */
+
+/* ---- Section header ---- */
+
+.faq-accordion__header {
+  margin-bottom: 4rem;
+}
+
+.faq-accordion__header.center {
+  text-align: center;
+}
+
+.faq-accordion__heading {
+  margin: 0 0 1.2rem;
+}
+
+.faq-accordion__description {
+  margin: 0;
+  opacity: 0.7;
+}
+
+.faq-accordion__description > p:first-child { margin-top: 0; }
+.faq-accordion__description > p:last-child  { margin-bottom: 0; }
+
+/* ---- Constrain list width ---- */
+
+.faq-accordion__list--narrow {
+  max-width: 84rem;
+}
+
+.faq-accordion__list--narrow.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---- FAQ item ---- */
+
+.faq__item {
+  border-top: 1px solid rgba(var(--color-foreground), 0.12);
+}
+
+.faq__item:last-child {
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.12);
+}
+
+/* ---- Question button ---- */
+
+.faq__question {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: rgb(var(--color-foreground));
+  font-family: inherit;
+}
+
+.faq__question:hover {
+  opacity: 0.7;
+}
+
+/* ---- Chevron icon ---- */
+
+.faq__question-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.35s ease;
+}
+
+.faq__question[aria-expanded="true"] .faq__question-icon {
+  transform: rotate(180deg);
+}
+
+/* ---- Answer panel (grid-row animation) ---- */
+
+.faq__answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+
+.faq__answer.is-open {
+  grid-template-rows: 1fr;
+}
+
+/* inner div needed so overflow: hidden doesn't clip content during animation */
+.faq__answer-inner {
+  overflow: hidden;
+}
+
+.faq__answer-content {
+  padding-bottom: 2.4rem;
+  opacity: 0.8;
+  line-height: 1.7;
+}
+
+.faq__answer-content > p:first-child { margin-top: 0; }
+.faq__answer-content > p:last-child  { margin-bottom: 0; }
+
+/* ---- Reduced motion ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .faq__answer {
+    transition: none;
+  }
+  .faq__question-icon {
+    transition: none;
+  }
+}

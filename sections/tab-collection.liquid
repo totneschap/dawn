@@ -1,0 +1,356 @@
+{{ 'section-tab-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-slider.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- unless section.blocks.size == 0 -%}
+  <div
+    class="tab-collection color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+    id="TabCollection-{{ section.id }}"
+  >
+    <div class="page-width">
+
+      <div class="tab-collection__header">
+        <div class="tab-collection__header-text">
+          {%- if section.settings.title != blank -%}
+            <h2 class="tab-collection__heading inline-richtext {{ section.settings.heading_size }}">
+              {{ section.settings.title }}
+            </h2>
+          {%- endif -%}
+          {%- if section.settings.description != blank -%}
+            <div class="tab-collection__description rte">{{ section.settings.description }}</div>
+          {%- endif -%}
+        </div>
+
+        <div class="tab-collection__tabs" role="tablist">
+        {%- for block in section.blocks -%}
+          {%- assign tab_label = block.settings.label | default: block.settings.collection.title | default: 'Collection' -%}
+          <button
+            class="tab-collection__tab{% if forloop.first %} is-active{% endif %}"
+            role="tab"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            aria-controls="TabPanel-{{ section.id }}-{{ forloop.index }}"
+            data-tab-index="{{ forloop.index0 }}"
+            {{ block.shopify_attributes }}
+          >{{ tab_label }}</button>
+        {%- endfor -%}
+        </div>
+      </div>
+
+      <div class="tab-collection__panels">
+        {%- for block in section.blocks -%}
+          {%- assign collection = block.settings.collection -%}
+          {%- assign panel_idx = forloop.index -%}
+
+          <div
+            class="tab-collection__panel{% if forloop.first %} is-active{% endif %}"
+            id="TabPanel-{{ section.id }}-{{ panel_idx }}"
+            role="tabpanel"
+            data-panel-index="{{ forloop.index0 }}"
+          >
+            {%- if collection != blank and collection.products_count > 0 -%}
+              <slider-component class="tab-collection__slider-component">
+                <ul
+                  class="tab-collection__slider list-unstyled"
+                  id="Slider-{{ section.id }}-{{ panel_idx }}"
+                  style="--tc-cols: {{ section.settings.columns_desktop }}; --tc-cols-mobile: {{ section.settings.columns_mobile }};"
+                  role="list"
+                >
+                  {%- if section.settings.show_featured_image and collection.image != blank -%}
+                    {%- assign featured_alt = collection.title | escape -%}
+                    <li
+                      class="tab-collection__slide tab-collection__slide--featured slider__slide"
+                      id="Slide-{{ section.id }}-{{ panel_idx }}-0"
+                    >
+                      <a
+                        href="{{ collection.url }}"
+                        class="tab-collection__featured-image tab-collection__featured-image--{{ section.settings.image_ratio }}"
+                        aria-label="{{ featured_alt }}"
+                      >
+                        {{ collection.image | image_url: width: 1000 | image_tag:
+                          loading: 'lazy',
+                          widths: '400, 600, 800, 1000',
+                          alt: featured_alt,
+                          class: 'tab-collection__featured-img'
+                        }}
+                        {%- if collection.title != blank -%}
+                          <div class="tab-collection__featured-overlay">
+                            <span class="tab-collection__featured-title">{{ collection.title }}</span>
+                          </div>
+                        {%- endif -%}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                  {%- for product in collection.products limit: section.settings.products_to_show -%}
+                    <li
+                      class="tab-collection__slide slider__slide"
+                      id="Slide-{{ section.id }}-{{ panel_idx }}-{{ forloop.index }}"
+                    >
+                      {% render 'card-product',
+                        card_product: product,
+                        media_aspect_ratio: section.settings.image_ratio,
+                        show_secondary_image: section.settings.show_secondary_image,
+                        show_vendor: section.settings.show_vendor,
+                        show_rating: section.settings.show_rating,
+                        lazy_load: false,
+                        section_id: section.id,
+                        index: forloop.index
+                      %}
+                    </li>
+                  {%- endfor -%}
+                </ul>
+
+                <div class="tab-collection__slider-nav slider-buttons no-js-hidden">
+                  <button
+                    type="button"
+                    class="slider-button slider-button--prev"
+                    name="previous"
+                    aria-label="{{ 'general.slider.previous_slide' | t }}"
+                    aria-controls="Slider-{{ section.id }}-{{ panel_idx }}"
+                  >
+                    <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="slider-button slider-button--next"
+                    name="next"
+                    aria-label="{{ 'general.slider.next_slide' | t }}"
+                    aria-controls="Slider-{{ section.id }}-{{ panel_idx }}"
+                  >
+                    <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+                  </button>
+                </div>
+              </slider-component>
+
+              {%- if section.settings.show_view_all and collection.url != blank -%}
+                <div class="tab-collection__view-all">
+                  <a href="{{ collection.url }}" class="button button--secondary">
+                    {{ 'sections.featured_collection.view_all' | t }}
+                  </a>
+                </div>
+              {%- endif -%}
+
+            {%- else -%}
+              <p class="tab-collection__empty">No products found in this collection.</p>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var section = document.getElementById('TabCollection-{{ section.id }}');
+      if (!section) return;
+
+      var tabs   = Array.from(section.querySelectorAll('.tab-collection__tab'));
+      var panels = Array.from(section.querySelectorAll('.tab-collection__panel'));
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          var idx = parseInt(tab.dataset.tabIndex, 10);
+
+          tabs.forEach(function (t) {
+            t.classList.remove('is-active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          panels.forEach(function (p) {
+            p.classList.remove('is-active');
+          });
+
+          tab.classList.add('is-active');
+          tab.setAttribute('aria-selected', 'true');
+
+          if (panels[idx]) {
+            panels[idx].classList.add('is-active');
+            requestAnimationFrame(function () {
+              window.dispatchEvent(new Event('resize'));
+            });
+          }
+        });
+      });
+    })();
+  </script>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Tab collection",
+  "class": "section",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "Shop by collection"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show per tab",
+      "min": 4,
+      "max": 16,
+      "step": 2,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Visible per row (desktop)",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Visible per row (mobile)",
+      "options": [
+        { "value": "1", "label": "1 per row" },
+        { "value": "2", "label": "2 per row" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "adapt",    "label": "Adapt to image" },
+        { "value": "portrait", "label": "Portrait (2:3)" },
+        { "value": "square",   "label": "Square (1:1)" }
+      ],
+      "default": "adapt"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_featured_image",
+      "label": "Show collection featured image",
+      "default": false,
+      "info": "Displays the collection's image as the first slide. Set a featured image on the collection in your Shopify admin."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "label": "Show second image on hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show product rating",
+      "default": false,
+      "info": "To display a rating, add a product rating app to your store."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View all' button",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_tab",
+      "name": "Collection tab",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Tab label",
+          "info": "Defaults to the collection title if left blank."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tab collection",
+      "blocks": [
+        { "type": "collection_tab" },
+        { "type": "collection_tab" }
+      ]
+    }
+  ]
+}
+{% endschema %}

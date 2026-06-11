@@ -4,7 +4,13 @@
       "type": "main-cart-items",
       "settings": {
         "padding_top": 36,
-        "padding_bottom": 36
+        "padding_bottom": 36,
+        "show_sidebar": true,
+        "sidebar_heading": "Order summary",
+        "free_shipping_threshold": 0,
+        "show_gift_message": true,
+        "gift_message_label": "Add a gift message",
+        "gift_message_placeholder": "Write your gift message here..."
       }
     },
     "cart-footer": {

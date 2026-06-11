@@ -1,0 +1,161 @@
+/* ============================================================
+   SECTION: SOCIAL MEDIA FEED
+   ============================================================ */
+
+/* ---- Header ---- */
+
+.smf__header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2.4rem;
+}
+
+.smf__header--left {
+  justify-content: space-between;
+}
+
+.smf__header--center {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.smf__heading {
+  margin: 0 0 0.4rem;
+}
+
+.smf__username {
+  margin: 0;
+  font-size: 1.4rem;
+  opacity: 0.65;
+}
+
+.smf__username-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.smf__username-link:hover {
+  text-decoration: underline;
+}
+
+.smf__follow-btn.button {
+  flex-shrink: 0;
+}
+
+/* ---- Image grid ---- */
+
+.smf__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--smf-cols-mobile, 3), 1fr);
+  gap: var(--smf-gap, 0.2rem);
+  margin: 0;
+  padding: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .smf__grid {
+    grid-template-columns: repeat(var(--smf-cols, 6), 1fr);
+  }
+}
+
+/* ---- Individual post tile ---- */
+
+.smf__item {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.smf__link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  text-decoration: none;
+}
+
+/* ---- Post image ---- */
+
+.smf__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.smf__img--placeholder {
+  background-color: rgba(var(--color-foreground), 0.05);
+}
+
+.smf__link:hover .smf__img {
+  transform: scale(1.06);
+}
+
+/* ---- Hover overlay ---- */
+
+.smf__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0);
+  transition: background-color 0.3s ease;
+  pointer-events: none;
+}
+
+.smf__link:hover .smf__overlay {
+  background: rgba(0, 0, 0, 0.38);
+}
+
+/* ---- Platform icon ---- */
+
+.smf__icon {
+  display: flex;
+  color: #fff;
+  opacity: 0;
+  transform: scale(0.75);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.smf__link:hover .smf__icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ---- Caption ---- */
+
+.smf__caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 3rem 1.2rem 1rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, transparent 100%);
+  color: #fff;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(0.4rem);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.smf__link:hover .smf__caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---- Reduced motion ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .smf__img,
+  .smf__icon,
+  .smf__caption,
+  .smf__overlay {
+    transition: none;
+  }
+}

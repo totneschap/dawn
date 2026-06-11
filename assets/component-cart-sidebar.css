@@ -1,0 +1,230 @@
+/* ============================================================
+   CART SIDEBAR – ORDER SUMMARY
+   ============================================================ */
+
+/* ---- Two-column layout ---- */
+
+.cart__layout {
+  display: block;
+}
+
+@media screen and (min-width: 990px) {
+  .cart__layout--with-sidebar {
+    display: grid;
+    grid-template-columns: 1fr 38rem;
+    align-items: start;
+    gap: 4rem;
+  }
+}
+
+/* ---- Items column ---- */
+
+.cart__items-col {
+  min-width: 0;
+}
+
+/* ---- Sidebar container ---- */
+
+.cart-sidebar {
+  border: 0.1rem solid rgba(var(--color-foreground), 0.12);
+  padding: 2.4rem;
+  margin-top: 3.2rem;
+}
+
+@media screen and (min-width: 990px) {
+  .cart-sidebar {
+    margin-top: 0;
+    position: sticky;
+    top: 2rem;
+  }
+}
+
+/* ---- Heading ---- */
+
+.cart-sidebar__heading {
+  font-size: calc(var(--font-heading-scale) * 1.8rem);
+  margin: 0 0 2.4rem;
+  padding-bottom: 2rem;
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+/* ---- Free shipping bar ---- */
+
+.cart-sidebar__shipping {
+  padding: 1.6rem 0 2rem;
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  margin-bottom: 0;
+}
+
+.cart-sidebar__shipping-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.cart-sidebar__shipping-truck {
+  display: flex;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  color: rgb(var(--color-foreground));
+}
+
+.cart-sidebar__shipping-message,
+.cart-sidebar__shipping-qualified {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1.5;
+}
+
+.cart-sidebar__shipping-qualified {
+  font-weight: 600;
+}
+
+.cart-sidebar__shipping-bar-track {
+  height: 0.6rem;
+  background: rgba(var(--color-foreground), 0.1);
+  border-radius: 0.3rem;
+  overflow: hidden;
+}
+
+.cart-sidebar__shipping-bar-fill {
+  height: 100%;
+  background: rgb(var(--color-foreground));
+  border-radius: 0.3rem;
+  transition: width 0.5s ease;
+  max-width: 100%;
+}
+
+/* ---- Totals block ---- */
+
+.cart-sidebar__totals-block {
+  padding: 2rem 0 0;
+}
+
+.cart-sidebar__discounts {
+  margin: 0 0 1.4rem;
+  font-size: 1.3rem;
+}
+
+.cart-sidebar__totals {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.cart-sidebar__total-label {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.cart-sidebar__total-value {
+  font-size: 2rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cart-sidebar__tax-note {
+  display: block;
+  font-size: 1.2rem;
+  opacity: 0.6;
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+/* ---- Gift message ---- */
+
+.cart-sidebar__gift {
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  margin-top: 0;
+}
+
+.cart-sidebar__gift-toggle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.8rem 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1.4rem;
+  color: rgb(var(--color-foreground));
+  font-family: inherit;
+  letter-spacing: inherit;
+}
+
+.cart-sidebar__gift-toggle:hover {
+  opacity: 0.75;
+}
+
+.cart-sidebar__gift-icon,
+.cart-sidebar__gift-chevron {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.cart-sidebar__gift-label-text {
+  flex: 1;
+}
+
+.cart-sidebar__gift-chevron {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+}
+
+.cart-sidebar__gift-toggle[aria-expanded="true"] .cart-sidebar__gift-chevron {
+  transform: rotate(180deg);
+}
+
+/* smooth height reveal */
+.cart-sidebar__gift-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s ease;
+}
+
+.cart-sidebar__gift-panel.is-open {
+  grid-template-rows: 1fr;
+}
+
+.cart-sidebar__gift-panel-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.cart-sidebar__gift-textarea {
+  width: 100%;
+  min-height: 10rem;
+  resize: vertical;
+  margin-bottom: 1.6rem;
+  margin-top: 0.4rem;
+}
+
+/* ---- Checkout CTAs ---- */
+
+.cart-sidebar__ctas {
+  padding-top: 2rem;
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.cart-sidebar__ctas .cart__checkout-button {
+  width: 100%;
+}
+
+.cart-sidebar__ctas .cart__dynamic-checkout-buttons {
+  margin-top: 1.2rem;
+}
+
+/* ---- Reduced motion ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .cart-sidebar__shipping-bar-fill,
+  .cart-sidebar__gift-panel,
+  .cart-sidebar__gift-chevron {
+    transition: none;
+  }
+}

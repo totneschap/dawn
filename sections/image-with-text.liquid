@@ -1,4 +1,5 @@
 {{ 'component-image-with-text.css' | asset_url | stylesheet_tag }}
+{{ 'section-image-with-text-additions.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -97,6 +98,45 @@
                     >
                       {{ block.settings.button_label | escape }}
                     </a>
+                  {%- endif -%}
+                {%- when 'category_link' -%}
+                  {%- if block.settings.label != blank -%}
+                    {%- if block.settings.style == 'tag' -%}
+                      <a
+                        {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% else %}role="link" aria-disabled="true"{% endif %}
+                        class="image-with-text__category-tag"
+                        {{ block.shopify_attributes }}
+                      >
+                        {{ block.settings.label | escape }}
+                      </a>
+                    {%- else -%}
+                      <a
+                        {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% else %}role="link" aria-disabled="true"{% endif %}
+                        class="link animate-arrow image-with-text__category-link"
+                        {{ block.shopify_attributes }}
+                      >
+                        {{- block.settings.label | escape -}}
+                        <span class="svg-wrapper"><span class="icon-wrap">&nbsp;{{ 'icon-arrow.svg' | inline_asset_content }}</span></span>
+                      </a>
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- when 'product_image' -%}
+                  {%- assign iwt_product = all_products[block.settings.product] -%}
+                  {%- if iwt_product != empty and iwt_product.featured_image != blank -%}
+                    {%- assign iwt_alt = iwt_product.featured_image.alt | escape -%}
+                    <div
+                      class="image-with-text__product-image image-with-text__product-image--{{ block.settings.image_size }} image-with-text__product-image--{{ section.settings.desktop_content_alignment }}"
+                      {{ block.shopify_attributes }}
+                    >
+                      <a href="{{ iwt_product.url }}" aria-label="{{ iwt_product.title | escape }}">
+                        {{ iwt_product.featured_image | image_url: width: 800 | image_tag:
+                          loading: 'lazy',
+                          widths: '200, 400, 600, 800',
+                          alt: iwt_alt,
+                          class: 'image-with-text__product-img'
+                        }}
+                      </a>
+                    </div>
                   {%- endif -%}
               {%- endcase -%}
             {%- endfor -%}
@@ -463,6 +503,58 @@
           "id": "button_style_secondary",
           "default": false,
           "label": "t:sections.image-with-text.blocks.button.settings.outline_button.label"
+        }
+      ]
+    },
+    {
+      "type": "category_link",
+      "name": "Category link",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Shop the collection"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Collection link"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Style",
+          "options": [
+            { "value": "link", "label": "Text link with arrow" },
+            { "value": "tag",  "label": "Pill / tag" }
+          ],
+          "default": "link"
+        }
+      ]
+    },
+    {
+      "type": "product_image",
+      "name": "Product image",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Displays the product's featured image, linked to the product page."
+        },
+        {
+          "type": "select",
+          "id": "image_size",
+          "label": "Image size",
+          "options": [
+            { "value": "small",  "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large",  "label": "Full width" }
+          ],
+          "default": "medium"
         }
       ]
     }

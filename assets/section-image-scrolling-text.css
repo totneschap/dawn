@@ -1,0 +1,215 @@
+/* ============================================================
+   SECTION: IMAGE WITH SCROLLING TEXT OVERLAY
+   ============================================================ */
+
+/* ---- Outer wrapper (carries color scheme + padding) ---- */
+
+.image-scrolling-text-section {
+  /* padding applied via .section-X-padding class from Liquid */
+}
+
+/* ---- Image container ---- */
+
+.image-scrolling-text {
+  position: relative;
+  overflow: hidden;
+  /* height set per-section via --ist-height custom property in <style> */
+}
+
+/* ---- Background image ---- */
+
+.image-scrolling-text__bg {
+  position: absolute;
+  inset: 0;
+}
+
+.image-scrolling-text__bg img,
+.image-scrolling-text__bg svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--ist-image-position, center);
+}
+
+/* ---- Dark overlay ---- */
+
+.image-scrolling-text__overlay {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: var(--ist-overlay, 0.2);
+  pointer-events: none;
+}
+
+/* ---- Text overlay content ---- */
+
+.image-scrolling-text__content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding: 0 2.4rem;
+  color: var(--ist-text-color, #ffffff);
+}
+
+@media screen and (min-width: 750px) {
+  .image-scrolling-text__content {
+    padding: 0 6rem;
+  }
+}
+
+.image-scrolling-text__content--top    { top: 4rem; }
+.image-scrolling-text__content--center { top: 50%; transform: translateY(-50%); }
+.image-scrolling-text__content--bottom { bottom: 4rem; }
+
+.image-scrolling-text__title {
+  margin: 0 0 2.4rem;
+  color: inherit;
+}
+
+.image-scrolling-text__btn.button {
+  border-color: var(--ist-text-color, #ffffff);
+  color: var(--ist-text-color, #ffffff);
+  background: transparent;
+}
+
+.image-scrolling-text__btn.button:hover {
+  background: var(--ist-text-color, #ffffff);
+  color: #000;
+}
+
+/* ---- Strip wrapper ---- */
+
+.image-scrolling-text__strip-wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  z-index: 2;
+}
+
+/* Strip semi-transparent background (separate from text so text stays fully opaque) */
+.image-scrolling-text__strip-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--ist-strip-bg, #000000);
+  opacity: var(--ist-strip-opacity, 0.6);
+  pointer-events: none;
+}
+
+/* Strip positions */
+.image-scrolling-text__strip-wrapper--top {
+  top: 0;
+}
+
+.image-scrolling-text__strip-wrapper--center {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.image-scrolling-text__strip-wrapper--bottom {
+  bottom: 0;
+}
+
+/* ---- Track inside strip ---- */
+
+.image-scrolling-text__track {
+  position: relative; /* above ::before */
+  display: flex;
+  align-items: center;
+  width: max-content;
+  white-space: nowrap;
+  color: var(--ist-text-color, #ffffff);
+}
+
+.image-scrolling-text__track--left {
+  animation: ist-scroll-left var(--ist-duration, 40s) linear infinite;
+}
+
+.image-scrolling-text__track--right {
+  animation: ist-scroll-right var(--ist-duration, 40s) linear infinite;
+}
+
+@keyframes ist-scroll-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes ist-scroll-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+/* ---- Track items ---- */
+
+.image-scrolling-text__item {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 2.4rem;
+}
+
+.image-scrolling-text__text {
+  display: inline;
+}
+
+.image-scrolling-text__separator {
+  display: inline-block;
+  margin-left: 2.4rem;
+  opacity: 0.6;
+  line-height: 1;
+}
+
+/* ---- Font sizes ---- */
+
+.image-scrolling-text__track--small {
+  font-size: 1.3rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 1.4rem 0;
+}
+
+.image-scrolling-text__track--medium {
+  font-size: 2rem;
+  letter-spacing: 0.02em;
+  padding: 1.6rem 0;
+}
+
+.image-scrolling-text__track--large {
+  font-size: 3.6rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  padding: 2rem 0;
+}
+
+.image-scrolling-text__track--xlarge {
+  font-size: 6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  padding: 2.4rem 0;
+}
+
+/* ---- Pause on hover ---- */
+
+.image-scrolling-text:hover .image-scrolling-text__track {
+  animation-play-state: paused;
+}
+
+/* ---- Reduced motion ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .image-scrolling-text__track {
+    animation: none;
+    flex-wrap: wrap;
+    white-space: normal;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .image-scrolling-text__item {
+    padding: 0.4rem 1.6rem;
+  }
+}
