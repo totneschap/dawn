@@ -88,6 +88,7 @@
         "speed": 5,
         "direction": "left",
         "font_size": "small",
+        "font_size_custom": 8,
         "separator": "-",
         "color_scheme": "",
         "padding_top": 28,
