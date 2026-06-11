@@ -11,6 +11,9 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+  {%- if section.settings.font_size_custom > 0 -%}
+    #StTrack-{{ section.id }} { font-size: {{ section.settings.font_size_custom }}px; }
+  {%- endif -%}
 {%- endstyle -%}
 
 {%- assign duration = section.settings.speed | times: -8 | plus: 88 -%}
@@ -27,6 +30,7 @@
         class="scrolling-text__track scrolling-text__track--{{ section.settings.direction }} scrolling-text__track--{{ section.settings.font_size }} list-unstyled"
         style="--st-duration: {{ duration }}s;"
         role="list"
+        id="StTrack-{{ section.id }}"
       >
         {%- for block in section.blocks -%}
           <li class="scrolling-text__item" {{ block.shopify_attributes }}>
@@ -36,16 +40,44 @@
             {%- endif -%}
           </li>
         {%- endfor -%}
-        {%- for block in section.blocks -%}
-          <li class="scrolling-text__item" aria-hidden="true">
-            <span class="scrolling-text__text">{{ block.settings.text }}</span>
-            {%- if section.settings.separator != blank -%}
-              <span class="scrolling-text__separator" aria-hidden="true">{{ section.settings.separator }}</span>
-            {%- endif -%}
-          </li>
-        {%- endfor -%}
       </ul>
     </div>
+
+    <script>
+      (function () {
+        function init(track) {
+          var items = Array.from(track.children);
+          if (!items.length) return;
+
+          var singleWidth = items.reduce(function (sum, el) {
+            return sum + el.getBoundingClientRect().width;
+          }, 0);
+
+          if (singleWidth === 0) return;
+
+          var needed = Math.max(window.innerWidth * 3, singleWidth * 4);
+          var total = singleWidth;
+          while (total < needed) {
+            items.forEach(function (item) {
+              var clone = item.cloneNode(true);
+              clone.setAttribute('aria-hidden', 'true');
+              track.appendChild(clone);
+            });
+            total += singleWidth;
+          }
+
+          track.style.setProperty('--st-scroll-distance', singleWidth + 'px');
+        }
+
+        var track = document.getElementById('StTrack-{{ section.id }}');
+        if (!track) return;
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(function () { init(track); });
+        } else {
+          init(track);
+        }
+      })();
+    </script>
   </div>
 {%- endunless -%}
 
@@ -102,14 +134,25 @@
     {
       "type": "select",
       "id": "font_size",
-      "label": "Text size",
+      "label": "Text size preset",
       "options": [
-        { "value": "small",  "label": "Small" },
-        { "value": "medium", "label": "Medium" },
-        { "value": "large",  "label": "Large" },
-        { "value": "xlarge", "label": "Extra large" }
+        { "value": "small",  "label": "Small (~13px)" },
+        { "value": "medium", "label": "Medium (~20px)" },
+        { "value": "large",  "label": "Large (~36px)" },
+        { "value": "xlarge", "label": "Extra large (~60px)" }
       ],
       "default": "large"
+    },
+    {
+      "type": "range",
+      "id": "font_size_custom",
+      "label": "Custom text size",
+      "info": "Overrides the preset above. Set to 0 to use the preset.",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0
     },
     {
       "type": "text",

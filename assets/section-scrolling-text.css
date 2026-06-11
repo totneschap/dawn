@@ -28,21 +28,21 @@
 }
 
 .scrolling-text__track--left {
-  animation: st-scroll-left var(--st-duration, 40s) linear infinite;
+  animation: st-scroll var(--st-duration, 40s) linear infinite;
 }
 
 .scrolling-text__track--right {
-  animation: st-scroll-right var(--st-duration, 40s) linear infinite;
+  animation: st-scroll var(--st-duration, 40s) linear infinite reverse;
+  /* fill-mode backwards applies the "to" keyframe immediately so right-scroll
+     starts at the correct position with no first-frame flash */
+  animation-fill-mode: backwards;
 }
 
-@keyframes st-scroll-left {
+@keyframes st-scroll {
   from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-@keyframes st-scroll-right {
-  from { transform: translateX(-50%); }
-  to   { transform: translateX(0); }
+  /* --st-scroll-distance is set by JS to exactly one copy's pixel width.
+     Falls back to 50% which works when content already fills the viewport. */
+  to   { transform: translateX(calc(-1 * var(--st-scroll-distance, 50%))); }
 }
 
 /* ---- Items ---- */
