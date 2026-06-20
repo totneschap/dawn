@@ -1,0 +1,202 @@
+/* ============================================================
+   QUICK VIEW – modal and card button
+   ============================================================ */
+
+/* ---- Modal overlay + dialog ---- */
+
+.quick-view-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.6rem;
+}
+
+.quick-view-modal[hidden] {
+  display: none;
+}
+
+.quick-view-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.quick-view-modal__dialog {
+  position: relative;
+  background: rgb(var(--color-background));
+  width: 100%;
+  max-width: 90rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: var(--popup-corner-radius, 0.4rem);
+  padding: 4rem;
+}
+
+@media screen and (max-width: 749px) {
+  .quick-view-modal__dialog {
+    padding: 2.4rem 1.6rem;
+    max-height: 95vh;
+  }
+}
+
+/* ---- Close button ---- */
+
+.quick-view-modal__close {
+  position: absolute;
+  top: 1.6rem;
+  right: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.6rem;
+  height: 3.6rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgb(var(--color-foreground));
+  border-radius: 50%;
+  transition: opacity 0.2s;
+}
+
+.quick-view-modal__close:hover {
+  opacity: 0.6;
+}
+
+/* ---- Loading spinner ---- */
+
+.quick-view-modal__spinner {
+  width: 4rem;
+  height: 4rem;
+  margin: 6rem auto;
+  border: 0.3rem solid rgba(var(--color-foreground), 0.15);
+  border-top-color: rgb(var(--color-foreground));
+  border-radius: 50%;
+  animation: qv-spin 0.7s linear infinite;
+}
+
+@keyframes qv-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- Product layout ---- */
+
+.quick-view-product {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+@media screen and (max-width: 749px) {
+  .quick-view-product {
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+  }
+}
+
+/* ---- Media ---- */
+
+.quick-view-product__media {
+  border-radius: var(--media-border-radius, 0);
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+
+.quick-view-product__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---- Info ---- */
+
+.quick-view-product__vendor {
+  margin: 0 0 0.8rem;
+  opacity: 0.65;
+}
+
+.quick-view-product__title {
+  margin: 0 0 1.6rem;
+}
+
+.quick-view-product__price {
+  margin-bottom: 2rem;
+}
+
+.quick-view-product__options {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  margin-bottom: 2rem;
+}
+
+.quick-view-product__full-link {
+  display: inline-block;
+  margin-top: 1.6rem;
+  font-size: 1.3rem;
+}
+
+/* ---- Body scroll lock ---- */
+
+body.quick-view-open {
+  overflow: hidden;
+}
+
+/* ============================================================
+   QUICK VIEW – card hover button
+   ============================================================ */
+
+.card__quick-view {
+  position: absolute;
+  bottom: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  width: calc(100% - 2.4rem);
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: translateX(-50%) translateY(0.4rem);
+  pointer-events: none;
+}
+
+.card-wrapper:hover .card__quick-view,
+.card-wrapper:focus-within .card__quick-view {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.card__quick-view-btn {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  border: 0.1rem solid rgba(var(--color-foreground), 0.2);
+  border-radius: var(--buttons-radius, 0);
+  font-size: 1.3rem;
+  font-family: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.card__quick-view-btn:hover {
+  background: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+  border-color: rgb(var(--color-foreground));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card__quick-view,
+  .card__quick-view-btn {
+    transition: none;
+  }
+}

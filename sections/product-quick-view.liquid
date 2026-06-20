@@ -1,0 +1,119 @@
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{%- assign product_form_id = 'QuickViewForm-' | append: product.id -%}
+
+<div
+  class="quick-view-product"
+  data-product-id="{{ product.id }}"
+  data-money-format="{{ shop.money_format | escape }}"
+>
+  {%- if product.featured_media -%}
+    <div class="quick-view-product__media">
+      <img
+        src="{{ product.featured_media | image_url: width: 600 }}"
+        alt="{{ product.featured_media.alt | escape }}"
+        width="600"
+        height="{{ 600 | divided_by: product.featured_media.aspect_ratio | ceil }}"
+        loading="eager"
+        class="quick-view-product__img"
+      >
+    </div>
+  {%- endif -%}
+
+  <div class="quick-view-product__info">
+    {%- if product.vendor != blank -%}
+      <p class="quick-view-product__vendor caption-with-letter-spacing">{{ product.vendor }}</p>
+    {%- endif -%}
+
+    <h2 class="quick-view-product__title h3">{{ product.title }}</h2>
+
+    <div class="quick-view-product__price" id="QuickViewPrice-{{ product.id }}">
+      {%- render 'price', product: product, use_variant: true, show_badges: true -%}
+    </div>
+
+    <product-form class="product-form" data-section-id="{{ section.id }}" data-hide-errors="false">
+      <div class="product-form__error-message-wrapper" role="alert" hidden>
+        <span class="svg-wrapper">{{- 'icon-error.svg' | inline_asset_content -}}</span>
+        <span class="product-form__error-message"></span>
+      </div>
+
+      {%- form 'product', product,
+        id: product_form_id,
+        class: 'form',
+        novalidate: 'novalidate',
+        data-type: 'add-to-cart-form'
+      -%}
+        <input
+          type="hidden"
+          name="id"
+          value="{{ product.selected_or_first_available_variant.id }}"
+          class="product-variant-id"
+          {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}
+        >
+
+        {%- unless product.has_only_default_variant -%}
+          <div class="quick-view-product__options">
+            {%- for option in product.options_with_values -%}
+              <div class="product-form__input product-form__input--dropdown">
+                <label class="form__label" for="QuickViewOption{{ forloop.index0 }}-{{ product.id }}">
+                  {{ option.name }}
+                </label>
+                <div class="select">
+                  <select
+                    id="QuickViewOption{{ forloop.index0 }}-{{ product.id }}"
+                    class="select__select"
+                    name="options[{{ option.name | escape }}]"
+                    data-option-index="{{ forloop.index0 }}"
+                  >
+                    {%- for value in option.values -%}
+                      <option
+                        value="{{ value | escape }}"
+                        {% if option.selected_value == value %}selected{% endif %}
+                      >
+                        {{ value | escape }}
+                      </option>
+                    {%- endfor -%}
+                  </select>
+                  <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endunless -%}
+
+        <div class="product-form__buttons">
+          <button
+            type="submit"
+            name="add"
+            class="product-form__submit button button--full-width button--primary"
+            {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}
+          >
+            <span>
+              {%- if product.selected_or_first_available_variant.available -%}
+                {{ 'products.product.add_to_cart' | t }}
+              {%- else -%}
+                {{ 'products.product.sold_out' | t }}
+              {%- endif -%}
+            </span>
+            {%- render 'loading-spinner' -%}
+          </button>
+        </div>
+      {%- endform -%}
+    </product-form>
+
+    <a href="{{ product.url }}" class="quick-view-product__full-link link underlined-link">
+      View full details
+    </a>
+  </div>
+
+  <script type="application/json" id="QuickViewVariants-{{ product.id }}">
+    {{ product.variants | json }}
+  </script>
+</div>
+
+{% schema %}
+{
+  "name": "Quick view",
+  "tag": "section"
+}
+{% endschema %}

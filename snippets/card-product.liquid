@@ -27,7 +27,9 @@
   {{ 'component-price.css' | asset_url | stylesheet_tag }}
   {{ 'quick-order-list.css' | asset_url | stylesheet_tag }}
   {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
+  {{ 'component-quick-view.css' | asset_url | stylesheet_tag }}
 {%- endunless -%}
+<script src="{{ 'quick-view.js' | asset_url }}" defer="defer"></script>
 {%- if card_product and card_product != empty -%}
   {%- liquid
     assign ratio = 1
@@ -106,6 +108,21 @@
             </div>
           </div>
         {%- endif -%}
+
+        {%- if card_product.featured_media -%}
+          <div class="card__quick-view">
+            <button
+              type="button"
+              class="card__quick-view-btn"
+              data-quick-view
+              data-product-url="{{ card_product.url }}"
+              aria-label="Quick view {{ card_product.title | escape }}"
+            >
+              Quick view
+            </button>
+          </div>
+        {%- endif -%}
+
         <div class="card__content">
           <div class="card__information">
             <h3
