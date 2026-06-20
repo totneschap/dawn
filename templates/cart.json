@@ -10,7 +10,11 @@
         "free_shipping_threshold": 0,
         "show_gift_message": true,
         "gift_message_label": "Add a gift message",
-        "gift_message_placeholder": "Write your gift message here..."
+        "gift_message_placeholder": "Write your gift message here...",
+        "show_gift_wrapping": true,
+        "gift_wrapping_label": "Add gift wrapping",
+        "gift_wrapping_price": "",
+        "gift_wrapping_note": ""
       }
     },
     "cart-footer": {
