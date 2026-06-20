@@ -1289,7 +1289,7 @@
         "min": 0,
         "max": 90,
         "step": 5,
-        "unit": "days",
+        "unit": "day",
         "label": "Show 'New' badge for products added within",
         "info": "Set to 0 to disable the New badge.",
         "default": 0
