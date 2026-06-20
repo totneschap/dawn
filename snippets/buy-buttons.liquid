@@ -123,6 +123,51 @@
       </p>
     {%- endif -%}
 
+    {%- if product.selected_or_first_available_variant.available == false
+        and is_preorder == false
+        and product.selected_or_first_available_variant != null -%}
+      {{ 'component-back-in-stock.css' | asset_url | stylesheet_tag }}
+      <script src="{{ 'back-in-stock.js' | asset_url }}" defer="defer"></script>
+      {%- liquid
+        assign bis_variant = product.selected_or_first_available_variant
+        assign bis_variant_label = ''
+        unless bis_variant.title == 'Default Title'
+          assign bis_variant_label = ' – ' | append: bis_variant.title
+        endunless
+        assign bis_body = 'Back in stock request for: ' | append: product.title | append: bis_variant_label | append: '. URL: ' | append: shop.url | append: product.url | append: '?variant=' | append: bis_variant.id
+      -%}
+      <div class="back-in-stock">
+        <p class="back-in-stock__heading">Notify me when available</p>
+        <p class="back-in-stock__subtext">Enter your email and we'll let you know when this is back in stock.</p>
+        <form class="back-in-stock__form" data-back-in-stock action="/contact" method="post">
+          <input type="hidden" name="form_type" value="contact">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="contact[body]" value="{{ bis_body | escape }}">
+          <div class="back-in-stock__fields">
+            <label class="visually-hidden" for="BackInStockEmail-{{ section_id }}">Email address</label>
+            <input
+              type="email"
+              id="BackInStockEmail-{{ section_id }}"
+              name="contact[email]"
+              class="back-in-stock__input field__input"
+              placeholder="your@email.com"
+              required
+              autocomplete="email"
+            >
+            <button type="submit" class="back-in-stock__submit button button--secondary">
+              Notify me
+            </button>
+          </div>
+          <p class="back-in-stock__success" hidden>
+            Done! We'll email you when it's back in stock.
+          </p>
+          <p class="back-in-stock__error" hidden>
+            Something went wrong — please try again.
+          </p>
+        </form>
+      </div>
+    {%- endif -%}
+
   {%- else -%}
     <div class="product-form">
       <div class="product-form__buttons form">

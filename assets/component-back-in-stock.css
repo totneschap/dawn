@@ -1,0 +1,51 @@
+/* ============================================================
+   BACK IN STOCK – notification form
+   ============================================================ */
+
+.back-in-stock {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.back-in-stock__heading {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+}
+
+.back-in-stock__subtext {
+  font-size: 1.2rem;
+  opacity: 0.65;
+  margin: 0 0 1.4rem;
+  line-height: 1.5;
+}
+
+.back-in-stock__fields {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.back-in-stock__input {
+  flex: 1;
+  min-width: 18rem;
+}
+
+.back-in-stock__submit {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.back-in-stock__success {
+  font-size: 1.3rem;
+  margin: 0;
+  padding: 1.2rem 0 0;
+  line-height: 1.5;
+}
+
+.back-in-stock__error {
+  font-size: 1.2rem;
+  color: rgb(var(--color-error, 176, 0, 0));
+  margin: 0.8rem 0 0;
+}
