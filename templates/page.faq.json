@@ -1,0 +1,55 @@
+{
+  "sections": {
+    "faq": {
+      "type": "faq-accordion",
+      "blocks": {
+        "faq_1": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is your returns policy?",
+            "answer": "<p>We offer free returns within 30 days of purchase. Items must be in their original condition and packaging. Please contact us to start your return.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long does delivery take?",
+            "answer": "<p>Standard delivery takes 3–5 working days. Express delivery (1–2 days) is available at checkout for an additional fee.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "<p>Yes, we ship to most countries worldwide. International shipping times and costs vary by destination and will be shown at checkout.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How do I track my order?",
+            "answer": "<p>Once your order has shipped you will receive a confirmation email with your tracking number. You can use this to follow your delivery at any time.</p>"
+          }
+        },
+        "faq_5": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I change or cancel my order?",
+            "answer": "<p>Orders can be changed or cancelled within 1 hour of being placed. After that, the order will already be in process and we may not be able to make amendments. Please contact us as soon as possible.</p>"
+          }
+        }
+      },
+      "blocks_order": ["faq_1", "faq_2", "faq_3", "faq_4", "faq_5"],
+      "settings": {
+        "title": "Frequently asked questions",
+        "heading_size": "h1",
+        "header_alignment": "left",
+        "open_first": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 52,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": ["faq"]
+}
