@@ -183,7 +183,34 @@
             </ul>
 
             {%- if paginate.pages > 1 -%}
-              {% render 'pagination', paginate: paginate, anchor: '' %}
+              {%- if section.settings.pagination_type == 'paginate' -%}
+                {% render 'pagination', paginate: paginate, anchor: '' %}
+              {%- else -%}
+                <div
+                  class="collection-load-more"
+                  id="CollectionLoadMore-{{ section.id }}"
+                  data-pagination-type="{{ section.settings.pagination_type }}"
+                >
+                  {%- if paginate.next -%}
+                    <button
+                      type="button"
+                      class="collection-load-more__btn button button--secondary{% if section.settings.pagination_type == 'infinite_scroll' %} collection-load-more__btn--hidden{% endif %}"
+                      data-next-url="{{ paginate.next.url }}"
+                      aria-label="{{ 'general.pagination.next' | t }}"
+                    >
+                      <span class="collection-load-more__label">{{ section.settings.load_more_label | default: 'Load more' }}</span>
+                      <span class="collection-load-more__spinner" aria-hidden="true" hidden>
+                        {{- 'loading-spinner.svg' | inline_asset_content -}}
+                      </span>
+                    </button>
+                    {%- if section.settings.pagination_type == 'infinite_scroll' -%}
+                      <div class="collection-load-more__sentinel" aria-hidden="true"></div>
+                    {%- endif -%}
+                  {%- endif -%}
+                </div>
+                {{ 'collection-infinite-scroll.css' | asset_url | stylesheet_tag }}
+                <script src="{{ 'collection-infinite-scroll.js' | asset_url }}" defer="defer"></script>
+              {%- endif -%}
             {%- endif -%}
           </div>
         {%- endif -%}
@@ -208,6 +235,24 @@
       "step": 4,
       "default": 16,
       "label": "t:sections.main-collection-product-grid.settings.products_per_page.label"
+    },
+    {
+      "type": "select",
+      "id": "pagination_type",
+      "label": "Pagination style",
+      "options": [
+        { "value": "paginate",        "label": "Page numbers" },
+        { "value": "load_more",       "label": "Load more button" },
+        { "value": "infinite_scroll", "label": "Infinite scroll" }
+      ],
+      "default": "paginate"
+    },
+    {
+      "type": "text",
+      "id": "load_more_label",
+      "label": "Load more button text",
+      "default": "Load more products",
+      "info": "Only shown when 'Load more button' is selected."
     },
     {
       "type": "range",

@@ -1,0 +1,37 @@
+.collection-load-more {
+  display: flex;
+  justify-content: center;
+  padding-top: 4rem;
+}
+
+.collection-load-more__btn {
+  min-width: 20rem;
+  position: relative;
+}
+
+.collection-load-more__btn--hidden {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+}
+
+.collection-load-more__spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.collection-load-more__spinner svg {
+  width: 2rem;
+  height: 2rem;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.collection-load-more__sentinel {
+  height: 1px;
+  width: 100%;
+}
