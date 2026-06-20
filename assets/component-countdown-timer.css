@@ -1,0 +1,93 @@
+.countdown-timer-section {
+  text-align: center;
+}
+
+.countdown-timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+.countdown-timer__heading {
+  margin: 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+/* Timer row */
+.countdown-timer__timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+/* Unit box */
+.countdown-timer__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 7rem;
+  background: rgba(var(--color-foreground), 0.06);
+  border-radius: var(--inputs-radius, 0.4rem);
+  padding: 1.2rem 1.4rem 1rem;
+}
+
+@media screen and (min-width: 750px) {
+  .countdown-timer__unit {
+    min-width: 9rem;
+    padding: 1.6rem 2rem 1.2rem;
+  }
+}
+
+.countdown-timer__value {
+  display: block;
+  font-size: 3.6rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+@media screen and (min-width: 750px) {
+  .countdown-timer__value {
+    font-size: 5rem;
+  }
+}
+
+.countdown-timer__label {
+  display: block;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin-top: 0.6rem;
+}
+
+/* Colon separator */
+.countdown-timer__sep {
+  font-size: 3.6rem;
+  font-weight: 300;
+  line-height: 1;
+  opacity: 0.35;
+  margin-bottom: 2rem;
+  align-self: flex-start;
+  padding-top: 1.2rem;
+}
+
+@media screen and (min-width: 750px) {
+  .countdown-timer__sep {
+    font-size: 5rem;
+    padding-top: 1.6rem;
+  }
+}
+
+/* Expired message */
+.countdown-timer__expired {
+  font-size: 1.5rem;
+  margin: 0;
+  opacity: 0.75;
+}
