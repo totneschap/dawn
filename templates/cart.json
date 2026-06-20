@@ -12,9 +12,7 @@
         "gift_message_label": "Add a gift message",
         "gift_message_placeholder": "Write your gift message here...",
         "show_gift_wrapping": true,
-        "gift_wrapping_label": "Add gift wrapping",
-        "gift_wrapping_price": "",
-        "gift_wrapping_note": ""
+        "gift_wrapping_label": "Add gift wrapping"
       }
     },
     "cart-footer": {
