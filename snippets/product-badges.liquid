@@ -1,0 +1,77 @@
+{% comment %}
+  Renders product badges (sale, sold out, new, pre-order, custom tag).
+  Accepts:
+  - card_product: {Object} Product object
+  - badge_id: {String} ID for the primary badge (used by aria-labelledby on card link)
+{% endcomment %}
+
+{%- liquid
+  assign is_preorder = false
+  if card_product.tags contains 'pre-order'
+    assign is_preorder = true
+  endif
+
+  assign is_sold_out = false
+  unless card_product.available
+    assign is_sold_out = true
+  endunless
+
+  assign is_on_sale = false
+  assign discount_pct = 0
+  if card_product.compare_at_price > card_product.price and card_product.available
+    assign is_on_sale = true
+    assign discount_pct = card_product.compare_at_price | minus: card_product.price | times: 100 | divided_by: card_product.compare_at_price | round
+  endif
+
+  assign is_new = false
+  if settings.new_badge_days > 0
+    assign now_ts = 'now' | date: '%s' | plus: 0
+    assign created_ts = card_product.created_at | date: '%s' | plus: 0
+    assign days_old = now_ts | minus: created_ts | divided_by: 86400
+    if days_old <= settings.new_badge_days
+      assign is_new = true
+    endif
+  endif
+
+  assign custom_badge_text = ''
+  for tag in card_product.tags
+    if tag contains 'badge:'
+      assign custom_badge_text = tag | remove: 'badge:'
+      break
+    endif
+  endfor
+-%}
+
+{%- comment -%} Primary badge — pre-order / sold out / sale / new (one wins) {%- endcomment -%}
+
+{%- if is_preorder -%}
+  <span id="{{ badge_id }}" class="badge badge--bottom-left preorder-badge">
+    Pre-order
+  </span>
+{%- elsif is_sold_out -%}
+  <span id="{{ badge_id }}" class="badge badge--bottom-left color-{{ settings.sold_out_badge_color_scheme }}">
+    {{- 'products.product.sold_out' | t -}}
+  </span>
+{%- elsif is_on_sale -%}
+  {%- if settings.sale_badge_style == 'percentage' -%}
+    {%- assign sale_badge_text = '-' | append: discount_pct | append: '%' -%}
+  {%- elsif settings.sale_badge_style == 'savings' -%}
+    {%- assign sale_badge_text = 'Save ' | append: discount_pct | append: '%' -%}
+  {%- else -%}
+    {%- assign sale_badge_text = 'products.product.on_sale' | t -%}
+  {%- endif -%}
+  <span id="{{ badge_id }}" class="badge badge--bottom-left color-{{ settings.sale_badge_color_scheme }}">
+    {{ sale_badge_text }}
+  </span>
+{%- elsif is_new -%}
+  <span id="{{ badge_id }}" class="badge badge--bottom-left color-{{ settings.new_badge_color_scheme }}">
+    {{ settings.new_badge_label | default: 'New' }}
+  </span>
+{%- endif -%}
+
+{%- comment -%} Custom tag badge — stacks alongside primary {%- endcomment -%}
+{%- if custom_badge_text != blank -%}
+  <span class="badge badge--bottom-left color-{{ settings.custom_badge_color_scheme }}">
+    {{ custom_badge_text | escape }}
+  </span>
+{%- endif -%}

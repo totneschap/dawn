@@ -1263,6 +1263,62 @@
         "id": "sold_out_badge_color_scheme",
         "label": "t:settings_schema.badges.settings.sold_out_badge_color_scheme.label",
         "default": "scheme-3"
+      },
+      {
+        "type": "header",
+        "content": "Sale badge"
+      },
+      {
+        "type": "select",
+        "id": "sale_badge_style",
+        "label": "Sale badge text",
+        "options": [
+          { "value": "label", "label": "Sale" },
+          { "value": "percentage", "label": "Percentage off (e.g. -25%)" },
+          { "value": "savings", "label": "Savings label (e.g. Save 25%)" }
+        ],
+        "default": "label"
+      },
+      {
+        "type": "header",
+        "content": "New badge"
+      },
+      {
+        "type": "range",
+        "id": "new_badge_days",
+        "min": 0,
+        "max": 90,
+        "step": 5,
+        "unit": "days",
+        "label": "Show 'New' badge for products added within",
+        "info": "Set to 0 to disable the New badge.",
+        "default": 0
+      },
+      {
+        "type": "text",
+        "id": "new_badge_label",
+        "label": "New badge label",
+        "default": "New"
+      },
+      {
+        "type": "color_scheme",
+        "id": "new_badge_color_scheme",
+        "label": "New badge color scheme",
+        "default": "scheme-2"
+      },
+      {
+        "type": "header",
+        "content": "Custom tag badge"
+      },
+      {
+        "type": "paragraph",
+        "content": "Tag any product with badge:Your Text (e.g. badge:Limited Edition) to show a custom label."
+      },
+      {
+        "type": "color_scheme",
+        "id": "custom_badge_color_scheme",
+        "label": "Custom badge color scheme",
+        "default": "scheme-4"
       }
     ]
   },
