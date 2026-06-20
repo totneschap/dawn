@@ -1,0 +1,34 @@
+/* ============================================================
+   PRE-ORDER – badge and shipping message
+   ============================================================ */
+
+/* ---- Badge on product cards ---- */
+
+.preorder-badge {
+  background-color: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+}
+
+/* ---- Shipping message below buy button ---- */
+
+.preorder-message {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 1.2rem 0 0;
+  font-size: 1.3rem;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+.preorder-message__icon {
+  display: flex;
+  flex-shrink: 0;
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.preorder-message__icon svg {
+  width: 100%;
+  height: 100%;
+}

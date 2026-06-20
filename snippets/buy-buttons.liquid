@@ -10,6 +10,14 @@
   Usage:
   {% render 'buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true %}
 {% endcomment %}
+{%- liquid
+  assign is_preorder = false
+  if product.tags contains 'pre-order'
+    assign is_preorder = true
+  endif
+  assign preorder_message = product.metafields.custom.preorder_message | default: ''
+-%}
+{{ 'component-preorder.css' | asset_url | stylesheet_tag }}
 <div {{ block.shopify_attributes }}>
   {%- if product != blank -%}
     {%- liquid
@@ -86,7 +94,13 @@
               {%- if product.selected_or_first_available_variant == null -%}
                 {{ 'products.product.unavailable' | t }}
               {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
-                {{ 'products.product.sold_out' | t }}
+                {%- if is_preorder -%}
+                  Pre-order
+                {%- else -%}
+                  {{ 'products.product.sold_out' | t }}
+                {%- endif -%}
+              {%- elsif is_preorder -%}
+                Pre-order
               {%- else -%}
                 {{ 'products.product.add_to_cart' | t }}
               {%- endif -%}
@@ -99,6 +113,16 @@
         </div>
       {%- endform -%}
     </product-form>
+
+    {%- if is_preorder and preorder_message != blank -%}
+      <p class="preorder-message">
+        <span class="preorder-message__icon" aria-hidden="true">
+          {{- 'icon-truck.svg' | inline_asset_content -}}
+        </span>
+        {{ preorder_message | escape }}
+      </p>
+    {%- endif -%}
+
   {%- else -%}
     <div class="product-form">
       <div class="product-form__buttons form">
