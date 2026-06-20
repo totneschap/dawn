@@ -10,6 +10,16 @@
     {%- for link in section.settings.menu.links -%}
       <li>
         {%- if link.links != blank -%}
+
+          {%- comment -%} Find a promo block attached to this top-level link {%- endcomment -%}
+          {%- assign promo_block = nil -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'mega_menu_promo' and block.settings.menu_item == link.handle -%}
+              {%- assign promo_block = block -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+
           <header-menu>
             <details id="Details-HeaderMenu-{{ forloop.index }}" class="mega-menu">
               <summary
@@ -33,7 +43,8 @@
                 class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
                 tabindex="-1"
               >
-                <div class="mega-menu__inner page-width">
+                <div class="mega-menu__inner page-width{% if promo_block %} mega-menu__inner--has-promo{% endif %}">
+
                   <ul
                     class="mega-menu__list{% if link.levels == 1 %} mega-menu__list--condensed{% endif %}"
                     role="list"
@@ -71,6 +82,56 @@
                       </li>
                     {%- endfor -%}
                   </ul>
+
+                  {%- if promo_block -%}
+                    <div class="mega-menu__promo" {{ promo_block.shopify_attributes }}>
+
+                      {%- if promo_block.settings.image != blank -%}
+                        <a
+                          href="{{ promo_block.settings.button_url | default: '#' }}"
+                          class="mega-menu__promo-image-link"
+                          {% if promo_block.settings.button_label == blank %}aria-hidden="true" tabindex="-1"{% endif %}
+                        >
+                          {{
+                            promo_block.settings.image
+                            | image_url: width: 600
+                            | image_tag:
+                              class: 'mega-menu__promo-image',
+                              loading: 'lazy',
+                              widths: '300, 400, 600',
+                              sizes: '(min-width: 990px) 28rem, 50vw'
+                          }}
+                          {%- if promo_block.settings.badge_text != blank -%}
+                            <span class="mega-menu__promo-badge">{{ promo_block.settings.badge_text | escape }}</span>
+                          {%- endif -%}
+                        </a>
+                      {%- elsif promo_block.settings.badge_text != blank -%}
+                        <span class="mega-menu__promo-badge mega-menu__promo-badge--standalone">
+                          {{ promo_block.settings.badge_text | escape }}
+                        </span>
+                      {%- endif -%}
+
+                      <div class="mega-menu__promo-body">
+                        {%- if promo_block.settings.heading != blank -%}
+                          <p class="mega-menu__promo-heading">{{ promo_block.settings.heading | escape }}</p>
+                        {%- endif -%}
+                        {%- if promo_block.settings.text != blank -%}
+                          <p class="mega-menu__promo-text">{{ promo_block.settings.text | escape }}</p>
+                        {%- endif -%}
+                        {%- if promo_block.settings.button_label != blank -%}
+                          <a
+                            href="{{ promo_block.settings.button_url | default: '#' }}"
+                            class="mega-menu__promo-btn"
+                          >
+                            {{ promo_block.settings.button_label | escape }}
+                            <span class="mega-menu__promo-btn-arrow" aria-hidden="true">→</span>
+                          </a>
+                        {%- endif -%}
+                      </div>
+
+                    </div>
+                  {%- endif -%}
+
                 </div>
               </div>
             </details>
