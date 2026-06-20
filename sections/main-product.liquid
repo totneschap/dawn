@@ -674,6 +674,70 @@
                 </product-recommendations>
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
+
+              {%- when 'trust_badges' -%}
+                {{ 'component-trust-badges.css' | asset_url | stylesheet_tag }}
+                <div class="trust-badges" {{ block.shopify_attributes }}>
+
+                  {%- comment -%} Trust badge row {%- endcomment -%}
+                  {%- assign has_any_badge = false -%}
+                  {%- for i in (1..4) -%}
+                    {%- assign badge_text_key = 'badge_' | append: i | append: '_text' -%}
+                    {%- assign badge_text_val = block.settings[badge_text_key] -%}
+                    {%- if badge_text_val != blank -%}
+                      {%- assign has_any_badge = true -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+
+                  {%- if has_any_badge -%}
+                    <ul class="trust-badges__list" role="list">
+                      {%- for i in (1..4) -%}
+                        {%- assign badge_icon_key = 'badge_' | append: i | append: '_icon' -%}
+                        {%- assign badge_text_key = 'badge_' | append: i | append: '_text' -%}
+                        {%- assign badge_icon_val = block.settings[badge_icon_key] -%}
+                        {%- assign badge_text_val = block.settings[badge_text_key] -%}
+                        {%- if badge_text_val != blank -%}
+                          <li class="trust-badges__item">
+                            {%- unless badge_icon_val == 'none' or badge_icon_val == blank -%}
+                              <span class="trust-badges__icon svg-wrapper" aria-hidden="true">
+                                {%- case badge_icon_val -%}
+                                  {%- when 'lock' -%}{{- 'icon-lock.svg' | inline_asset_content -}}
+                                  {%- when 'return' -%}{{- 'icon-return.svg' | inline_asset_content -}}
+                                  {%- when 'truck' -%}{{- 'icon-truck.svg' | inline_asset_content -}}
+                                  {%- when 'checkmark' -%}{{- 'icon-checkmark.svg' | inline_asset_content -}}
+                                  {%- when 'star' -%}
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.09 7.26L17.78 7.27L13.36 10.64L14.97 16.07L10 12.9L5.03 16.07L6.64 10.64L2.22 7.27L7.91 7.26L10 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                                  {%- when 'shield' -%}
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L17 5V10C17 13.87 13.87 17.43 10 18C6.13 17.43 3 13.87 3 10V5L10 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                                {%- endcase -%}
+                              </span>
+                            {%- endunless -%}
+                            <span class="trust-badges__text">{{ badge_text_val | escape }}</span>
+                          </li>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+
+                  {%- comment -%} Payment icons row {%- endcomment -%}
+                  {%- if block.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+                    {{ 'component-list-payment.css' | asset_url | stylesheet_tag }}
+                    <div class="trust-badges__payment">
+                      {%- if block.settings.payment_label != blank -%}
+                        <span class="trust-badges__payment-label">{{ block.settings.payment_label | escape }}</span>
+                      {%- endif -%}
+                      <ul class="list list-payment trust-badges__payment-list" role="list">
+                        {%- for type in shop.enabled_payment_types -%}
+                          <li class="list-payment__item">
+                            {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                  {%- endif -%}
+
+                </div>
+
             {%- endcase -%}
           {%- endfor -%}
           <a href="{{ product.url }}" class="link product__view-details animate-arrow">
@@ -746,6 +810,115 @@
   "blocks": [
     {
       "type": "@app"
+    },
+    {
+      "type": "trust_badges",
+      "name": "Trust & payment badges",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Trust badges"
+        },
+        {
+          "type": "select",
+          "id": "badge_1_icon",
+          "label": "Badge 1 icon",
+          "options": [
+            { "value": "none",      "label": "None" },
+            { "value": "lock",      "label": "Lock" },
+            { "value": "shield",    "label": "Shield" },
+            { "value": "checkmark", "label": "Checkmark" },
+            { "value": "return",    "label": "Return arrow" },
+            { "value": "truck",     "label": "Truck" },
+            { "value": "star",      "label": "Star" }
+          ],
+          "default": "lock"
+        },
+        {
+          "type": "text",
+          "id": "badge_1_text",
+          "label": "Badge 1 text",
+          "default": "Secure checkout"
+        },
+        {
+          "type": "select",
+          "id": "badge_2_icon",
+          "label": "Badge 2 icon",
+          "options": [
+            { "value": "none",      "label": "None" },
+            { "value": "lock",      "label": "Lock" },
+            { "value": "shield",    "label": "Shield" },
+            { "value": "checkmark", "label": "Checkmark" },
+            { "value": "return",    "label": "Return arrow" },
+            { "value": "truck",     "label": "Truck" },
+            { "value": "star",      "label": "Star" }
+          ],
+          "default": "return"
+        },
+        {
+          "type": "text",
+          "id": "badge_2_text",
+          "label": "Badge 2 text",
+          "default": "Free returns"
+        },
+        {
+          "type": "select",
+          "id": "badge_3_icon",
+          "label": "Badge 3 icon",
+          "options": [
+            { "value": "none",      "label": "None" },
+            { "value": "lock",      "label": "Lock" },
+            { "value": "shield",    "label": "Shield" },
+            { "value": "checkmark", "label": "Checkmark" },
+            { "value": "return",    "label": "Return arrow" },
+            { "value": "truck",     "label": "Truck" },
+            { "value": "star",      "label": "Star" }
+          ],
+          "default": "truck"
+        },
+        {
+          "type": "text",
+          "id": "badge_3_text",
+          "label": "Badge 3 text",
+          "default": "Fast shipping"
+        },
+        {
+          "type": "select",
+          "id": "badge_4_icon",
+          "label": "Badge 4 icon",
+          "options": [
+            { "value": "none",      "label": "None" },
+            { "value": "lock",      "label": "Lock" },
+            { "value": "shield",    "label": "Shield" },
+            { "value": "checkmark", "label": "Checkmark" },
+            { "value": "return",    "label": "Return arrow" },
+            { "value": "truck",     "label": "Truck" },
+            { "value": "star",      "label": "Star" }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "text",
+          "id": "badge_4_text",
+          "label": "Badge 4 text"
+        },
+        {
+          "type": "header",
+          "content": "Payment icons"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_payment_icons",
+          "label": "Show payment method icons",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "payment_label",
+          "label": "Payment label",
+          "default": "We accept"
+        }
+      ]
     },
     {
       "type": "text",
