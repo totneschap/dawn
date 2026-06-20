@@ -1,0 +1,31 @@
+{% comment %}
+  Renders the text content for a lookbook block.
+  Accepts:
+  - block: {Object} Lookbook block
+{% endcomment %}
+
+{%- if block.settings.collection_tag != blank and block.settings.layout == 'full' -%}
+  <a
+    href="{{ block.settings.collection_tag_url | default: '#' }}"
+    class="lookbook__tag"
+  >
+    {{ block.settings.collection_tag | escape }}
+  </a>
+{%- endif -%}
+
+{%- if block.settings.title != blank -%}
+  <p class="lookbook__title">{{ block.settings.title | escape }}</p>
+{%- endif -%}
+
+{%- if block.settings.subtitle != blank -%}
+  <p class="lookbook__subtitle">{{ block.settings.subtitle | escape }}</p>
+{%- endif -%}
+
+{%- if block.settings.button_label != blank -%}
+  <a
+    href="{{ block.settings.button_url | default: '#' }}"
+    class="lookbook__btn button button--secondary"
+  >
+    {{ block.settings.button_label | escape }}
+  </a>
+{%- endif -%}

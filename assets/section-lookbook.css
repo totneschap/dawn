@@ -1,0 +1,234 @@
+/* ============================================================
+   LOOKBOOK SECTION
+   ============================================================ */
+
+/* ---- Section header ---- */
+
+.lookbook__header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.lookbook__heading {
+  margin: 0 0 1rem;
+}
+
+.lookbook__subheading {
+  margin: 0;
+  opacity: 0.65;
+  font-size: 1.5rem;
+}
+
+/* ---- Items stack ---- */
+
+.lookbook__items {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ============================================================
+   FULL-WIDTH LAYOUT
+   ============================================================ */
+
+.lookbook__full {
+  position: relative;
+  overflow: hidden;
+  display: block;
+}
+
+/* Image heights */
+.lookbook__full--portrait  { aspect-ratio: 3 / 4; }
+.lookbook__full--landscape { aspect-ratio: 16 / 7; }
+.lookbook__full--square    { aspect-ratio: 1 / 1; }
+
+@media screen and (max-width: 749px) {
+  .lookbook__full--landscape { aspect-ratio: 4 / 5; }
+}
+
+/* ---- Image ---- */
+
+.lookbook__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lookbook__full .lookbook__image {
+  position: absolute;
+  inset: 0;
+}
+
+.lookbook__item:hover .lookbook__image {
+  transform: scale(1.03);
+}
+
+.lookbook__image--placeholder {
+  background: rgba(var(--color-foreground), 0.04);
+}
+
+/* ---- Dark overlay ---- */
+
+.lookbook__overlay {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  pointer-events: none;
+}
+
+/* ---- Text content (overlay) ---- */
+
+.lookbook__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 3.2rem;
+  gap: 1.2rem;
+}
+
+@media screen and (min-width: 750px) {
+  .lookbook__content {
+    padding: 4.8rem;
+    max-width: 52rem;
+  }
+}
+
+/* Positioning grid */
+.lookbook__content--top-left      { justify-content: flex-start; align-items: flex-start; }
+.lookbook__content--top-center    { justify-content: flex-start; align-items: center; text-align: center; }
+.lookbook__content--top-right     { justify-content: flex-start; align-items: flex-end; text-align: right; }
+.lookbook__content--middle-left   { justify-content: center;     align-items: flex-start; }
+.lookbook__content--middle-center { justify-content: center;     align-items: center; text-align: center; }
+.lookbook__content--middle-right  { justify-content: center;     align-items: flex-end; text-align: right; }
+.lookbook__content--bottom-left   { justify-content: flex-end;   align-items: flex-start; }
+.lookbook__content--bottom-center { justify-content: flex-end;   align-items: center; text-align: center; }
+.lookbook__content--bottom-right  { justify-content: flex-end;   align-items: flex-end; text-align: right; }
+
+/* Text colours */
+.lookbook__content--light .lookbook__tag,
+.lookbook__content--light .lookbook__title,
+.lookbook__content--light .lookbook__subtitle { color: #fff; }
+.lookbook__content--light .lookbook__btn {
+  color: #fff;
+  border-color: rgba(255,255,255,0.6);
+  background: transparent;
+}
+.lookbook__content--light .lookbook__btn:hover {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+.lookbook__content--dark .lookbook__tag,
+.lookbook__content--dark .lookbook__title,
+.lookbook__content--dark .lookbook__subtitle { color: rgb(var(--color-foreground)); }
+
+/* ============================================================
+   SPLIT LAYOUT
+   ============================================================ */
+
+.lookbook__split {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 750px) {
+  .lookbook__split {
+    grid-template-columns: 55fr 45fr;
+    min-height: 60rem;
+  }
+  .lookbook__item--split-right .lookbook__split {
+    grid-template-columns: 45fr 55fr;
+  }
+  .lookbook__item--split-right .lookbook__split-media { order: 2; }
+  .lookbook__item--split-right .lookbook__split-text  { order: 1; }
+}
+
+.lookbook__split-media {
+  position: relative;
+  overflow: hidden;
+  min-height: 40rem;
+}
+
+@media screen and (min-width: 750px) {
+  .lookbook__split-media {
+    min-height: unset;
+  }
+}
+
+.lookbook__split-media .lookbook__image {
+  position: absolute;
+  inset: 0;
+}
+
+.lookbook__split-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.6rem;
+  padding: 4rem 3.2rem;
+}
+
+@media screen and (min-width: 750px) {
+  .lookbook__split-text {
+    padding: 6rem 5.6rem;
+  }
+}
+
+/* ============================================================
+   SHARED CONTENT ELEMENTS
+   ============================================================ */
+
+.lookbook__tag {
+  display: inline-block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.5rem 1.2rem;
+  border: 0.1rem solid currentColor;
+  border-radius: 2rem;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+  align-self: flex-start;
+}
+
+.lookbook__split-media .lookbook__tag {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  background: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.lookbook__tag:hover {
+  background: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+  border-color: transparent;
+}
+
+.lookbook__title {
+  font-size: clamp(2.4rem, 4vw, 4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.lookbook__subtitle {
+  font-size: 1.5rem;
+  line-height: 1.6;
+  opacity: 0.7;
+  margin: 0;
+  max-width: 36rem;
+}
+
+.lookbook__btn {
+  align-self: flex-start;
+  margin-top: 0.8rem;
+}

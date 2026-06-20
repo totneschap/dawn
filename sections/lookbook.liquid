@@ -1,0 +1,327 @@
+{{ 'section-lookbook.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="lookbook color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+
+  {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+    <div class="lookbook__header page-width">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="lookbook__heading inline-richtext {{ section.settings.heading_size }}">
+          {{ section.settings.heading }}
+        </h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="lookbook__subheading">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="lookbook__items">
+      {%- for block in section.blocks -%}
+        {%- assign layout = block.settings.layout -%}
+
+        <div
+          class="lookbook__item lookbook__item--{{ layout }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+          {{ block.shopify_attributes }}
+        >
+
+          {%- if layout == 'full' -%}
+            {%- comment -%} Full-width image with text overlay {%- endcomment -%}
+            <div class="lookbook__full lookbook__full--{{ block.settings.image_height }}">
+              {%- if block.settings.image != blank -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 2400
+                  | image_tag:
+                    class: 'lookbook__image',
+                    loading: 'lazy',
+                    widths: '750, 1100, 1500, 1780, 2000, 2400',
+                    sizes: '100vw'
+                }}
+              {%- else -%}
+                {{ 'lifestyle-2' | placeholder_svg_tag: 'lookbook__image lookbook__image--placeholder' }}
+              {%- endif -%}
+
+              {%- if block.settings.overlay_opacity > 0 -%}
+                <div
+                  class="lookbook__overlay"
+                  style="opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};"
+                ></div>
+              {%- endif -%}
+
+              <div class="lookbook__content lookbook__content--{{ block.settings.text_position }} lookbook__content--{{ block.settings.text_color }}">
+                {%- render 'lookbook-content', block: block -%}
+              </div>
+            </div>
+
+          {%- elsif layout == 'split-left' or layout == 'split-right' -%}
+            {%- comment -%} Split: image on one side, text panel on the other {%- endcomment -%}
+            <div class="lookbook__split">
+              <div class="lookbook__split-media">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 1200
+                    | image_tag:
+                      class: 'lookbook__image',
+                      loading: 'lazy',
+                      widths: '550, 750, 900, 1100, 1200',
+                      sizes: '(min-width: 750px) 55vw, 100vw'
+                  }}
+                {%- else -%}
+                  {{ 'lifestyle-1' | placeholder_svg_tag: 'lookbook__image lookbook__image--placeholder' }}
+                {%- endif -%}
+                {%- if block.settings.collection_tag != blank -%}
+                  <a
+                    href="{{ block.settings.collection_tag_url | default: '#' }}"
+                    class="lookbook__tag"
+                  >
+                    {{ block.settings.collection_tag | escape }}
+                  </a>
+                {%- endif -%}
+              </div>
+              <div class="lookbook__split-text color-{{ section.settings.color_scheme }} gradient">
+                {%- render 'lookbook-content', block: block -%}
+              </div>
+            </div>
+
+          {%- endif -%}
+
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+</div>
+
+{% schema %}
+{
+  "name": "Lookbook",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Lookbook"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "look",
+      "name": "Look",
+      "settings": [
+        {
+          "type": "select",
+          "id": "layout",
+          "label": "Layout",
+          "options": [
+            { "value": "full",        "label": "Full width (text overlay)" },
+            { "value": "split-left",  "label": "Image left, text right" },
+            { "value": "split-right", "label": "Text left, image right" }
+          ],
+          "default": "full"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "image_height",
+          "label": "Image height",
+          "info": "Applies to full-width layout only.",
+          "options": [
+            { "value": "portrait",  "label": "Tall / portrait" },
+            { "value": "landscape", "label": "Cinematic / landscape" },
+            { "value": "square",    "label": "Square" }
+          ],
+          "default": "portrait"
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "text",
+          "id": "collection_tag",
+          "label": "Collection tag",
+          "info": "Small pill label shown on the image."
+        },
+        {
+          "type": "url",
+          "id": "collection_tag_url",
+          "label": "Collection tag link"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Summer Collection"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "Effortless pieces for the warmer months."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Shop the collection"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button link"
+        },
+        {
+          "type": "header",
+          "content": "Text overlay options",
+          "info": "Applies to full-width layout only."
+        },
+        {
+          "type": "select",
+          "id": "text_position",
+          "label": "Text position",
+          "options": [
+            { "value": "top-left",      "label": "Top left" },
+            { "value": "top-center",    "label": "Top centre" },
+            { "value": "top-right",     "label": "Top right" },
+            { "value": "middle-left",   "label": "Middle left" },
+            { "value": "middle-center", "label": "Middle centre" },
+            { "value": "middle-right",  "label": "Middle right" },
+            { "value": "bottom-left",   "label": "Bottom left" },
+            { "value": "bottom-center", "label": "Bottom centre" },
+            { "value": "bottom-right",  "label": "Bottom right" }
+          ],
+          "default": "bottom-left"
+        },
+        {
+          "type": "select",
+          "id": "text_color",
+          "label": "Text colour",
+          "options": [
+            { "value": "light", "label": "Light" },
+            { "value": "dark",  "label": "Dark" }
+          ],
+          "default": "light"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Overlay opacity",
+          "min": 0,
+          "max": 70,
+          "step": 5,
+          "unit": "%",
+          "default": 25
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lookbook",
+      "blocks": [
+        {
+          "type": "look",
+          "settings": {
+            "layout": "full",
+            "image_height": "portrait",
+            "title": "The Edit",
+            "subtitle": "Curated styles for the season.",
+            "button_label": "Shop now",
+            "text_position": "bottom-left",
+            "text_color": "light",
+            "overlay_opacity": 25
+          }
+        },
+        {
+          "type": "look",
+          "settings": {
+            "layout": "split-left",
+            "title": "Summer Collection",
+            "subtitle": "Effortless pieces made to be worn all day.",
+            "button_label": "Shop the collection"
+          }
+        },
+        {
+          "type": "look",
+          "settings": {
+            "layout": "split-right",
+            "title": "New Arrivals",
+            "subtitle": "Fresh drops, updated weekly.",
+            "button_label": "See what's new"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
