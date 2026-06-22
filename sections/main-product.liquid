@@ -675,6 +675,10 @@
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
 
+              {%- when 'ingredients_nutrition' -%}
+                {{ 'component-product-ingredients.css' | asset_url | stylesheet_tag }}
+                {%- render 'product-ingredients', block: block -%}
+
               {%- when 'size_chart' -%}
                 {{ 'component-size-chart.css' | asset_url | stylesheet_tag }}
                 <modal-opener
@@ -1466,6 +1470,183 @@
           "id": "page",
           "label": "t:sections.main-product.blocks.collapsible_tab.settings.page.label"
         }
+      ]
+    },
+    {
+      "type": "ingredients_nutrition",
+      "name": "Ingredients & nutrition",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Ingredients"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_ingredients",
+          "label": "Show ingredients accordion",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "ingredients_heading",
+          "label": "Ingredients heading",
+          "default": "Ingredients"
+        },
+        {
+          "type": "checkbox",
+          "id": "ingredients_open",
+          "label": "Open by default",
+          "default": false
+        },
+        {
+          "type": "richtext",
+          "id": "ingredients_list",
+          "label": "Full ingredients list"
+        },
+        {
+          "type": "header",
+          "content": "Key ingredients",
+          "info": "Highlighted ingredients shown as icon cards above the full list."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_key_ingredients",
+          "label": "Show key ingredients",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "ki_1_icon",
+          "label": "Key ingredient 1 – Icon",
+          "options": [
+            { "value": "leaf",   "label": "Leaf / plant" },
+            { "value": "drop",   "label": "Drop / hydration" },
+            { "value": "sun",    "label": "Sun / vitamin D" },
+            { "value": "star",   "label": "Star / premium" },
+            { "value": "shield", "label": "Shield / protection" },
+            { "value": "flower", "label": "Flower / botanical" }
+          ],
+          "default": "leaf"
+        },
+        { "type": "text", "id": "ki_1_name",    "label": "Key ingredient 1 – Name" },
+        { "type": "text", "id": "ki_1_benefit", "label": "Key ingredient 1 – Benefit" },
+        {
+          "type": "select",
+          "id": "ki_2_icon",
+          "label": "Key ingredient 2 – Icon",
+          "options": [
+            { "value": "leaf",   "label": "Leaf / plant" },
+            { "value": "drop",   "label": "Drop / hydration" },
+            { "value": "sun",    "label": "Sun / vitamin D" },
+            { "value": "star",   "label": "Star / premium" },
+            { "value": "shield", "label": "Shield / protection" },
+            { "value": "flower", "label": "Flower / botanical" }
+          ],
+          "default": "drop"
+        },
+        { "type": "text", "id": "ki_2_name",    "label": "Key ingredient 2 – Name" },
+        { "type": "text", "id": "ki_2_benefit", "label": "Key ingredient 2 – Benefit" },
+        {
+          "type": "select",
+          "id": "ki_3_icon",
+          "label": "Key ingredient 3 – Icon",
+          "options": [
+            { "value": "leaf",   "label": "Leaf / plant" },
+            { "value": "drop",   "label": "Drop / hydration" },
+            { "value": "sun",    "label": "Sun / vitamin D" },
+            { "value": "star",   "label": "Star / premium" },
+            { "value": "shield", "label": "Shield / protection" },
+            { "value": "flower", "label": "Flower / botanical" }
+          ],
+          "default": "sun"
+        },
+        { "type": "text", "id": "ki_3_name",    "label": "Key ingredient 3 – Name" },
+        { "type": "text", "id": "ki_3_benefit", "label": "Key ingredient 3 – Benefit" },
+        {
+          "type": "select",
+          "id": "ki_4_icon",
+          "label": "Key ingredient 4 – Icon",
+          "options": [
+            { "value": "leaf",   "label": "Leaf / plant" },
+            { "value": "drop",   "label": "Drop / hydration" },
+            { "value": "sun",    "label": "Sun / vitamin D" },
+            { "value": "star",   "label": "Star / premium" },
+            { "value": "shield", "label": "Shield / protection" },
+            { "value": "flower", "label": "Flower / botanical" }
+          ],
+          "default": "shield"
+        },
+        { "type": "text", "id": "ki_4_name",    "label": "Key ingredient 4 – Name" },
+        { "type": "text", "id": "ki_4_benefit", "label": "Key ingredient 4 – Benefit" },
+        {
+          "type": "header",
+          "content": "Nutritional information"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_nutrition",
+          "label": "Show nutrition accordion",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "nutrition_heading",
+          "label": "Nutrition heading",
+          "default": "Nutritional information"
+        },
+        {
+          "type": "checkbox",
+          "id": "nutrition_open",
+          "label": "Open by default",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "show_per_serving",
+          "label": "Show per-serving column",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "serving_size",
+          "label": "Serving size",
+          "info": "e.g. 30g, 1 capsule, 250ml",
+          "default": "30g"
+        },
+        {
+          "type": "text",
+          "id": "nutrition_note",
+          "label": "Note",
+          "info": "e.g. 'Reference intake of an average adult (8400kJ / 2000kcal)'"
+        },
+        {
+          "type": "header",
+          "content": "Energy",
+          "info": "Enter numeric values only (units are shown automatically)."
+        },
+        { "type": "text", "id": "energy_kj_100g",    "label": "Energy kJ – per 100g" },
+        { "type": "text", "id": "energy_kj_serving",  "label": "Energy kJ – per serving" },
+        { "type": "text", "id": "energy_kcal_100g",   "label": "Energy kcal – per 100g" },
+        { "type": "text", "id": "energy_kcal_serving","label": "Energy kcal – per serving" },
+        {
+          "type": "header",
+          "content": "Macronutrients"
+        },
+        { "type": "text", "id": "fat_100g",        "label": "Fat – per 100g" },
+        { "type": "text", "id": "fat_serving",     "label": "Fat – per serving" },
+        { "type": "text", "id": "saturates_100g",  "label": "of which saturates – per 100g" },
+        { "type": "text", "id": "saturates_serving","label": "of which saturates – per serving" },
+        { "type": "text", "id": "carbs_100g",      "label": "Carbohydrates – per 100g" },
+        { "type": "text", "id": "carbs_serving",   "label": "Carbohydrates – per serving" },
+        { "type": "text", "id": "sugars_100g",     "label": "of which sugars – per 100g" },
+        { "type": "text", "id": "sugars_serving",  "label": "of which sugars – per serving" },
+        { "type": "text", "id": "fibre_100g",      "label": "Fibre – per 100g" },
+        { "type": "text", "id": "fibre_serving",   "label": "Fibre – per serving" },
+        { "type": "text", "id": "protein_100g",    "label": "Protein – per 100g" },
+        { "type": "text", "id": "protein_serving", "label": "Protein – per serving" },
+        { "type": "text", "id": "salt_100g",       "label": "Salt – per 100g" },
+        { "type": "text", "id": "salt_serving",    "label": "Salt – per serving" }
       ]
     },
     {

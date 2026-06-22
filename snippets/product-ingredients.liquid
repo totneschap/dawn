@@ -1,0 +1,164 @@
+{%- comment -%}
+  Renders ingredients list and/or nutrition table for a product page block.
+  Accepts:
+  - block: {Object} The ingredients_nutrition block
+{%- endcomment -%}
+
+<div class="ingredients-nutrition-block quick-add-hidden" {{ block.shopify_attributes }}>
+
+  {%- comment -%} ── INGREDIENTS ACCORDION ── {%- endcomment -%}
+  {%- if block.settings.show_ingredients -%}
+    <div class="product__accordion accordion">
+      <details id="Details-Ingredients-{{ block.id }}" {% if block.settings.ingredients_open %}open{% endif %}>
+        <summary>
+          <div class="summary__title">
+            <span class="svg-wrapper" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M12 22C12 22 3 15 3 9a9 9 0 0 1 18 0c0 6-9 13-9 13Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M12 22V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M12 15c2-2 4-3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M12 12c-1.5-1.5-3-2-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <h2 class="h4 accordion__title">
+              {{ block.settings.ingredients_heading | default: 'Ingredients' | escape }}
+            </h2>
+          </div>
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </summary>
+
+        <div class="accordion__content ingredients__content">
+
+          {%- comment -%} Key ingredient highlights {%- endcomment -%}
+          {%- if block.settings.show_key_ingredients -%}
+            {%- assign has_ki = false -%}
+            {%- for i in (1..4) -%}
+              {%- assign ki_name_key = 'ki_' | append: i | append: '_name' -%}
+              {%- if block.settings[ki_name_key] != blank -%}
+                {%- assign has_ki = true -%}
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- if has_ki -%}
+              <ul class="ingredients__key-list" role="list">
+                {%- for i in (1..4) -%}
+                  {%- assign ki_name_key    = 'ki_' | append: i | append: '_name' -%}
+                  {%- assign ki_benefit_key = 'ki_' | append: i | append: '_benefit' -%}
+                  {%- assign ki_icon_key    = 'ki_' | append: i | append: '_icon' -%}
+                  {%- assign ki_name    = block.settings[ki_name_key] -%}
+                  {%- assign ki_benefit = block.settings[ki_benefit_key] -%}
+                  {%- assign ki_icon    = block.settings[ki_icon_key] -%}
+                  {%- if ki_name != blank -%}
+                    <li class="ingredients__key-item">
+                      <span class="ingredients__key-icon" aria-hidden="true">
+                        {%- case ki_icon -%}
+                          {%- when 'leaf' -%}
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 22C12 22 3 15 3 9a9 9 0 0 1 18 0c0 6-9 13-9 13Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 22V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                          {%- when 'drop' -%}
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L5 12a7 7 0 1 0 14 0L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                          {%- when 'sun' -%}
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                          {%- when 'star' -%}
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                          {%- when 'shield' -%}
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                          {%- when 'flower' -%}
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M12 2a3 3 0 0 1 3 3v1a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3ZM12 22a3 3 0 0 1-3-3v-1a3 3 0 0 1 6 0v1a3 3 0 0 1-3 3ZM2 12a3 3 0 0 1 3-3h1a3 3 0 0 1 0 6H5a3 3 0 0 1-3-3ZM22 12a3 3 0 0 1-3 3h-1a3 3 0 0 1 0-6h1a3 3 0 0 1 3 3ZM5.64 5.64a3 3 0 0 1 4.24 0l.71.71a3 3 0 0 1-4.24 4.24l-.71-.71a3 3 0 0 1 0-4.24ZM18.36 18.36a3 3 0 0 1-4.24 0l-.71-.71a3 3 0 0 1 4.24-4.24l.71.71a3 3 0 0 1 0 4.24ZM5.64 18.36a3 3 0 0 1 0-4.24l.71-.71a3 3 0 0 1 4.24 4.24l-.71.71a3 3 0 0 1-4.24 0ZM18.36 5.64a3 3 0 0 1 0 4.24l-.71.71a3 3 0 0 1-4.24-4.24l.71-.71a3 3 0 0 1 4.24 0Z" stroke="currentColor" stroke-width="1.5"/></svg>
+                          {%- else -%}
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                        {%- endcase -%}
+                      </span>
+                      <div class="ingredients__key-text">
+                        <span class="ingredients__key-name">{{ ki_name | escape }}</span>
+                        {%- if ki_benefit != blank -%}
+                          <span class="ingredients__key-benefit">{{ ki_benefit | escape }}</span>
+                        {%- endif -%}
+                      </div>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          {%- endif -%}
+
+          {%- comment -%} Full ingredients list {%- endcomment -%}
+          {%- if block.settings.ingredients_list != blank -%}
+            {%- if block.settings.show_key_ingredients and has_ki -%}
+              <p class="ingredients__full-label">Full ingredients list</p>
+            {%- endif -%}
+            <div class="ingredients__full rte">{{ block.settings.ingredients_list }}</div>
+          {%- endif -%}
+
+        </div>
+      </details>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ── NUTRITION ACCORDION ── {%- endcomment -%}
+  {%- if block.settings.show_nutrition -%}
+    <div class="product__accordion accordion">
+      <details id="Details-Nutrition-{{ block.id }}" {% if block.settings.nutrition_open %}open{% endif %}>
+        <summary>
+          <div class="summary__title">
+            <span class="svg-wrapper" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M3 9h18M9 9v12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <h2 class="h4 accordion__title">
+              {{ block.settings.nutrition_heading | default: 'Nutritional information' | escape }}
+            </h2>
+          </div>
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </summary>
+
+        <div class="accordion__content nutrition__content">
+
+          {%- assign show_serving_col = false -%}
+          {%- if block.settings.show_per_serving and block.settings.serving_size != blank -%}
+            {%- assign show_serving_col = true -%}
+          {%- endif -%}
+
+          <div class="nutrition__table-wrap">
+            <table class="nutrition__table">
+              <thead>
+                <tr>
+                  <th class="nutrition__cell nutrition__cell--head nutrition__cell--label"></th>
+                  <th class="nutrition__cell nutrition__cell--head">Per 100g</th>
+                  {%- if show_serving_col -%}
+                    <th class="nutrition__cell nutrition__cell--head">Per {{ block.settings.serving_size | escape }}</th>
+                  {%- endif -%}
+                </tr>
+              </thead>
+              <tbody>
+                {%- assign nut_keys   = 'energy_kj,energy_kcal,fat,saturates,carbs,sugars,fibre,protein,salt' | split: ',' -%}
+                {%- assign nut_labels = 'Energy (kJ),Energy (kcal),Fat,of which saturates,Carbohydrates,of which sugars,Fibre,Protein,Salt' | split: ',' -%}
+                {%- assign nut_indent = 'no,no,no,yes,no,yes,no,no,no' | split: ',' -%}
+                {%- for key in nut_keys -%}
+                  {%- assign v100  = block.settings[key | append: '_100g'] -%}
+                  {%- assign vserv = block.settings[key | append: '_serving'] -%}
+                  {%- if v100 != blank or vserv != blank -%}
+                    <tr class="nutrition__row{% if nut_indent[forloop.index0] == 'yes' %} nutrition__row--indent{% endif %}">
+                      <td class="nutrition__cell nutrition__cell--label">{{ nut_labels[forloop.index0] }}</td>
+                      <td class="nutrition__cell">{{ v100 | default: '—' }}</td>
+                      {%- if show_serving_col -%}
+                        <td class="nutrition__cell">{{ vserv | default: '—' }}</td>
+                      {%- endif -%}
+                    </tr>
+                  {%- endif -%}
+                {%- endfor -%}
+              </tbody>
+            </table>
+          </div>
+
+          {%- if block.settings.nutrition_note != blank -%}
+            <p class="nutrition__note">{{ block.settings.nutrition_note | escape }}</p>
+          {%- endif -%}
+
+        </div>
+      </details>
+    </div>
+  {%- endif -%}
+
+</div>
