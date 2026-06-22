@@ -1,0 +1,117 @@
+{%- comment -%}
+  Renders shipping options and estimated delivery on the product page.
+  Accepts:
+  - block: {Object} The shipping_info block
+{%- endcomment -%}
+
+{%- liquid
+  assign has_options = false
+  for i in (1..4)
+    assign label_key = 'option_' | append: i | append: '_label'
+    if block.settings[label_key] != blank
+      assign has_options = true
+    endif
+  endfor
+-%}
+
+<div class="shipping-info quick-add-hidden" {{ block.shopify_attributes }}>
+
+  {%- if block.settings.heading != blank -%}
+    <p class="shipping-info__heading">{{ block.settings.heading | escape }}</p>
+  {%- endif -%}
+
+  {%- if block.settings.cutoff_time != blank -%}
+    <p class="shipping-info__cutoff" data-cutoff-hour="{{ block.settings.cutoff_hour }}">
+      <span class="svg-wrapper" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </span>
+      {{ block.settings.cutoff_time | escape }}
+    </p>
+  {%- endif -%}
+
+  {%- if has_options -%}
+    <ul class="shipping-info__list" role="list">
+      {%- for i in (1..4) -%}
+        {%- assign label_key     = 'option_' | append: i | append: '_label' -%}
+        {%- assign timeframe_key = 'option_' | append: i | append: '_timeframe' -%}
+        {%- assign price_key     = 'option_' | append: i | append: '_price' -%}
+        {%- assign icon_key      = 'option_' | append: i | append: '_icon' -%}
+        {%- assign highlight_key = 'option_' | append: i | append: '_highlight' -%}
+        {%- assign label_val     = block.settings[label_key] -%}
+        {%- if label_val != blank -%}
+          <li class="shipping-info__item{% if block.settings[highlight_key] %} shipping-info__item--highlight{% endif %}">
+            <span class="shipping-info__icon" aria-hidden="true">
+              {%- case block.settings[icon_key] -%}
+                {%- when 'truck' -%}
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M1 3h13v13H1zM14 8h4l3 3v5h-7V8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="1.5"/><circle cx="18.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="1.5"/></svg>
+                {%- when 'plane' -%}
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                {%- when 'store' -%}
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 9l1-6h16l1 6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M3 9a3 3 0 0 0 6 0m0 0a3 3 0 0 0 6 0m0 0a3 3 0 0 0 6 0" stroke="currentColor" stroke-width="1.5"/><path d="M5 21v-9.5M19 21v-9.5M5 21h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                {%- when 'box' -%}
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 7l-8-4-8 4v10l8 4 8-4V7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M4 7l8 4m0 0l8-4m-8 4v9" stroke="currentColor" stroke-width="1.5"/></svg>
+                {%- when 'lightning' -%}
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 2L4.5 13.5H11L10 22l9.5-12H13.5L13 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                {%- else -%}
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M1 3h13v13H1zM14 8h4l3 3v5h-7V8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="1.5"/><circle cx="18.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="1.5"/></svg>
+              {%- endcase -%}
+            </span>
+            <span class="shipping-info__text">
+              <span class="shipping-info__label">{{ label_val | escape }}</span>
+              {%- if block.settings[timeframe_key] != blank -%}
+                <span class="shipping-info__timeframe">{{ block.settings[timeframe_key] | escape }}</span>
+              {%- endif -%}
+            </span>
+            {%- if block.settings[price_key] != blank -%}
+              <span class="shipping-info__price">{{ block.settings[price_key] | escape }}</span>
+            {%- endif -%}
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+
+  {%- if block.settings.show_policy_link and shop.shipping_policy.body != blank -%}
+    <a href="{{ shop.shipping_policy.url }}" class="shipping-info__policy link">
+      {{ 'products.product.shipping_policy_html' | t: link: '' | strip_html }}
+      {{- 'icon-arrow.svg' | inline_asset_content -}}
+    </a>
+  {%- endif -%}
+
+</div>
+
+{%- if block.settings.cutoff_hour != blank -%}
+  <script>
+    (function () {
+      var el = document.querySelector('[data-cutoff-hour="{{ block.settings.cutoff_hour }}"]');
+      if (!el) return;
+      var now = new Date();
+      var cutoff = parseInt('{{ block.settings.cutoff_hour }}', 10);
+      var isWeekend = now.getDay() === 0 || now.getDay() === 6;
+      var isPast = now.getHours() >= cutoff;
+      var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      function addWorkingDays(date, n) {
+        var d = new Date(date);
+        var added = 0;
+        while (added < n) {
+          d.setDate(d.getDate() + 1);
+          if (d.getDay() !== 0 && d.getDay() !== 6) added++;
+        }
+        return d;
+      }
+      var dispatchDate = new Date(now);
+      if (isWeekend || isPast) {
+        do { dispatchDate.setDate(dispatchDate.getDate() + 1); }
+        while (dispatchDate.getDay() === 0 || dispatchDate.getDay() === 6);
+      }
+      var isToday = dispatchDate.toDateString() === now.toDateString();
+      var cutoffStr = '{{ block.settings.cutoff_time | escape }}';
+      if (isToday && cutoffStr) {
+        el.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Order before <strong>' + cutoffStr + '</strong> for dispatch today';
+      } else if (cutoffStr) {
+        el.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Order now for dispatch <strong>' + days[dispatchDate.getDay()] + '</strong>';
+      }
+    })();
+  </script>
+{%- endif -%}

@@ -675,6 +675,10 @@
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
 
+              {%- when 'shipping_info' -%}
+                {{ 'component-product-shipping-info.css' | asset_url | stylesheet_tag }}
+                {%- render 'product-shipping-info', block: block -%}
+
               {%- when 'tabs' -%}
                 {{ 'component-product-tabs.css' | asset_url | stylesheet_tag }}
                 {%- render 'product-tabs', block: block -%}
@@ -1473,6 +1477,133 @@
           "type": "page",
           "id": "page",
           "label": "t:sections.main-product.blocks.collapsible_tab.settings.page.label"
+        }
+      ]
+    },
+    {
+      "type": "shipping_info",
+      "name": "Shipping info",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Delivery & shipping"
+        },
+        {
+          "type": "header",
+          "content": "Dispatch notice",
+          "info": "Shows a live message: 'Order before X for dispatch today' or 'Order now for dispatch [day]'."
+        },
+        {
+          "type": "text",
+          "id": "cutoff_time",
+          "label": "Cutoff display text",
+          "info": "e.g. '2pm' — shown in the dispatch notice.",
+          "default": "2pm"
+        },
+        {
+          "type": "text",
+          "id": "cutoff_hour",
+          "label": "Cutoff hour (24h)",
+          "info": "e.g. '14' for 2pm. Used to calculate whether today counts for dispatch.",
+          "default": "14"
+        },
+        {
+          "type": "header",
+          "content": "Shipping option 1"
+        },
+        {
+          "type": "select",
+          "id": "option_1_icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck",     "label": "Delivery van" },
+            { "value": "lightning", "label": "Lightning (express)" },
+            { "value": "plane",     "label": "Plane (international)" },
+            { "value": "store",     "label": "Store (click & collect)" },
+            { "value": "box",       "label": "Box (standard)" }
+          ],
+          "default": "truck"
+        },
+        { "type": "text", "id": "option_1_label",     "label": "Label",     "default": "Standard delivery" },
+        { "type": "text", "id": "option_1_timeframe", "label": "Timeframe", "default": "3–5 working days" },
+        { "type": "text", "id": "option_1_price",     "label": "Price",     "default": "£3.99" },
+        { "type": "checkbox", "id": "option_1_highlight", "label": "Highlight this option", "default": false },
+        {
+          "type": "header",
+          "content": "Shipping option 2"
+        },
+        {
+          "type": "select",
+          "id": "option_2_icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck",     "label": "Delivery van" },
+            { "value": "lightning", "label": "Lightning (express)" },
+            { "value": "plane",     "label": "Plane (international)" },
+            { "value": "store",     "label": "Store (click & collect)" },
+            { "value": "box",       "label": "Box (standard)" }
+          ],
+          "default": "lightning"
+        },
+        { "type": "text", "id": "option_2_label",     "label": "Label",     "default": "Express delivery" },
+        { "type": "text", "id": "option_2_timeframe", "label": "Timeframe", "default": "Next working day" },
+        { "type": "text", "id": "option_2_price",     "label": "Price",     "default": "£6.99" },
+        { "type": "checkbox", "id": "option_2_highlight", "label": "Highlight this option", "default": false },
+        {
+          "type": "header",
+          "content": "Shipping option 3"
+        },
+        {
+          "type": "select",
+          "id": "option_3_icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck",     "label": "Delivery van" },
+            { "value": "lightning", "label": "Lightning (express)" },
+            { "value": "plane",     "label": "Plane (international)" },
+            { "value": "store",     "label": "Store (click & collect)" },
+            { "value": "box",       "label": "Box (standard)" }
+          ],
+          "default": "store"
+        },
+        { "type": "text", "id": "option_3_label",     "label": "Label" },
+        { "type": "text", "id": "option_3_timeframe", "label": "Timeframe" },
+        { "type": "text", "id": "option_3_price",     "label": "Price" },
+        { "type": "checkbox", "id": "option_3_highlight", "label": "Highlight this option", "default": false },
+        {
+          "type": "header",
+          "content": "Shipping option 4"
+        },
+        {
+          "type": "select",
+          "id": "option_4_icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck",     "label": "Delivery van" },
+            { "value": "lightning", "label": "Lightning (express)" },
+            { "value": "plane",     "label": "Plane (international)" },
+            { "value": "store",     "label": "Store (click & collect)" },
+            { "value": "box",       "label": "Box (standard)" }
+          ],
+          "default": "plane"
+        },
+        { "type": "text", "id": "option_4_label",     "label": "Label" },
+        { "type": "text", "id": "option_4_timeframe", "label": "Timeframe" },
+        { "type": "text", "id": "option_4_price",     "label": "Price" },
+        { "type": "checkbox", "id": "option_4_highlight", "label": "Highlight this option", "default": false },
+        {
+          "type": "header",
+          "content": "Policy link"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_policy_link",
+          "label": "Show shipping policy link",
+          "default": true,
+          "info": "Links to your shipping policy set in Shopify Admin → Settings → Policies."
         }
       ]
     },
