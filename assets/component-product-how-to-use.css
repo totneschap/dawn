@@ -1,0 +1,104 @@
+/* ============================================================
+   PRODUCT HOW TO USE — numbered steps
+   ============================================================ */
+
+.how-to-use {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+/* ---- Heading ---- */
+
+.how-to-use__heading {
+  margin: 0;
+}
+
+/* ---- Steps list ---- */
+
+.how-to-use__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ---- Individual step ---- */
+
+.how-to-use__step {
+  display: flex;
+  gap: 1.6rem;
+  align-items: flex-start;
+  position: relative;
+}
+
+/* Connecting line between steps */
+.how-to-use__step:not(.how-to-use__step--last)::before {
+  content: '';
+  position: absolute;
+  left: 1.55rem;
+  top: 3.2rem;
+  bottom: 0;
+  width: 0.1rem;
+  background: rgba(var(--color-foreground), 0.15);
+}
+
+/* ---- Number badge ---- */
+
+.how-to-use__number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 50%;
+  background: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+  font-size: 1.3rem;
+  font-weight: 600;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- Step content ---- */
+
+.how-to-use__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-bottom: 2rem;
+}
+
+.how-to-use__step--last .how-to-use__content {
+  padding-bottom: 0;
+}
+
+.how-to-use__title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 3.2rem;
+  margin: 0;
+}
+
+.how-to-use__description {
+  font-size: 1.4rem;
+  line-height: 1.6;
+  opacity: 0.75;
+}
+
+.how-to-use__description p {
+  margin: 0;
+}
+
+/* ---- Optional CTA link ---- */
+
+.how-to-use__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.4rem;
+  margin-top: 0.4rem;
+}

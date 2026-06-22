@@ -1,0 +1,56 @@
+{%- comment -%}
+  Renders a numbered "How to use" steps block on the product page.
+  Accepts:
+  - block: {Object} The how_to_use block
+{%- endcomment -%}
+
+{%- liquid
+  assign step_count = 0
+  for i in (1..6)
+    assign title_key = 'step_' | append: i | append: '_title'
+    if block.settings[title_key] != blank
+      assign step_count = step_count | plus: 1
+    endif
+  endfor
+-%}
+
+{%- if step_count > 0 -%}
+  <div class="how-to-use quick-add-hidden" {{ block.shopify_attributes }}>
+
+    {%- if block.settings.heading != blank -%}
+      <h2 class="how-to-use__heading h4">{{ block.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    <ol class="how-to-use__steps" role="list">
+      {%- assign step_num = 0 -%}
+      {%- for i in (1..6) -%}
+        {%- assign title_key = 'step_' | append: i | append: '_title' -%}
+        {%- assign desc_key  = 'step_' | append: i | append: '_description' -%}
+        {%- assign title_val = block.settings[title_key] -%}
+        {%- if title_val != blank -%}
+          {%- assign step_num = step_num | plus: 1 -%}
+          <li class="how-to-use__step{% if step_num == step_count %} how-to-use__step--last{% endif %}">
+            <div class="how-to-use__number" aria-hidden="true">{{ step_num }}</div>
+            <div class="how-to-use__content">
+              <p class="how-to-use__title">{{ title_val | escape }}</p>
+              {%- if block.settings[desc_key] != blank -%}
+                <div class="how-to-use__description rte">{{ block.settings[desc_key] }}</div>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ol>
+
+    {%- if block.settings.link_label != blank -%}
+      <a
+        href="{{ block.settings.link_url | default: '#' }}"
+        class="how-to-use__link link animate-arrow"
+      >
+        {{ block.settings.link_label | escape }}
+        {{- 'icon-arrow.svg' | inline_asset_content -}}
+      </a>
+    {%- endif -%}
+
+  </div>
+{%- endif -%}

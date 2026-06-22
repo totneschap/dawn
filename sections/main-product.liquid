@@ -675,6 +675,10 @@
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
 
+              {%- when 'how_to_use' -%}
+                {{ 'component-product-how-to-use.css' | asset_url | stylesheet_tag }}
+                {%- render 'product-how-to-use', block: block -%}
+
               {%- when 'shipping_info' -%}
                 {{ 'component-product-shipping-info.css' | asset_url | stylesheet_tag }}
                 {%- render 'product-shipping-info', block: block -%}
@@ -1477,6 +1481,120 @@
           "type": "page",
           "id": "page",
           "label": "t:sections.main-product.blocks.collapsible_tab.settings.page.label"
+        }
+      ]
+    },
+    {
+      "type": "how_to_use",
+      "name": "How to use",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "How to use"
+        },
+        {
+          "type": "header",
+          "content": "Step 1"
+        },
+        {
+          "type": "text",
+          "id": "step_1_title",
+          "label": "Title",
+          "default": "Step one"
+        },
+        {
+          "type": "richtext",
+          "id": "step_1_description",
+          "label": "Description"
+        },
+        {
+          "type": "header",
+          "content": "Step 2"
+        },
+        {
+          "type": "text",
+          "id": "step_2_title",
+          "label": "Title",
+          "default": "Step two"
+        },
+        {
+          "type": "richtext",
+          "id": "step_2_description",
+          "label": "Description"
+        },
+        {
+          "type": "header",
+          "content": "Step 3"
+        },
+        {
+          "type": "text",
+          "id": "step_3_title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "step_3_description",
+          "label": "Description"
+        },
+        {
+          "type": "header",
+          "content": "Step 4"
+        },
+        {
+          "type": "text",
+          "id": "step_4_title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "step_4_description",
+          "label": "Description"
+        },
+        {
+          "type": "header",
+          "content": "Step 5"
+        },
+        {
+          "type": "text",
+          "id": "step_5_title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "step_5_description",
+          "label": "Description"
+        },
+        {
+          "type": "header",
+          "content": "Step 6"
+        },
+        {
+          "type": "text",
+          "id": "step_6_title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "step_6_description",
+          "label": "Description"
+        },
+        {
+          "type": "header",
+          "content": "Optional link"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link text",
+          "info": "e.g. 'Watch the full tutorial'"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
         }
       ]
     },
