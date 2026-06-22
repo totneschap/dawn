@@ -1,0 +1,133 @@
+/* ============================================================
+   SIZE CHART BLOCK — modal link + table
+   ============================================================ */
+
+/* ---- Trigger link ---- */
+
+.size-chart__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.size-chart__link .svg-wrapper svg {
+  display: block;
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+/* ---- Modal overrides ---- */
+
+.size-chart-modal .product-popup-modal__content {
+  max-width: 72rem;
+}
+
+/* ---- Inner layout ---- */
+
+.size-chart-modal__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.size-chart__heading {
+  margin: 0;
+}
+
+/* ---- Unit toggle ---- */
+
+.size-chart__toggle {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.2);
+  border-radius: 3rem;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.size-chart__toggle-btn {
+  padding: 0.6rem 1.6rem;
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  background: transparent;
+  color: rgb(var(--color-foreground));
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  line-height: 1;
+}
+
+.size-chart__toggle-btn.is-active {
+  background: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+}
+
+/* ---- Intro richtext ---- */
+
+.size-chart__intro {
+  font-size: 1.4rem;
+  opacity: 0.75;
+  margin: 0;
+}
+
+.size-chart__intro p {
+  margin: 0;
+}
+
+/* ---- Table wrapper (allows horizontal scroll on mobile) ---- */
+
+.size-chart__table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ---- Table ---- */
+
+.size-chart__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.4rem;
+  white-space: nowrap;
+}
+
+.size-chart__cell {
+  padding: 1.1rem 1.6rem;
+  text-align: center;
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.1);
+}
+
+.size-chart__cell--head {
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(var(--color-foreground), 0.04);
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.15);
+}
+
+.size-chart__cell--size {
+  font-weight: 600;
+  text-align: left;
+}
+
+.size-chart__row:last-child .size-chart__cell {
+  border-bottom: none;
+}
+
+.size-chart__row:hover .size-chart__cell {
+  background: rgba(var(--color-foreground), 0.03);
+}
+
+/* ---- Note ---- */
+
+.size-chart__note {
+  font-size: 1.2rem;
+  opacity: 0.55;
+  margin: 0;
+  text-align: center;
+  padding-top: 0.4rem;
+}

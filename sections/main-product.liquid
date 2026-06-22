@@ -675,6 +675,25 @@
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
 
+              {%- when 'size_chart' -%}
+                {{ 'component-size-chart.css' | asset_url | stylesheet_tag }}
+                <modal-opener
+                  class="size-chart__opener quick-add-hidden"
+                  data-modal="#SizeChartModal-{{ block.id }}"
+                  {{ block.shopify_attributes }}
+                >
+                  <button
+                    type="button"
+                    class="size-chart__link link"
+                    aria-haspopup="dialog"
+                  >
+                    <span class="svg-wrapper" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 7H21M3 7L6 4M3 7L6 10M21 7L18 4M21 7L18 10M3 17H21M3 17L6 14M3 17L6 20M21 17L18 14M21 17L18 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                    {{ block.settings.link_label | default: 'Size guide' }}
+                  </button>
+                </modal-opener>
+
               {%- when 'trust_badges' -%}
                 {{ 'component-trust-badges.css' | asset_url | stylesheet_tag }}
                 <div class="trust-badges" {{ block.shopify_attributes }}>
@@ -772,6 +791,118 @@
             <h1 class="h2">{{ block.settings.page.title | escape }}</h1>
             {{ block.settings.page.content }}
           </div>
+        </div>
+      </modal-dialog>
+    {%- endfor -%}
+
+    {%- assign size_charts = section.blocks | where: 'type', 'size_chart' -%}
+    {%- for block in size_charts -%}
+      <modal-dialog id="SizeChartModal-{{ block.id }}" class="size-chart-modal product-popup-modal" {{ block.shopify_attributes }}>
+        <div
+          role="dialog"
+          aria-label="{{ block.settings.link_label | default: 'Size guide' | escape }}"
+          aria-modal="true"
+          class="size-chart-modal__dialog product-popup-modal__content"
+          tabindex="-1"
+        >
+          <button
+            type="button"
+            class="product-popup-modal__toggle"
+            aria-label="{{ 'accessibility.close' | t }}"
+          >
+            {{- 'icon-close.svg' | inline_asset_content -}}
+          </button>
+
+          <div class="size-chart-modal__inner">
+            {%- if block.settings.heading != blank -%}
+              <h2 class="size-chart__heading h2">{{ block.settings.heading | escape }}</h2>
+            {%- endif -%}
+
+            {%- if block.settings.show_unit_toggle -%}
+              <div class="size-chart__toggle" role="group" aria-label="Unit">
+                <button type="button" class="size-chart__toggle-btn is-active" data-unit="cm">cm</button>
+                <button type="button" class="size-chart__toggle-btn" data-unit="in">inches</button>
+              </div>
+            {%- endif -%}
+
+            {%- if block.settings.intro != blank -%}
+              <div class="size-chart__intro rte">{{ block.settings.intro }}</div>
+            {%- endif -%}
+
+            <div class="size-chart__table-wrap">
+              <table class="size-chart__table">
+                <thead>
+                  <tr>
+                    <th class="size-chart__cell size-chart__cell--head">Size</th>
+                    {%- for i in (1..4) -%}
+                      {%- assign col_key = 'col_' | append: i | append: '_label' -%}
+                      {%- assign col_val = block.settings[col_key] -%}
+                      {%- if col_val != blank -%}
+                        <th class="size-chart__cell size-chart__cell--head">{{ col_val }}</th>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </tr>
+                </thead>
+                <tbody>
+                  {%- for i in (1..8) -%}
+                    {%- assign row_size_key = 'row_' | append: i | append: '_size' -%}
+                    {%- assign row_size_val = block.settings[row_size_key] -%}
+                    {%- if row_size_val != blank -%}
+                      <tr class="size-chart__row">
+                        <td class="size-chart__cell size-chart__cell--size">{{ row_size_val }}</td>
+                        {%- for j in (1..4) -%}
+                          {%- assign col_key = 'col_' | append: j | append: '_label' -%}
+                          {%- if block.settings[col_key] != blank -%}
+                            {%- assign val_key = 'row_' | append: i | append: '_v' | append: j -%}
+                            {%- assign val = block.settings[val_key] -%}
+                            <td class="size-chart__cell">
+                              {%- if val != blank -%}
+                                <span class="size-chart__value" data-cm="{{ val }}">
+                                  {{ val }}<span class="size-chart__unit-label"> cm</span>
+                                </span>
+                              {%- else -%}
+                                —
+                              {%- endif -%}
+                            </td>
+                          {%- endif -%}
+                        {%- endfor -%}
+                      </tr>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </tbody>
+              </table>
+            </div>
+
+            {%- if block.settings.note != blank -%}
+              <p class="size-chart__note">{{ block.settings.note | escape }}</p>
+            {%- endif -%}
+          </div>
+
+          <script>
+            (function () {
+              var dialog = document.getElementById('SizeChartModal-{{ block.id }}');
+              if (!dialog) return;
+              dialog.querySelectorAll('.size-chart__toggle-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                  var unit = btn.dataset.unit;
+                  dialog.querySelectorAll('.size-chart__toggle-btn').forEach(function (b) { b.classList.remove('is-active'); });
+                  btn.classList.add('is-active');
+                  dialog.querySelectorAll('.size-chart__value').forEach(function (el) {
+                    var cm = parseFloat(el.dataset.cm);
+                    var label = el.querySelector('.size-chart__unit-label');
+                    if (unit === 'in') {
+                      el.childNodes[0].textContent = (Math.round((cm / 2.54) * 10) / 10);
+                      if (label) label.textContent = ' in';
+                    } else {
+                      el.childNodes[0].textContent = cm;
+                      if (label) label.textContent = ' cm';
+                    }
+                  });
+                });
+              });
+            })();
+          </script>
+
         </div>
       </modal-dialog>
     {%- endfor -%}
@@ -1335,6 +1466,116 @@
           "id": "page",
           "label": "t:sections.main-product.blocks.collapsible_tab.settings.page.label"
         }
+      ]
+    },
+    {
+      "type": "size_chart",
+      "name": "Size chart",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link text",
+          "default": "Size guide"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Modal heading",
+          "default": "Size guide"
+        },
+        {
+          "type": "richtext",
+          "id": "intro",
+          "label": "Introduction",
+          "info": "Optional note shown above the table."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_unit_toggle",
+          "label": "Show cm / inches toggle",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "note",
+          "label": "Note",
+          "info": "Small text shown below the table, e.g. 'All measurements are approximate.'"
+        },
+        {
+          "type": "header",
+          "content": "Column headings"
+        },
+        {
+          "type": "text",
+          "id": "col_1_label",
+          "label": "Column 1",
+          "default": "Chest"
+        },
+        {
+          "type": "text",
+          "id": "col_2_label",
+          "label": "Column 2",
+          "default": "Waist"
+        },
+        {
+          "type": "text",
+          "id": "col_3_label",
+          "label": "Column 3",
+          "default": "Hips"
+        },
+        {
+          "type": "text",
+          "id": "col_4_label",
+          "label": "Column 4",
+          "default": "Length"
+        },
+        {
+          "type": "header",
+          "content": "Size rows",
+          "info": "Enter numeric measurements in cm. Rows with a blank size label are hidden."
+        },
+        { "type": "text", "id": "row_1_size", "label": "Row 1 – Size", "default": "XS" },
+        { "type": "text", "id": "row_1_v1",   "label": "Row 1 – Col 1 (cm)", "default": "82" },
+        { "type": "text", "id": "row_1_v2",   "label": "Row 1 – Col 2 (cm)", "default": "62" },
+        { "type": "text", "id": "row_1_v3",   "label": "Row 1 – Col 3 (cm)", "default": "88" },
+        { "type": "text", "id": "row_1_v4",   "label": "Row 1 – Col 4 (cm)", "default": "58" },
+        { "type": "text", "id": "row_2_size", "label": "Row 2 – Size", "default": "S" },
+        { "type": "text", "id": "row_2_v1",   "label": "Row 2 – Col 1 (cm)", "default": "86" },
+        { "type": "text", "id": "row_2_v2",   "label": "Row 2 – Col 2 (cm)", "default": "66" },
+        { "type": "text", "id": "row_2_v3",   "label": "Row 2 – Col 3 (cm)", "default": "92" },
+        { "type": "text", "id": "row_2_v4",   "label": "Row 2 – Col 4 (cm)", "default": "59" },
+        { "type": "text", "id": "row_3_size", "label": "Row 3 – Size", "default": "M" },
+        { "type": "text", "id": "row_3_v1",   "label": "Row 3 – Col 1 (cm)", "default": "90" },
+        { "type": "text", "id": "row_3_v2",   "label": "Row 3 – Col 2 (cm)", "default": "70" },
+        { "type": "text", "id": "row_3_v3",   "label": "Row 3 – Col 3 (cm)", "default": "96" },
+        { "type": "text", "id": "row_3_v4",   "label": "Row 3 – Col 4 (cm)", "default": "60" },
+        { "type": "text", "id": "row_4_size", "label": "Row 4 – Size", "default": "L" },
+        { "type": "text", "id": "row_4_v1",   "label": "Row 4 – Col 1 (cm)", "default": "94" },
+        { "type": "text", "id": "row_4_v2",   "label": "Row 4 – Col 2 (cm)", "default": "74" },
+        { "type": "text", "id": "row_4_v3",   "label": "Row 4 – Col 3 (cm)", "default": "100" },
+        { "type": "text", "id": "row_4_v4",   "label": "Row 4 – Col 4 (cm)", "default": "61" },
+        { "type": "text", "id": "row_5_size", "label": "Row 5 – Size", "default": "XL" },
+        { "type": "text", "id": "row_5_v1",   "label": "Row 5 – Col 1 (cm)", "default": "98" },
+        { "type": "text", "id": "row_5_v2",   "label": "Row 5 – Col 2 (cm)", "default": "78" },
+        { "type": "text", "id": "row_5_v3",   "label": "Row 5 – Col 3 (cm)", "default": "104" },
+        { "type": "text", "id": "row_5_v4",   "label": "Row 5 – Col 4 (cm)", "default": "62" },
+        { "type": "text", "id": "row_6_size", "label": "Row 6 – Size", "default": "XXL" },
+        { "type": "text", "id": "row_6_v1",   "label": "Row 6 – Col 1 (cm)", "default": "102" },
+        { "type": "text", "id": "row_6_v2",   "label": "Row 6 – Col 2 (cm)", "default": "82" },
+        { "type": "text", "id": "row_6_v3",   "label": "Row 6 – Col 3 (cm)", "default": "108" },
+        { "type": "text", "id": "row_6_v4",   "label": "Row 6 – Col 4 (cm)", "default": "63" },
+        { "type": "text", "id": "row_7_size", "label": "Row 7 – Size" },
+        { "type": "text", "id": "row_7_v1",   "label": "Row 7 – Col 1 (cm)" },
+        { "type": "text", "id": "row_7_v2",   "label": "Row 7 – Col 2 (cm)" },
+        { "type": "text", "id": "row_7_v3",   "label": "Row 7 – Col 3 (cm)" },
+        { "type": "text", "id": "row_7_v4",   "label": "Row 7 – Col 4 (cm)" },
+        { "type": "text", "id": "row_8_size", "label": "Row 8 – Size" },
+        { "type": "text", "id": "row_8_v1",   "label": "Row 8 – Col 1 (cm)" },
+        { "type": "text", "id": "row_8_v2",   "label": "Row 8 – Col 2 (cm)" },
+        { "type": "text", "id": "row_8_v3",   "label": "Row 8 – Col 3 (cm)" },
+        { "type": "text", "id": "row_8_v4",   "label": "Row 8 – Col 4 (cm)" }
       ]
     },
     {
