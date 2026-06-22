@@ -136,8 +136,10 @@
                 {%- assign nut_labels = 'Energy (kJ),Energy (kcal),Fat,of which saturates,Carbohydrates,of which sugars,Fibre,Protein,Salt' | split: ',' -%}
                 {%- assign nut_indent = 'no,no,no,yes,no,yes,no,no,no' | split: ',' -%}
                 {%- for key in nut_keys -%}
-                  {%- assign v100  = block.settings[key | append: '_100g'] -%}
-                  {%- assign vserv = block.settings[key | append: '_serving'] -%}
+                  {%- assign key_100g = key | append: '_100g' -%}
+                  {%- assign key_serv = key | append: '_serving' -%}
+                  {%- assign v100  = block.settings[key_100g] -%}
+                  {%- assign vserv = block.settings[key_serv] -%}
                   {%- if v100 != blank or vserv != blank -%}
                     <tr class="nutrition__row{% if nut_indent[forloop.index0] == 'yes' %} nutrition__row--indent{% endif %}">
                       <td class="nutrition__cell nutrition__cell--label">{{ nut_labels[forloop.index0] }}</td>
