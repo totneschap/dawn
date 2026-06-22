@@ -1,0 +1,99 @@
+/* ============================================================
+   PRODUCT PAGE TABS
+   ============================================================ */
+
+product-tabs {
+  display: block;
+}
+
+/* ---- Tab bar ---- */
+
+.product-tabs__bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.12);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin-bottom: 2.4rem;
+}
+
+.product-tabs__bar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---- Tab buttons ---- */
+
+.product-tabs__btn {
+  position: relative;
+  padding: 1.2rem 1.8rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: rgba(var(--color-foreground), 0.55);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.product-tabs__btn::after {
+  content: '';
+  position: absolute;
+  bottom: -0.1rem;
+  left: 0;
+  right: 0;
+  height: 0.2rem;
+  background: rgb(var(--color-foreground));
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
+}
+
+.product-tabs__btn:hover {
+  color: rgb(var(--color-foreground));
+}
+
+.product-tabs__btn[aria-selected='true'] {
+  color: rgb(var(--color-foreground));
+}
+
+.product-tabs__btn[aria-selected='true']::after {
+  transform: scaleX(1);
+}
+
+/* ---- Tab panels ---- */
+
+.product-tabs__panel {
+  font-size: 1.5rem;
+  line-height: 1.7;
+  animation: tabFadeIn 0.2s ease;
+}
+
+.product-tabs__panel[hidden] {
+  display: none;
+}
+
+@keyframes tabFadeIn {
+  from { opacity: 0; transform: translateY(0.4rem); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- RTE spacing inside panels ---- */
+
+.product-tabs__panel > * + * {
+  margin-top: 1.2rem;
+}
+
+.product-tabs__panel h1,
+.product-tabs__panel h2,
+.product-tabs__panel h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.8rem;
+}
+
+.product-tabs__panel ul,
+.product-tabs__panel ol {
+  padding-left: 2rem;
+}

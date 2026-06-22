@@ -675,6 +675,10 @@
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
 
+              {%- when 'tabs' -%}
+                {{ 'component-product-tabs.css' | asset_url | stylesheet_tag }}
+                {%- render 'product-tabs', block: block -%}
+
               {%- when 'ingredients_nutrition' -%}
                 {{ 'component-product-ingredients.css' | asset_url | stylesheet_tag }}
                 {%- render 'product-ingredients', block: block -%}
@@ -1469,6 +1473,115 @@
           "type": "page",
           "id": "page",
           "label": "t:sections.main-product.blocks.collapsible_tab.settings.page.label"
+        }
+      ]
+    },
+    {
+      "type": "tabs",
+      "name": "Tabs",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Add up to 5 tabs. Leave the label blank to hide a tab."
+        },
+        {
+          "type": "header",
+          "content": "Tab 1"
+        },
+        {
+          "type": "text",
+          "id": "tab_1_label",
+          "label": "Label",
+          "default": "Description"
+        },
+        {
+          "type": "richtext",
+          "id": "tab_1_content",
+          "label": "Content"
+        },
+        {
+          "type": "page",
+          "id": "tab_1_page",
+          "label": "Or link to a page"
+        },
+        {
+          "type": "header",
+          "content": "Tab 2"
+        },
+        {
+          "type": "text",
+          "id": "tab_2_label",
+          "label": "Label",
+          "default": "Details"
+        },
+        {
+          "type": "richtext",
+          "id": "tab_2_content",
+          "label": "Content"
+        },
+        {
+          "type": "page",
+          "id": "tab_2_page",
+          "label": "Or link to a page"
+        },
+        {
+          "type": "header",
+          "content": "Tab 3"
+        },
+        {
+          "type": "text",
+          "id": "tab_3_label",
+          "label": "Label",
+          "default": "Shipping & returns"
+        },
+        {
+          "type": "richtext",
+          "id": "tab_3_content",
+          "label": "Content"
+        },
+        {
+          "type": "page",
+          "id": "tab_3_page",
+          "label": "Or link to a page"
+        },
+        {
+          "type": "header",
+          "content": "Tab 4"
+        },
+        {
+          "type": "text",
+          "id": "tab_4_label",
+          "label": "Label"
+        },
+        {
+          "type": "richtext",
+          "id": "tab_4_content",
+          "label": "Content"
+        },
+        {
+          "type": "page",
+          "id": "tab_4_page",
+          "label": "Or link to a page"
+        },
+        {
+          "type": "header",
+          "content": "Tab 5"
+        },
+        {
+          "type": "text",
+          "id": "tab_5_label",
+          "label": "Label"
+        },
+        {
+          "type": "richtext",
+          "id": "tab_5_content",
+          "label": "Content"
+        },
+        {
+          "type": "page",
+          "id": "tab_5_page",
+          "label": "Or link to a page"
         }
       ]
     },

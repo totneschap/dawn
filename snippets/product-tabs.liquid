@@ -1,0 +1,95 @@
+{%- comment -%}
+  Renders a tabbed content block on the product page.
+  Accepts:
+  - block: {Object} The tabs block
+{%- endcomment -%}
+
+{%- liquid
+  assign tab_count = 0
+  for i in (1..5)
+    assign label_key = 'tab_' | append: i | append: '_label'
+    if block.settings[label_key] != blank
+      assign tab_count = tab_count | plus: 1
+    endif
+  endfor
+-%}
+
+{%- if tab_count > 0 -%}
+  <product-tabs class="product-tabs quick-add-hidden" {{ block.shopify_attributes }}>
+
+    <div class="product-tabs__bar" role="tablist" aria-label="Product information">
+      {%- assign first_tab = true -%}
+      {%- for i in (1..5) -%}
+        {%- assign label_key = 'tab_' | append: i | append: '_label' -%}
+        {%- assign label_val = block.settings[label_key] -%}
+        {%- if label_val != blank -%}
+          <button
+            role="tab"
+            class="product-tabs__btn"
+            id="ProductTab-{{ block.id }}-{{ i }}"
+            aria-controls="ProductTabPanel-{{ block.id }}-{{ i }}"
+            aria-selected="{% if first_tab %}true{% else %}false{% endif %}"
+            tabindex="{% if first_tab %}0{% else %}-1{% endif %}"
+          >
+            {{ label_val | escape }}
+          </button>
+          {%- assign first_tab = false -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- assign first_panel = true -%}
+    {%- for i in (1..5) -%}
+      {%- assign label_key   = 'tab_' | append: i | append: '_label' -%}
+      {%- assign content_key = 'tab_' | append: i | append: '_content' -%}
+      {%- assign page_key    = 'tab_' | append: i | append: '_page' -%}
+      {%- assign label_val   = block.settings[label_key] -%}
+      {%- if label_val != blank -%}
+        <div
+          role="tabpanel"
+          class="product-tabs__panel rte"
+          id="ProductTabPanel-{{ block.id }}-{{ i }}"
+          aria-labelledby="ProductTab-{{ block.id }}-{{ i }}"
+          {% unless first_panel %}hidden{% endunless %}
+        >
+          {{ block.settings[content_key] }}
+          {{ block.settings[page_key].content }}
+        </div>
+        {%- assign first_panel = false -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+  </product-tabs>
+
+  <script>
+    if (!customElements.get('product-tabs')) {
+      customElements.define('product-tabs', class extends HTMLElement {
+        connectedCallback() {
+          this._tabs   = Array.from(this.querySelectorAll('[role="tab"]'));
+          this._panels = Array.from(this.querySelectorAll('[role="tabpanel"]'));
+          this._tabs.forEach(tab => tab.addEventListener('click', () => this._select(tab)));
+          this.addEventListener('keydown', e => this._handleKey(e));
+        }
+        _select(tab) {
+          this._tabs.forEach(t => {
+            var active = t === tab;
+            t.setAttribute('aria-selected', active);
+            t.setAttribute('tabindex', active ? '0' : '-1');
+          });
+          this._panels.forEach(panel => {
+            panel.hidden = panel.id !== tab.getAttribute('aria-controls');
+          });
+          tab.scrollIntoView({ inline: 'nearest', block: 'nearest' });
+        }
+        _handleKey(e) {
+          var idx = this._tabs.indexOf(document.activeElement);
+          if (idx === -1) return;
+          if (e.key === 'ArrowRight') { e.preventDefault(); this._tabs[(idx + 1) % this._tabs.length].focus(); }
+          if (e.key === 'ArrowLeft')  { e.preventDefault(); this._tabs[(idx - 1 + this._tabs.length) % this._tabs.length].focus(); }
+          if (e.key === 'Home')       { e.preventDefault(); this._tabs[0].focus(); }
+          if (e.key === 'End')        { e.preventDefault(); this._tabs[this._tabs.length - 1].focus(); }
+        }
+      });
+    }
+  </script>
+{%- endif -%}
