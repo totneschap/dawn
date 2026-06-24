@@ -16,6 +16,10 @@
 .shop-the-look__description > p:first-child { margin-top: 0; }
 .shop-the-look__description > p:last-child  { margin-bottom: 0; }
 
+.shop-the-look__btn {
+  margin-bottom: 2.4rem;
+}
+
 /* ---- Two-column grid ---- */
 
 .shop-the-look__grid {
