@@ -1,0 +1,294 @@
+{{ 'section-hotspot.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div
+  class="hotspot-section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding{% if section.settings.uppercase_heading %} section--uppercase-heading{% endif %}"
+  id="HotspotSection-{{ section.id }}"
+>
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="hotspot-section__heading inline-richtext {{ section.settings.heading_size }}">
+        {{ section.settings.heading }}
+      </h2>
+    {%- endif -%}
+
+    <hotspot-image class="hotspot-section__image-wrapper">
+      {%- if section.settings.image != blank -%}
+        {{
+          section.settings.image
+          | image_url: width: 2000
+          | image_tag:
+            class: 'hotspot-section__img',
+            loading: 'lazy',
+            widths: '550, 750, 990, 1200, 1500, 2000',
+            sizes: '(min-width: 990px) calc(100vw - 10rem), 100vw'
+        }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'hotspot-section__img hotspot-section__img--placeholder' }}
+      {%- endif -%}
+
+      {%- for block in section.blocks -%}
+        {%- assign x = block.settings.x_position -%}
+        {%- assign y = block.settings.y_position -%}
+
+        {%- comment -%} Flip popup above/below based on vertical position {%- endcomment -%}
+        {%- if y < 35 -%}
+          {%- assign popup_v = 'below' -%}
+        {%- else -%}
+          {%- assign popup_v = 'above' -%}
+        {%- endif -%}
+
+        {%- comment -%} Align popup left/center/right based on horizontal position {%- endcomment -%}
+        {%- if x < 28 -%}
+          {%- assign popup_h = 'start' -%}
+        {%- elsif x > 72 -%}
+          {%- assign popup_h = 'end' -%}
+        {%- else -%}
+          {%- assign popup_h = 'center' -%}
+        {%- endif -%}
+
+        {%- assign hs_product = all_products[block.settings.product] -%}
+
+        <div
+          class="hotspot"
+          style="left: {{ x }}%; top: {{ y }}%;"
+          {{ block.shopify_attributes }}
+        >
+          <button
+            class="hotspot__dot"
+            aria-expanded="false"
+            aria-label="{% if hs_product != empty %}{{ hs_product.title | escape }}{% else %}View product{% endif %}"
+          >
+            <span class="hotspot__ring" aria-hidden="true"></span>
+          </button>
+
+          {%- if hs_product != empty -%}
+            <div
+              class="hotspot__popup hotspot__popup--{{ popup_v }} hotspot__popup--{{ popup_h }}"
+              aria-hidden="true"
+            >
+              <div class="hotspot__popup-inner">
+                {%- if hs_product.featured_image != blank -%}
+                  <a href="{{ hs_product.url }}" class="hotspot__popup-img-link" tabindex="-1" aria-hidden="true">
+                    {{
+                      hs_product.featured_image
+                      | image_url: width: 200
+                      | image_tag:
+                        class: 'hotspot__popup-img',
+                        loading: 'lazy',
+                        widths: '80, 120, 160, 200',
+                        sizes: '6.4rem'
+                    }}
+                  </a>
+                {%- endif -%}
+                <div class="hotspot__popup-details">
+                  <p class="hotspot__popup-title">
+                    <a href="{{ hs_product.url }}">{{ hs_product.title | escape }}</a>
+                  </p>
+                  <p class="hotspot__popup-price">
+                    {%- if hs_product.compare_at_price > hs_product.price -%}
+                      <span class="hotspot__price--sale">{{ hs_product.price | money }}</span>
+                      <span class="hotspot__price--compare">{{ hs_product.compare_at_price | money }}</span>
+                    {%- else -%}
+                      <span>{{ hs_product.price | money }}</span>
+                    {%- endif -%}
+                  </p>
+                  <a href="{{ hs_product.url }}" class="hotspot__popup-btn button button--primary">
+                    View product
+                  </a>
+                </div>
+              </div>
+              <button class="hotspot__popup-close" aria-label="Close">
+                <span class="svg-wrapper">{{ 'icon-close.svg' | inline_asset_content }}</span>
+              </button>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </hotspot-image>
+  </div>
+</div>
+
+<script>
+  if (!customElements.get('hotspot-image')) {
+    customElements.define('hotspot-image', class extends HTMLElement {
+      connectedCallback() {
+        this._hotspots = Array.from(this.querySelectorAll('.hotspot'));
+
+        this._hotspots.forEach(hotspot => {
+          const dot = hotspot.querySelector('.hotspot__dot');
+          const popup = hotspot.querySelector('.hotspot__popup');
+          const closeBtn = hotspot.querySelector('.hotspot__popup-close');
+
+          if (!dot) return;
+
+          dot.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = dot.getAttribute('aria-expanded') === 'true';
+            this._closeAll();
+            if (!isOpen && popup) this._open(hotspot, dot, popup);
+          });
+
+          if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              this._closeAll();
+            });
+          }
+        });
+
+        document.addEventListener('click', () => this._closeAll());
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') this._closeAll();
+        });
+      }
+
+      _open(hotspot, dot, popup) {
+        hotspot.classList.add('hotspot--active');
+        dot.setAttribute('aria-expanded', 'true');
+        popup.setAttribute('aria-hidden', 'false');
+        popup.querySelector('a')?.focus();
+      }
+
+      _closeAll() {
+        this._hotspots.forEach(hotspot => {
+          hotspot.classList.remove('hotspot--active');
+          const dot = hotspot.querySelector('.hotspot__dot');
+          const popup = hotspot.querySelector('.hotspot__popup');
+          if (dot) dot.setAttribute('aria-expanded', 'false');
+          if (popup) popup.setAttribute('aria-hidden', 'true');
+        });
+      }
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Hotspot",
+  "class": "section",
+  "tag": "section",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Optional heading shown above the image."
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "checkbox",
+      "id": "uppercase_heading",
+      "label": "Uppercase heading",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hotspot",
+      "name": "Hotspot",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "range",
+          "id": "x_position",
+          "label": "Horizontal position",
+          "min": 2,
+          "max": 98,
+          "step": 1,
+          "unit": "%",
+          "default": 30,
+          "info": "Drag to position the dot left or right on the image."
+        },
+        {
+          "type": "range",
+          "id": "y_position",
+          "label": "Vertical position",
+          "min": 2,
+          "max": 98,
+          "step": 1,
+          "unit": "%",
+          "default": 40,
+          "info": "Drag to position the dot up or down on the image."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hotspot",
+      "blocks": [
+        { "type": "hotspot", "settings": { "x_position": 30, "y_position": 40 } },
+        { "type": "hotspot", "settings": { "x_position": 65, "y_position": 60 } }
+      ]
+    }
+  ]
+}
+{% endschema %}

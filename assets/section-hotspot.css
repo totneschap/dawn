@@ -1,0 +1,253 @@
+/* ============================================================
+   SECTION: HOTSPOT
+   ============================================================ */
+
+.hotspot-section__heading {
+  text-align: center;
+  margin: 0 0 3.2rem;
+}
+
+/* ---- Image wrapper ---- */
+
+.hotspot-section__image-wrapper {
+  display: block;
+  position: relative;
+  border-radius: var(--media-radius, 0);
+  overflow: hidden;
+  line-height: 0;
+}
+
+.hotspot-section__img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.hotspot-section__img--placeholder {
+  aspect-ratio: 16 / 9;
+  background: rgba(var(--color-foreground), 0.04);
+  width: 100%;
+}
+
+/* ---- Hotspot container ---- */
+
+.hotspot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+/* ---- Dot button ---- */
+
+.hotspot__dot {
+  position: relative;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: rgb(255, 255, 255);
+  border: 0.2rem solid rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 3;
+  padding: 0;
+}
+
+.hotspot__dot:hover,
+.hotspot--active .hotspot__dot {
+  box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.2);
+}
+
+/* Plus icon via pseudo-elements, rotates to × when active */
+.hotspot__dot::before,
+.hotspot__dot::after {
+  content: '';
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 0.1rem;
+  transition: transform 0.25s ease;
+}
+.hotspot__dot::before { width: 0.15rem; height: 1.1rem; }
+.hotspot__dot::after  { width: 1.1rem;  height: 0.15rem; }
+
+.hotspot--active .hotspot__dot::before { transform: rotate(45deg); }
+.hotspot--active .hotspot__dot::after  { transform: rotate(45deg); }
+
+/* Pulsing ring */
+.hotspot__ring {
+  position: absolute;
+  inset: -0.7rem;
+  border-radius: 50%;
+  border: 0.15rem solid rgba(255, 255, 255, 0.8);
+  animation: hotspot-pulse 2.4s ease-out infinite;
+  pointer-events: none;
+}
+
+.hotspot--active .hotspot__ring { animation: none; opacity: 0; }
+
+@keyframes hotspot-pulse {
+  0%   { transform: scale(1);   opacity: 0.9; }
+  60%  { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* ---- Popup card ---- */
+
+.hotspot__popup {
+  --popup-x: 0px;
+  position: absolute;
+  width: 23rem;
+  background: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  border: 0.1rem solid rgba(var(--color-foreground), 0.1);
+  border-radius: 0.6rem;
+  box-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.14);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(var(--popup-x), 0.8rem);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+  line-height: 1.4;
+}
+
+.hotspot__popup:not([aria-hidden='true']) {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(var(--popup-x), 0);
+}
+
+/* Vertical position */
+.hotspot__popup--above { bottom: calc(100% + 1.4rem); }
+.hotspot__popup--below {
+  top: calc(100% + 1.4rem);
+  transform: translate(var(--popup-x), -0.8rem);
+}
+.hotspot__popup--below:not([aria-hidden='true']) {
+  transform: translate(var(--popup-x), 0);
+}
+
+/* Horizontal position */
+.hotspot__popup--center { --popup-x: -50%; left: 50%; }
+.hotspot__popup--start  { left: -0.8rem; }
+.hotspot__popup--end    { right: -0.8rem; }
+
+/* Arrow */
+.hotspot__popup::after {
+  content: '';
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  background: rgb(var(--color-background));
+  transform: translateX(-50%) rotate(45deg);
+  left: 50%;
+}
+.hotspot__popup--start::after { left: 1.8rem; transform: rotate(45deg); }
+.hotspot__popup--end::after   { left: auto; right: 1.8rem; transform: rotate(45deg); }
+
+.hotspot__popup--above::after {
+  bottom: -0.5rem;
+  border-right: 0.1rem solid rgba(var(--color-foreground), 0.1);
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.1);
+}
+.hotspot__popup--below::after {
+  top: -0.5rem;
+  border-left: 0.1rem solid rgba(var(--color-foreground), 0.1);
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.1);
+}
+
+/* ---- Popup inner layout ---- */
+
+.hotspot__popup-inner {
+  display: flex;
+  gap: 1.2rem;
+  padding: 1.2rem 1.2rem 1.2rem 1.2rem;
+  align-items: flex-start;
+}
+
+.hotspot__popup-img-link {
+  display: block;
+  flex-shrink: 0;
+  width: 6.4rem;
+  height: 6.4rem;
+  border-radius: calc(var(--media-radius, 0.4rem) * 0.5);
+  overflow: hidden;
+}
+
+.hotspot__popup-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hotspot__popup-details {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-right: 1.6rem;
+}
+
+.hotspot__popup-title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.hotspot__popup-title a {
+  text-decoration: none;
+  color: rgb(var(--color-foreground));
+}
+.hotspot__popup-title a:hover { text-decoration: underline; }
+
+.hotspot__popup-price {
+  margin: 0;
+  font-size: 1.3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.hotspot__price--sale { color: rgb(var(--color-sale-price, var(--color-foreground))); }
+.hotspot__price--compare {
+  font-size: 1.1rem;
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.hotspot__popup-btn.button {
+  font-size: 1.1rem;
+  padding: 0.6rem 1.2rem;
+  margin-top: 0.4rem;
+  align-self: flex-start;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+/* ---- Close button ---- */
+
+.hotspot__popup-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: rgb(var(--color-foreground));
+  opacity: 0.45;
+  transition: opacity 0.15s ease;
+}
+.hotspot__popup-close:hover { opacity: 1; }
+.hotspot__popup-close .svg-wrapper { display: flex; align-items: center; }
+.hotspot__popup-close svg { width: 1.4rem; height: 1.4rem; }
