@@ -40,18 +40,15 @@
       </div>
 
       <!-- Products column -->
-      <div class="shop-the-look__content-col">
+      {%- assign stl_pos = section.settings.content_position | split: '-' -%}
+      <div class="shop-the-look__content-col stl-col--v-{{ stl_pos[0] }} stl-col--h-{{ stl_pos[1] }}">
         {%- if section.settings.title != blank -%}
           <h2
             class="shop-the-look__heading inline-richtext {{ section.settings.heading_size }}"
-            style="text-align: {{ section.settings.heading_alignment }};"
           >{{ section.settings.title }}</h2>
         {%- endif -%}
         {%- if section.settings.description != blank -%}
-          <div
-            class="shop-the-look__description rte"
-            style="text-align: {{ section.settings.text_alignment }};"
-          >{{ section.settings.description }}</div>
+          <div class="shop-the-look__description rte">{{ section.settings.description }}</div>
         {%- endif -%}
         {%- if section.settings.button_label != blank -%}
           <a
@@ -140,17 +137,6 @@
       "default": "h1"
     },
     {
-      "type": "select",
-      "id": "heading_alignment",
-      "label": "Heading alignment",
-      "options": [
-        { "value": "left",   "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right",  "label": "Right" }
-      ],
-      "default": "left"
-    },
-    {
       "type": "richtext",
       "id": "description",
       "label": "Text",
@@ -158,14 +144,20 @@
     },
     {
       "type": "select",
-      "id": "text_alignment",
-      "label": "Text alignment",
+      "id": "content_position",
+      "label": "Text position",
       "options": [
-        { "value": "left",   "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right",  "label": "Right" }
+        { "value": "top-left",      "label": "Top left" },
+        { "value": "top-center",    "label": "Top centre" },
+        { "value": "top-right",     "label": "Top right" },
+        { "value": "middle-left",   "label": "Middle left" },
+        { "value": "middle-center", "label": "Middle centre" },
+        { "value": "middle-right",  "label": "Middle right" },
+        { "value": "bottom-left",   "label": "Bottom left" },
+        { "value": "bottom-center", "label": "Bottom centre" },
+        { "value": "bottom-right",  "label": "Bottom right" }
       ],
-      "default": "left"
+      "default": "middle-left"
     },
     {
       "type": "header",

@@ -26,8 +26,23 @@
   display: grid;
   grid-template-columns: var(--stl-image-width, 50%) 1fr;
   gap: 4rem 6rem;
-  align-items: center;
+  align-items: stretch;
 }
+
+/* ---- Content column position ---- */
+
+.shop-the-look__content-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.stl-col--v-top    { justify-content: flex-start; }
+.stl-col--v-middle { justify-content: center; }
+.stl-col--v-bottom { justify-content: flex-end; }
+
+.stl-col--h-left   { align-items: flex-start; text-align: left; }
+.stl-col--h-center { align-items: center;     text-align: center; }
+.stl-col--h-right  { align-items: flex-end;   text-align: right; }
 
 .shop-the-look__grid--image-right {
   grid-template-columns: 1fr var(--stl-image-width, 50%);
