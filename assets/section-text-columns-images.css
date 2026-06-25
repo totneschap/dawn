@@ -51,7 +51,7 @@
   position: relative;
 }
 
-.text-columns-images__card-link {
+a.text-columns-images__card-link {
   display: block;
   position: absolute;
   inset: 0;
