@@ -10,9 +10,9 @@
 {
   "current": {
     "logo_width": 90,
-    "type_header_font": "assistant_n4",
+    "type_header_font": "dm_sans_n4",
     "heading_scale": 100,
-    "type_body_font": "assistant_n4",
+    "type_body_font": "dm_sans_n4",
     "body_scale": 100,
     "page_width": 1200,
     "spacing_sections": 0,
@@ -131,6 +131,25 @@
         "type": "main-password-footer",
         "settings": {
           "color_scheme": "scheme-1"
+        }
+      },
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {
+          "heading": "Your Cart",
+          "show_item_count": true,
+          "empty_cart_message": "Looks like you haven't added anything yet.",
+          "show_free_shipping_threshold": false,
+          "free_shipping_threshold": 50,
+          "free_shipping_progress_text": "Spend [amount] more for free shipping",
+          "free_shipping_reached_text": "You've unlocked free shipping!",
+          "show_upsell": false,
+          "upsell_product": "",
+          "upsell_heading": "You might also like",
+          "upsell_button_text": "Quick add",
+          "checkout_label": "Check out",
+          "show_view_cart_link": true,
+          "view_cart_text": "View full basket"
         }
       }
     },
