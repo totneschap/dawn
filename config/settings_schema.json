@@ -143,6 +143,28 @@
         "unit": "%",
         "label": "t:settings_schema.typography.settings.body_scale.label",
         "default": 100
+      },
+      {
+        "type": "header",
+        "content": "Uppercase"
+      },
+      {
+        "type": "checkbox",
+        "id": "uppercase_headings",
+        "label": "Uppercase headings",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "uppercase_buttons",
+        "label": "Uppercase buttons",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "uppercase_nav",
+        "label": "Uppercase navigation",
+        "default": false
       }
     ]
   },
