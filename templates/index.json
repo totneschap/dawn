@@ -622,7 +622,7 @@
           "type": "post",
           "settings": {
             "image": "shopify://shop_images/rack-of-womens-clothing.jpg",
-            "caption": "",
+            "caption": "test",
             "link": ""
           }
         },
@@ -686,6 +686,7 @@
         "profile_url": "",
         "button_label": "Follow us",
         "header_alignment": "left",
+        "layout": "carousel",
         "platform": "instagram",
         "columns_desktop": 6,
         "columns_mobile": "3",
