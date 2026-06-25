@@ -92,8 +92,23 @@
 @media screen and (min-width: 750px) {
   .lookbook__content {
     padding: 4.8rem;
-    max-width: 52rem;
   }
+}
+
+/* Limit readable line length on left/right positions only */
+.lookbook__content--top-left .lookbook__title,
+.lookbook__content--middle-left .lookbook__title,
+.lookbook__content--bottom-left .lookbook__title,
+.lookbook__content--top-right .lookbook__title,
+.lookbook__content--middle-right .lookbook__title,
+.lookbook__content--bottom-right .lookbook__title,
+.lookbook__content--top-left .lookbook__subtitle,
+.lookbook__content--middle-left .lookbook__subtitle,
+.lookbook__content--bottom-left .lookbook__subtitle,
+.lookbook__content--top-right .lookbook__subtitle,
+.lookbook__content--middle-right .lookbook__subtitle,
+.lookbook__content--bottom-right .lookbook__subtitle {
+  max-width: 44rem;
 }
 
 /* Positioning grid */
