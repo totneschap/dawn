@@ -53,10 +53,13 @@
         >
           {%- for block in section.blocks -%}
             <li
-              class="text-columns-images__item{% if show_mobile_slider %} slider__slide{% endif %}{% if section.settings.card_style %} text-columns-images__item--card content-container{% endif %}{% if section.settings.column_alignment == 'center' %} center{% endif %}"
+              class="text-columns-images__item{% if show_mobile_slider %} slider__slide{% endif %}{% if section.settings.card_style %} text-columns-images__item--card content-container{% endif %}{% if section.settings.column_alignment == 'center' %} center{% endif %}{% if block.settings.link != blank %} text-columns-images__item--linked{% endif %}"
               id="Slide-{{ section.id }}-{{ forloop.index }}"
               {{ block.shopify_attributes }}
             >
+            {%- if block.settings.link != blank -%}
+              <a href="{{ block.settings.link }}" class="text-columns-images__card-link" aria-label="{{ block.settings.title | strip_html | escape }}"></a>
+            {%- endif -%}
             {%- if block.settings.image != blank -%}
               <div class="text-columns-images__img-wrapper text-columns-images__img-wrapper--{{ section.settings.image_ratio }}">
                 {{ block.settings.image | image_url: width: 1500 | image_tag:

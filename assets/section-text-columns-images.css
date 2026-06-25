@@ -45,6 +45,29 @@
   min-width: 0;
 }
 
+/* ---- Linked card overlay ---- */
+
+.text-columns-images__item--linked {
+  position: relative;
+}
+
+.text-columns-images__card-link {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.text-columns-images__item--linked .text-columns-images__img-wrapper,
+.text-columns-images__item--linked .text-columns-images__body {
+  position: relative;
+  z-index: 1;
+}
+
+.text-columns-images__item--linked a:not(.text-columns-images__card-link) {
+  position: relative;
+  z-index: 2;
+}
+
 @media screen and (min-width: 990px) {
   .text-columns-images__item {
     width: calc((100% - var(--tcwi-gap) * var(--tcwi-gap-count)) / var(--tcwi-cols));
