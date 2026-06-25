@@ -1,4 +1,7 @@
 {{ 'section-social-feed.css' | asset_url | stylesheet_tag }}
+{%- if section.settings.layout == 'carousel' -%}
+  {{ 'component-slider.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
 
 {%- liquid
   case section.settings.image_gap
@@ -90,10 +93,25 @@
     {%- endif -%}
 
     {%- if section.blocks.size > 0 -%}
-      <ul class="smf__grid list-unstyled" role="list">
+      {%- assign is_carousel = false -%}
+      {%- if section.settings.layout == 'carousel' -%}
+        {%- assign is_carousel = true -%}
+      {%- endif -%}
+
+      {%- if is_carousel -%}<slider-component>{%- endif -%}
+
+      <ul
+        class="smf__grid list-unstyled{% if is_carousel %} slider{% endif %}"
+        id="Slider-{{ section.id }}"
+        role="list"
+      >
         {%- for block in section.blocks -%}
           {%- assign post_alt = block.settings.image.alt | default: block.settings.caption | default: 'Social media post' | escape -%}
-          <li class="smf__item" {{ block.shopify_attributes }}>
+          <li
+            class="smf__item{% if is_carousel %} slider__slide{% endif %}"
+            id="Slide-{{ section.id }}-{{ forloop.index }}"
+            {{ block.shopify_attributes }}
+          >
             <a
               href="{{ block.settings.link | default: section.settings.profile_url | default: '#' }}"
               class="smf__link"
@@ -127,6 +145,35 @@
           </li>
         {%- endfor -%}
       </ul>
+
+      {%- if is_carousel -%}
+        <div class="slider-buttons smf__slider-buttons">
+          <button
+            type="button"
+            class="slider-button slider-button--prev"
+            name="previous"
+            aria-label="{{ 'general.slider.previous_slide' | t }}"
+          >
+            <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+          </button>
+          <div class="slider-counter caption">
+            <span class="slider-counter--current">1</span>
+            <span aria-hidden="true"> / </span>
+            <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
+            <span class="slider-counter--total">{{ section.blocks.size }}</span>
+          </div>
+          <button
+            type="button"
+            class="slider-button slider-button--next"
+            name="next"
+            aria-label="{{ 'general.slider.next_slide' | t }}"
+          >
+            <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+          </button>
+        </div>
+        </slider-component>
+      {%- endif -%}
+
     {%- endif -%}
 
   </div>
@@ -189,7 +236,17 @@
     },
     {
       "type": "header",
-      "content": "Grid"
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "grid",     "label": "Grid" },
+        { "value": "carousel", "label": "Carousel" }
+      ],
+      "default": "grid"
     },
     {
       "type": "select",
@@ -209,20 +266,23 @@
       "type": "range",
       "id": "columns_desktop",
       "label": "Columns on desktop",
-      "min": 3,
+      "min": 2,
       "max": 8,
       "step": 1,
-      "default": 6
+      "default": 6,
+      "info": "In carousel mode this controls how many posts are visible at once."
     },
     {
       "type": "select",
       "id": "columns_mobile",
       "label": "Columns on mobile",
       "options": [
+        { "value": "1", "label": "1" },
         { "value": "2", "label": "2" },
         { "value": "3", "label": "3" }
       ],
-      "default": "3"
+      "default": "3",
+      "info": "In carousel mode this controls how many posts are visible at once."
     },
     {
       "type": "select",
