@@ -1,30 +1,20 @@
 /* ============================================================
-   GLOBAL UPPERCASE — driven by Theme Settings → Typography
+   PER-SECTION UPPERCASE — applied via section--uppercase-heading class
    ============================================================ */
 
-/* ---- Headings ---- */
-
-h1, h2, h3, h4, h5, h6,
-.h0, .h1, .h2, .h3, .h4, .h5,
-.accordion__title,
-.inline-richtext {
-  text-transform: var(--text-transform-headings, none);
-  letter-spacing: var(--letter-spacing-headings, inherit);
-}
-
-/* ---- Buttons ---- */
-
-.button,
-.shopify-payment-button__button {
-  text-transform: var(--text-transform-buttons, none);
-  letter-spacing: var(--letter-spacing-buttons, inherit);
-}
-
-/* ---- Navigation ---- */
-
-.header__menu-item span,
-.mega-menu__link,
-.header__menu-item .mega-menu__toggle > span {
-  text-transform: var(--text-transform-nav, none);
-  letter-spacing: var(--letter-spacing-nav, inherit);
+.section--uppercase-heading h1,
+.section--uppercase-heading h2,
+.section--uppercase-heading h3,
+.section--uppercase-heading h4,
+.section--uppercase-heading h5,
+.section--uppercase-heading h6,
+.section--uppercase-heading .h0,
+.section--uppercase-heading .h1,
+.section--uppercase-heading .h2,
+.section--uppercase-heading .h3,
+.section--uppercase-heading .h4,
+.section--uppercase-heading .inline-richtext,
+.section--uppercase-heading .accordion__title {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }

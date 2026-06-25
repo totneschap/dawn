@@ -32,7 +32,7 @@
 
 <div
   id="VideoBanner-{{ section.id }}"
-  class="video-banner video-banner--{{ section.settings.section_height }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+  class="video-banner video-banner--{{ section.settings.section_height }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}{% if section.settings.uppercase_heading %} section--uppercase-heading{% endif %}"
 >
 
   {%- comment -%} ---- Media layer ---- {%- endcomment -%}
@@ -266,6 +266,16 @@
         { "value": "right",  "label": "Right"  }
       ],
       "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "checkbox",
+      "id": "uppercase_heading",
+      "label": "Uppercase heading",
+      "default": false
     },
     {
       "type": "header",

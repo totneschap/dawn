@@ -13,7 +13,7 @@
   }
 {%- endstyle -%}
 
-<div class="faq-accordion color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+<div class="faq-accordion color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding{% if section.settings.uppercase_heading %} section--uppercase-heading{% endif %}">
   <div class="page-width">
 
     {%- if section.settings.title != blank or section.settings.description != blank -%}
@@ -145,6 +145,16 @@
       "id": "color_scheme",
       "label": "Color scheme",
       "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "checkbox",
+      "id": "uppercase_heading",
+      "label": "Uppercase heading",
+      "default": false
     },
     {
       "type": "header",

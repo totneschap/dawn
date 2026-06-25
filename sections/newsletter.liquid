@@ -15,7 +15,7 @@
   }
 {%- endstyle -%}
 
-<div class="newsletter center {% if section.settings.full_width == false %}newsletter--narrow page-width{% endif %}">
+<div class="newsletter center {% if section.settings.full_width == false %}newsletter--narrow page-width{% endif %}{% if section.settings.uppercase_heading %} section--uppercase-heading{% endif %}">
   <div class="newsletter__wrapper color-{{ section.settings.color_scheme }} gradient content-container isolate{% if section.settings.full_width %} content-container--full-width{% endif %} section-{{ section.id }}-padding">
     {%- for block in section.blocks -%}
       {%- case block.type -%}
@@ -144,6 +144,16 @@
       "id": "full_width",
       "default": true,
       "label": "t:sections.newsletter.settings.full_width.label"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "checkbox",
+      "id": "uppercase_heading",
+      "label": "Uppercase heading",
+      "default": false
     },
     {
       "type": "header",

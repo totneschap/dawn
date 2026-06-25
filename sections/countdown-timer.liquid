@@ -15,7 +15,7 @@
 {%- endstyle -%}
 
 {%- if section.settings.end_date != blank -%}
-  <div class="countdown-timer-section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding" id="CountdownTimer-{{ section.id }}">
+  <div class="countdown-timer-section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding{% if section.settings.uppercase_heading %} section--uppercase-heading{% endif %}" id="CountdownTimer-{{ section.id }}">
     <div class="page-width">
       <countdown-timer
         class="countdown-timer"
@@ -107,6 +107,16 @@
       "id": "color_scheme",
       "label": "Color scheme",
       "default": "scheme-2"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "checkbox",
+      "id": "uppercase_heading",
+      "label": "Uppercase heading",
+      "default": false
     },
     {
       "type": "header",

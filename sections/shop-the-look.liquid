@@ -17,7 +17,7 @@
 {%- endstyle -%}
 
 <div
-  class="shop-the-look color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+  class="shop-the-look color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding{% if section.settings.uppercase_heading %} section--uppercase-heading{% endif %}"
   id="ShopTheLook-{{ section.id }}"
 >
   <div class="page-width">
@@ -218,6 +218,16 @@
       "id": "color_scheme",
       "label": "Color scheme",
       "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "checkbox",
+      "id": "uppercase_heading",
+      "label": "Uppercase heading",
+      "default": false
     },
     {
       "type": "header",

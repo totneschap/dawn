@@ -112,13 +112,6 @@
         --font-body-scale: {{ settings.body_scale | divided_by: 100.0 }};
         --font-heading-scale: {{ settings.heading_scale | times: 1.0 | divided_by: settings.body_scale }};
 
-        --text-transform-headings: {{ settings.uppercase_headings | default: false | json | replace: 'true', 'uppercase' | replace: 'false', 'none' }};
-        --letter-spacing-headings: {{ settings.uppercase_headings | default: false | json | replace: 'true', '0.08em' | replace: 'false', 'inherit' }};
-        --text-transform-buttons: {{ settings.uppercase_buttons | default: false | json | replace: 'true', 'uppercase' | replace: 'false', 'none' }};
-        --letter-spacing-buttons: {{ settings.uppercase_buttons | default: false | json | replace: 'true', '0.1em' | replace: 'false', 'inherit' }};
-        --text-transform-nav: {{ settings.uppercase_nav | default: false | json | replace: 'true', 'uppercase' | replace: 'false', 'none' }};
-        --letter-spacing-nav: {{ settings.uppercase_nav | default: false | json | replace: 'true', '0.08em' | replace: 'false', 'inherit' }};
-
         --media-padding: {{ settings.media_padding }}px;
         --media-border-opacity: {{ settings.media_border_opacity | divided_by: 100.0 }};
         --media-border-width: {{ settings.media_border_thickness }}px;

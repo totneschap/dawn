@@ -42,7 +42,7 @@
   endunless
 -%}
 
-<div class="multirow section-{{ section.id }}-padding gradient color-{{ section.settings.section_color_scheme }}">
+<div class="multirow section-{{ section.id }}-padding gradient color-{{ section.settings.section_color_scheme }}{% if section.settings.uppercase_heading %} section--uppercase-heading{% endif %}">
   <div class="multirow__inner page-width">
     {%- for block in section.blocks -%}
       <div
@@ -326,6 +326,16 @@
       "id": "row_color_scheme",
       "label": "t:sections.multirow.settings.container_color_scheme.label",
       "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "checkbox",
+      "id": "uppercase_heading",
+      "label": "Uppercase heading",
+      "default": false
     },
     {
       "type": "header",

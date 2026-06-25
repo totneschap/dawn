@@ -29,7 +29,7 @@
   }
 {%- endstyle -%}
 
-<div class="its-outer its-outer--{{ section.settings.section_width }} section-{{ section.id }}-padding">
+<div class="its-outer its-outer--{{ section.settings.section_width }} section-{{ section.id }}-padding{% if section.settings.uppercase_heading %} section--uppercase-heading{% endif %}">
   {%- if section.settings.section_width == 'page-width' -%}
     <div class="page-width">
   {%- endif -%}
@@ -283,6 +283,16 @@
       "id": "color_scheme",
       "label": "Text panel color scheme",
       "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "checkbox",
+      "id": "uppercase_heading",
+      "label": "Uppercase heading",
+      "default": false
     },
     {
       "type": "header",

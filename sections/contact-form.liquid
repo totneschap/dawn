@@ -22,7 +22,7 @@
   endfor
 -%}
 
-<div class="color-{{ section.settings.color_scheme }} gradient">
+<div class="color-{{ section.settings.color_scheme }} gradient{% if section.settings.uppercase_heading %} section--uppercase-heading{% endif %}">
   <div class="contact page-width section-{{ section.id }}-padding">
 
     {%- if section.settings.heading != blank -%}
@@ -380,6 +380,16 @@
       "id": "submit_label",
       "label": "Submit button label",
       "info": "Leave blank to use the default 'Send' label."
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "checkbox",
+      "id": "uppercase_heading",
+      "label": "Uppercase heading",
+      "default": false
     },
     {
       "type": "header",
