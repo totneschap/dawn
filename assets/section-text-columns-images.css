@@ -55,12 +55,6 @@ a.text-columns-images__card-link {
   display: block;
   position: absolute;
   inset: 0;
-  z-index: 0;
-}
-
-.text-columns-images__item--linked .text-columns-images__img-wrapper,
-.text-columns-images__item--linked .text-columns-images__body {
-  position: relative;
   z-index: 1;
 }
 
