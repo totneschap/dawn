@@ -151,27 +151,27 @@
 
 /* ---- Carousel mode ---- */
 
-.smf__grid.slider {
+.smf__carousel-wrapper {
+  overflow: hidden;
+}
+
+.smf__grid--carousel {
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
   scrollbar-width: none;
   -ms-overflow-style: none;
   gap: var(--smf-gap, 2px);
-  /* Undo the grid column template */
   grid-template-columns: unset;
 }
 
-.smf__grid.slider::-webkit-scrollbar {
+.smf__grid--carousel::-webkit-scrollbar {
   display: none;
 }
 
-.smf__item.slider__slide {
+.smf__carousel-slide {
   flex: 0 0 calc(
-    (100% - var(--smf-gap, 2px) * (var(--smf-cols-mobile, 3) - 1))
-    / var(--smf-cols-mobile, 3)
-  );
-  width: calc(
     (100% - var(--smf-gap, 2px) * (var(--smf-cols-mobile, 3) - 1))
     / var(--smf-cols-mobile, 3)
   );
@@ -179,20 +179,64 @@
 }
 
 @media screen and (min-width: 750px) {
-  .smf__item.slider__slide {
+  .smf__carousel-slide {
     flex: 0 0 calc(
-      (100% - var(--smf-gap, 2px) * (var(--smf-cols, 6) - 1))
-      / var(--smf-cols, 6)
-    );
-    width: calc(
       (100% - var(--smf-gap, 2px) * (var(--smf-cols, 6) - 1))
       / var(--smf-cols, 6)
     );
   }
 }
 
-.smf__slider-buttons {
+/* ---- Carousel nav ---- */
+
+.smf__carousel-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
   margin-top: 2rem;
+}
+
+.smf__nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  background: none;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  color: rgb(var(--color-foreground));
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.smf__nav-btn:hover:not(:disabled) {
+  border-color: rgb(var(--color-foreground));
+}
+
+.smf__nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.smf__nav-btn .svg-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.smf__nav-btn--prev .svg-wrapper {
+  transform: rotate(90deg);
+}
+
+.smf__nav-btn--next .svg-wrapper {
+  transform: rotate(-90deg);
+}
+
+.smf__carousel-counter {
+  font-size: 1.4rem;
+  min-width: 4rem;
+  text-align: center;
 }
 
 /* ---- Reduced motion ---- */

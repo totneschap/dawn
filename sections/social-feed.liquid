@@ -1,8 +1,4 @@
 {{ 'section-social-feed.css' | asset_url | stylesheet_tag }}
-{%- if section.settings.layout == 'carousel' -%}
-  {{ 'component-slider.css' | asset_url | stylesheet_tag }}
-  <script src="{{ 'component-slider.js' | asset_url }}" defer="defer"></script>
-{%- endif -%}
 
 {%- liquid
   case section.settings.image_gap
@@ -94,23 +90,19 @@
     {%- endif -%}
 
     {%- if section.blocks.size > 0 -%}
-      {%- assign is_carousel = false -%}
-      {%- if section.settings.layout == 'carousel' -%}
-        {%- assign is_carousel = true -%}
-      {%- endif -%}
+      {%- assign is_carousel = section.settings.layout == 'carousel' -%}
 
-      {%- if is_carousel -%}<slider-component>{%- endif -%}
+      {%- if is_carousel -%}<div class="smf__carousel-wrapper">{%- endif -%}
 
       <ul
-        class="smf__grid list-unstyled{% if is_carousel %} slider slider--everywhere{% endif %}"
-        id="Slider-{{ section.id }}"
+        class="smf__grid list-unstyled{% if is_carousel %} smf__grid--carousel{% endif %}"
+        id="SocialFeedTrack-{{ section.id }}"
         role="list"
       >
         {%- for block in section.blocks -%}
           {%- assign post_alt = block.settings.image.alt | default: block.settings.caption | default: 'Social media post' | escape -%}
           <li
-            class="smf__item{% if is_carousel %} slider__slide{% endif %}"
-            id="Slide-{{ section.id }}-{{ forloop.index }}"
+            class="smf__item{% if is_carousel %} smf__carousel-slide{% endif %}"
             {{ block.shopify_attributes }}
           >
             <a
@@ -148,31 +140,78 @@
       </ul>
 
       {%- if is_carousel -%}
-        <div class="slider-buttons smf__slider-buttons">
-          <button
-            type="button"
-            class="slider-button slider-button--prev"
-            name="previous"
-            aria-label="{{ 'general.slider.previous_slide' | t }}"
-          >
+        <div class="smf__carousel-nav">
+          <button type="button" class="smf__nav-btn smf__nav-btn--prev" aria-label="Previous" disabled>
             <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
           </button>
-          <div class="slider-counter caption">
-            <span class="slider-counter--current">1</span>
+          <span class="smf__carousel-counter">
+            <span class="smf__counter-current">1</span>
             <span aria-hidden="true"> / </span>
-            <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
-            <span class="slider-counter--total">{{ section.blocks.size }}</span>
-          </div>
-          <button
-            type="button"
-            class="slider-button slider-button--next"
-            name="next"
-            aria-label="{{ 'general.slider.next_slide' | t }}"
-          >
+            <span class="smf__counter-total">{{ section.blocks.size }}</span>
+          </span>
+          <button type="button" class="smf__nav-btn smf__nav-btn--next" aria-label="Next">
             <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
           </button>
         </div>
-        </slider-component>
+        </div>
+
+        <script>
+          (function () {
+            var track = document.getElementById('SocialFeedTrack-{{ section.id }}');
+            if (!track) return;
+
+            var wrapper = track.parentElement;
+            var prevBtn  = wrapper.querySelector('.smf__nav-btn--prev');
+            var nextBtn  = wrapper.querySelector('.smf__nav-btn--next');
+            var counterCurrent = wrapper.querySelector('.smf__counter-current');
+            var counterTotal   = wrapper.querySelector('.smf__counter-total');
+            var slides  = Array.from(track.querySelectorAll('.smf__carousel-slide'));
+            var total   = slides.length;
+            var current = 0;
+
+            function slideWidth() {
+              if (!slides[0]) return 1;
+              var gap = parseFloat(window.getComputedStyle(track).columnGap) || 0;
+              return slides[0].offsetWidth + gap;
+            }
+
+            function visibleCount() {
+              var sw = slideWidth();
+              return sw > 0 ? Math.max(1, Math.round(track.clientWidth / sw)) : 1;
+            }
+
+            function maxIndex() {
+              return Math.max(0, total - visibleCount());
+            }
+
+            function goTo(idx) {
+              current = Math.max(0, Math.min(idx, maxIndex()));
+              track.scrollTo({ left: current * slideWidth(), behavior: 'smooth' });
+              updateUI();
+            }
+
+            function updateUI() {
+              var vis   = visibleCount();
+              var pages = maxIndex() + 1;
+              if (counterCurrent) counterCurrent.textContent = current + 1;
+              if (counterTotal)   counterTotal.textContent   = pages;
+              if (prevBtn) prevBtn.disabled = current === 0;
+              if (nextBtn) nextBtn.disabled = current >= maxIndex();
+            }
+
+            if (prevBtn) prevBtn.addEventListener('click', function () { goTo(current - 1); });
+            if (nextBtn) nextBtn.addEventListener('click', function () { goTo(current + 1); });
+
+            track.addEventListener('scroll', function () {
+              var sw = slideWidth();
+              if (sw > 0) current = Math.round(track.scrollLeft / sw);
+              updateUI();
+            });
+
+            window.addEventListener('resize', function () { updateUI(); });
+            updateUI();
+          })();
+        </script>
       {%- endif -%}
 
     {%- endif -%}
