@@ -52,6 +52,7 @@
 }
 
 .text-columns-images__card-link {
+  display: block;
   position: absolute;
   inset: 0;
   z-index: 0;
