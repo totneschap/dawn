@@ -90,7 +90,8 @@
     {%- endif -%}
 
     {%- if section.blocks.size > 0 -%}
-      {%- assign is_carousel = section.settings.layout == 'carousel' -%}
+      {%- assign is_carousel = false -%}
+      {%- if section.settings.layout == 'carousel' -%}{%- assign is_carousel = true -%}{%- endif -%}
 
       {%- if is_carousel -%}<div class="smf__carousel-wrapper">{%- endif -%}
 
