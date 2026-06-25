@@ -509,14 +509,30 @@
         "title": "Shop the look",
         "heading_size": "h1",
         "description": "<p>cheese</p>",
-        "button_label": "",
-        "button_url": "",
+        "content_position": "bottom-left",
+        "button_label": "view all",
+        "button_url": "shopify://collections/all",
         "image_width": "50%",
         "image_position": "left",
         "color_scheme": "",
         "uppercase_heading": false,
         "padding_top": 36,
         "padding_bottom": 36
+      }
+    },
+    "countdown_timer_cVFr7B": {
+      "type": "countdown-timer",
+      "name": "Countdown timer",
+      "settings": {
+        "heading": "Sale ends in",
+        "heading_size": "h3",
+        "end_date": "2026-06-26 23:59",
+        "show_seconds": true,
+        "expired_text": "",
+        "color_scheme": "",
+        "uppercase_heading": false,
+        "padding_top": 28,
+        "padding_bottom": 28
       }
     }
   },
@@ -532,6 +548,7 @@
     "video_banner_3EiAqX",
     "tab_collection_JDViAp",
     "lookbook_6LbNAa",
-    "shop_the_look_zwL48K"
+    "shop_the_look_zwL48K",
+    "countdown_timer_cVFr7B"
   ]
 }
