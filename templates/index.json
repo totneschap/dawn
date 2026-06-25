@@ -454,7 +454,7 @@
             "subtitle": "Effortless pieces made to be worn all day.",
             "button_label": "Shop the collection",
             "button_url": "",
-            "text_position": "middle-center",
+            "text_position": "top-right",
             "text_color": "light",
             "overlay_opacity": 25
           }
