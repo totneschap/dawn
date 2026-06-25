@@ -41,7 +41,10 @@
 
       <!-- Products column -->
       {%- assign stl_pos = section.settings.content_position | split: '-' -%}
-      <div class="shop-the-look__content-col stl-col--v-{{ stl_pos[0] }} stl-col--h-{{ stl_pos[1] }}">
+      {%- assign stl_v = stl_pos[0] -%}
+      {%- assign stl_h = stl_pos[1] -%}
+      <div class="shop-the-look__content-col stl-col--v-{{ stl_v }} stl-col--h-{{ stl_h }}"
+           style="text-align: {{ stl_h }};">
         {%- if section.settings.title != blank -%}
           <h2
             class="shop-the-look__heading inline-richtext {{ section.settings.heading_size }}"

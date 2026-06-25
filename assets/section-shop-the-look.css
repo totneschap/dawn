@@ -36,13 +36,22 @@
   flex-direction: column;
 }
 
+/* Vertical: justify-content works when image is taller than the text content */
 .stl-col--v-top    { justify-content: flex-start; }
 .stl-col--v-middle { justify-content: center; }
 .stl-col--v-bottom { justify-content: flex-end; }
 
-.stl-col--h-left   { align-items: flex-start; text-align: left; }
-.stl-col--h-center { align-items: center;     text-align: center; }
-.stl-col--h-right  { align-items: flex-end;   text-align: right; }
+/* Horizontal: text-align set inline so it cascades with full specificity.
+   Button uses align-self so it doesn't stretch full-width. */
+.shop-the-look__btn {
+  align-self: flex-start;
+  width: fit-content;
+}
+.stl-col--h-center .shop-the-look__btn { align-self: center; }
+.stl-col--h-right  .shop-the-look__btn { align-self: flex-end; }
+
+/* Products grid always fills its column */
+.shop-the-look__products { width: 100%; }
 
 .shop-the-look__grid--image-right {
   grid-template-columns: 1fr var(--stl-image-width, 50%);
