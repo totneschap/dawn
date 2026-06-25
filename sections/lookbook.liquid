@@ -69,6 +69,9 @@
 
           {%- elsif layout == 'split-left' or layout == 'split-right' -%}
             {%- comment -%} Split: image on one side, text panel on the other {%- endcomment -%}
+            {%- assign split_pos = block.settings.text_position | split: '-' -%}
+            {%- assign split_v = split_pos[0] -%}
+            {%- assign split_h = split_pos[1] -%}
             <div class="lookbook__split">
               <div class="lookbook__split-media">
                 {%- if block.settings.image != blank -%}
@@ -93,7 +96,7 @@
                   </a>
                 {%- endif -%}
               </div>
-              <div class="lookbook__split-text color-{{ section.settings.color_scheme }} gradient">
+              <div class="lookbook__split-text lookbook__split-text--v-{{ split_v }} lookbook__split-text--h-{{ split_h }} color-{{ section.settings.color_scheme }} gradient">
                 {%- render 'lookbook-content', block: block -%}
               </div>
             </div>
@@ -204,7 +207,7 @@
           "type": "select",
           "id": "image_height",
           "label": "Image height",
-          "info": "Applies to full-width layout only.",
+          "info": "Controls text position within the overlay (full-width) or text panel (split layouts).",
           "options": [
             { "value": "portrait",  "label": "Tall / portrait" },
             { "value": "landscape", "label": "Cinematic / landscape" },
@@ -253,7 +256,7 @@
         {
           "type": "header",
           "content": "Text overlay options",
-          "info": "Applies to full-width layout only."
+          "info": "Controls text position within the overlay (full-width) or text panel (split layouts)."
         },
         {
           "type": "select",
