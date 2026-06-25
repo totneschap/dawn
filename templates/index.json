@@ -294,6 +294,7 @@
         "column_AyJmmY": {
           "type": "column",
           "settings": {
+            "image": "shopify://shop_images/person-stands-on-rocks-poking-out-of-the-ocean-shoreline.jpg",
             "title": "Column heading",
             "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post.</p>",
             "link_label": "",
