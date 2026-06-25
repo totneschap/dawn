@@ -55,6 +55,7 @@
         "stack_images_on_mobile": false,
         "mobile_content_alignment": "center",
         "show_text_below": false,
+        "uppercase_heading": false,
         "padding_top": 0,
         "padding_bottom": 0
       }
@@ -85,6 +86,7 @@
         "content_alignment": "center",
         "color_scheme": "scheme-1",
         "full_width": true,
+        "uppercase_heading": true,
         "padding_top": 40,
         "padding_bottom": 0
       }
@@ -113,6 +115,7 @@
         "quick_add": "none",
         "columns_mobile": "2",
         "swipe_on_mobile": false,
+        "uppercase_heading": true,
         "padding_top": 28,
         "padding_bottom": 36
       }
@@ -152,6 +155,7 @@
         "mobile_layout": "collage",
         "card_styles": "product-card-wrapper",
         "color_scheme": "scheme-1",
+        "uppercase_heading": false,
         "padding_top": 36,
         "padding_bottom": 36
       }
@@ -219,6 +223,7 @@
         "color_scheme": "scheme-1",
         "columns_mobile": "1",
         "swipe_on_mobile": false,
+        "uppercase_heading": false,
         "padding_top": 36,
         "padding_bottom": 36
       }
@@ -341,6 +346,7 @@
         "column_alignment": "left",
         "card_style": false,
         "color_scheme": "",
+        "uppercase_heading": false,
         "padding_top": 36,
         "padding_bottom": 36
       }
@@ -380,12 +386,14 @@
       ],
       "name": "Video banner",
       "settings": {
+        "video_url": "",
         "video_alt": "",
         "section_height": "large",
         "overlay_opacity": 40,
         "desktop_content_position": "middle-center",
         "desktop_content_alignment": "center",
         "mobile_content_alignment": "center",
+        "uppercase_heading": false,
         "padding_top": 80,
         "padding_bottom": 80
       }
