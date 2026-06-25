@@ -1,6 +1,7 @@
 {{ 'section-social-feed.css' | asset_url | stylesheet_tag }}
 {%- if section.settings.layout == 'carousel' -%}
   {{ 'component-slider.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'component-slider.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
 {%- liquid
@@ -101,7 +102,7 @@
       {%- if is_carousel -%}<slider-component>{%- endif -%}
 
       <ul
-        class="smf__grid list-unstyled{% if is_carousel %} slider{% endif %}"
+        class="smf__grid list-unstyled{% if is_carousel %} slider slider--everywhere{% endif %}"
         id="Slider-{{ section.id }}"
         role="list"
       >
