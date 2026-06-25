@@ -473,6 +473,51 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "shop_the_look_zwL48K": {
+      "type": "shop-the-look",
+      "blocks": {
+        "product_NRn8Bp": {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "button_label": "Shop now"
+          }
+        },
+        "product_Fgi8G3": {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "button_label": "Shop now"
+          }
+        },
+        "product_Knqqwh": {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "button_label": "Shop now"
+          }
+        }
+      },
+      "block_order": [
+        "product_NRn8Bp",
+        "product_Fgi8G3",
+        "product_Knqqwh"
+      ],
+      "name": "Shop the look",
+      "settings": {
+        "title": "Shop the look",
+        "heading_size": "h1",
+        "description": "<p>cheese</p>",
+        "button_label": "",
+        "button_url": "",
+        "image_width": "50%",
+        "image_position": "left",
+        "color_scheme": "",
+        "uppercase_heading": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
@@ -486,6 +531,7 @@
     "text_columns_images_V6tgYq",
     "video_banner_3EiAqX",
     "tab_collection_JDViAp",
-    "lookbook_6LbNAa"
+    "lookbook_6LbNAa",
+    "shop_the_look_zwL48K"
   ]
 }
