@@ -614,6 +614,87 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "social_feed_eEyACN": {
+      "type": "social-feed",
+      "blocks": {
+        "post_YyJJEk": {
+          "type": "post",
+          "settings": {
+            "image": "shopify://shop_images/rack-of-womens-clothing.jpg",
+            "caption": "",
+            "link": ""
+          }
+        },
+        "post_EcEVYQ": {
+          "type": "post",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        },
+        "post_iaXz97": {
+          "type": "post",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        },
+        "post_FRhqPD": {
+          "type": "post",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        },
+        "post_3xwGyR": {
+          "type": "post",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        },
+        "post_TtCDPE": {
+          "type": "post",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        },
+        "post_LbN4iN": {
+          "type": "post",
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "post_YyJJEk",
+        "post_EcEVYQ",
+        "post_iaXz97",
+        "post_FRhqPD",
+        "post_3xwGyR",
+        "post_TtCDPE",
+        "post_LbN4iN"
+      ],
+      "name": "Social media feed",
+      "settings": {
+        "title": "Follow us on Instagram",
+        "heading_size": "h2",
+        "username": "@yourbrand",
+        "profile_url": "",
+        "button_label": "Follow us",
+        "header_alignment": "left",
+        "platform": "instagram",
+        "columns_desktop": 6,
+        "columns_mobile": "3",
+        "image_gap": "small",
+        "show_caption": true,
+        "color_scheme": "",
+        "padding_top": 52,
+        "padding_bottom": 52
+      }
     }
   },
   "order": [
@@ -631,6 +712,7 @@
     "shop_the_look_zwL48K",
     "countdown_timer_cVFr7B",
     "image_text_slider_tUmTNC",
-    "hotspot_c4pPbP"
+    "hotspot_c4pPbP",
+    "social_feed_eEyACN"
   ]
 }
