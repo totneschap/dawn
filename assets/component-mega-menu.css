@@ -27,6 +27,16 @@
   right: 0;
 }
 
+/* Active page already has the ::after underline — suppress text-decoration underline */
+.header__inline-menu .header__active-menu-item {
+  text-decoration: none;
+}
+
+/* On hover of an active item, also suppress the span's text-decoration underline */
+.header__inline-menu .header__menu-item:hover span {
+  text-decoration: none;
+}
+
 /* Caret rotation */
 .mega-menu__caret {
   display: inline-flex;
