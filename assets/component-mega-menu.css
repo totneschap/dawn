@@ -27,7 +27,16 @@
   right: 0;
 }
 
-/* The ::after bar is the sole underline indicator — suppress text-decoration on all nav spans */
+/* The ::after bar is the sole underline indicator — suppress all text-decoration */
+/* Must target the element itself, not just spans, because parent text-decoration
+   paints through children and cannot be cancelled by child text-decoration: none */
+.header__inline-menu .header__menu-item,
+.header__inline-menu .header__menu-item:hover,
+.header__inline-menu details[open] > .header__menu-item,
+.header__inline-menu details[open]:hover > .header__menu-item {
+  text-decoration: none !important;
+}
+
 .header__inline-menu .header__menu-item span,
 .header__inline-menu .header__menu-item:hover span {
   text-decoration: none !important;
