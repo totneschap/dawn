@@ -27,14 +27,16 @@
   right: 0;
 }
 
-/* Active page already has the ::after underline — suppress text-decoration underline */
-.header__inline-menu .header__active-menu-item {
-  text-decoration: none;
+/* The ::after bar is the sole underline indicator — suppress text-decoration on all nav spans */
+.header__inline-menu .header__menu-item span,
+.header__inline-menu .header__menu-item:hover span {
+  text-decoration: none !important;
 }
 
-/* On hover of an active item, also suppress the span's text-decoration underline */
-.header__inline-menu .header__menu-item:hover span {
-  text-decoration: none;
+/* Active page: keep ::after bar permanently expanded */
+.header__inline-menu .header__menu-item[aria-current='page']::after {
+  left: 0;
+  right: 0;
 }
 
 /* Caret rotation */
