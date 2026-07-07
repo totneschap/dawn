@@ -177,6 +177,25 @@
         ],
         "default": "1.2"
       },
+      {
+        "type": "header",
+        "content": "Font pairing presets",
+        "info": "Selecting a preset overrides the font pickers above with a curated combination. Choose 'Custom' to use your own font selections."
+      },
+      {
+        "type": "select",
+        "id": "font_pairing",
+        "label": "Font pairing",
+        "options": [
+          { "value": "custom", "label": "Custom (use font pickers above)" },
+          { "value": "editorial", "label": "Editorial — Cormorant + Jost" },
+          { "value": "luxury", "label": "Luxury — Playfair Display + Raleway" },
+          { "value": "contemporary", "label": "Contemporary — DM Serif + DM Sans" },
+          { "value": "minimal", "label": "Minimal — Montserrat + Lato" },
+          { "value": "boutique", "label": "Boutique — Libre Baskerville + Karla" }
+        ],
+        "default": "custom"
+      }
     ]
   },
   {

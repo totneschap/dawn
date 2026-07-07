@@ -15,6 +15,22 @@
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     {%- endunless -%}
 
+    {%- unless settings.font_pairing == 'custom' or settings.font_pairing == blank -%}
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      {%- if settings.font_pairing == 'editorial' -%}
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500&display=swap">
+      {%- elsif settings.font_pairing == 'luxury' -%}
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Raleway:wght@300;400;600&display=swap">
+      {%- elsif settings.font_pairing == 'contemporary' -%}
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap">
+      {%- elsif settings.font_pairing == 'minimal' -%}
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Lato:wght@300;400;700&display=swap">
+      {%- elsif settings.font_pairing == 'boutique' -%}
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Karla:wght@300;400;600&display=swap">
+      {%- endif -%}
+    {%- endunless -%}
+
     <title>
       {{ page_title }}
       {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
@@ -223,6 +239,38 @@
         --variant-pills-shadow-horizontal-offset: {{ settings.variant_pills_shadow_horizontal_offset }}px;
         --variant-pills-shadow-vertical-offset: {{ settings.variant_pills_shadow_vertical_offset }}px;
         --variant-pills-shadow-blur-radius: {{ settings.variant_pills_shadow_blur }}px;
+
+        {%- if settings.font_pairing == 'editorial' -%}
+          --font-heading-family: 'Cormorant Garamond', Georgia, serif;
+          --font-heading-weight: 300;
+          --font-body-family: 'Jost', system-ui, sans-serif;
+          --font-body-weight: 300;
+          --font-body-weight-bold: 500;
+        {%- elsif settings.font_pairing == 'luxury' -%}
+          --font-heading-family: 'Playfair Display', Georgia, serif;
+          --font-heading-weight: 400;
+          --font-body-family: 'Raleway', system-ui, sans-serif;
+          --font-body-weight: 300;
+          --font-body-weight-bold: 600;
+        {%- elsif settings.font_pairing == 'contemporary' -%}
+          --font-heading-family: 'DM Serif Display', Georgia, serif;
+          --font-heading-weight: 400;
+          --font-body-family: 'DM Sans', system-ui, sans-serif;
+          --font-body-weight: 300;
+          --font-body-weight-bold: 500;
+        {%- elsif settings.font_pairing == 'minimal' -%}
+          --font-heading-family: 'Montserrat', system-ui, sans-serif;
+          --font-heading-weight: 300;
+          --font-body-family: 'Lato', system-ui, sans-serif;
+          --font-body-weight: 300;
+          --font-body-weight-bold: 700;
+        {%- elsif settings.font_pairing == 'boutique' -%}
+          --font-heading-family: 'Libre Baskerville', Georgia, serif;
+          --font-heading-weight: 400;
+          --font-body-family: 'Karla', system-ui, sans-serif;
+          --font-body-weight: 300;
+          --font-body-weight-bold: 600;
+        {%- endif -%}
       }
 
       *,
