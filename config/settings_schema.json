@@ -144,6 +144,39 @@
         "label": "t:settings_schema.typography.settings.body_scale.label",
         "default": 100
       },
+      {
+        "type": "header",
+        "content": "Heading style"
+      },
+      {
+        "type": "select",
+        "id": "heading_letter_spacing",
+        "label": "Heading letter spacing",
+        "options": [
+          { "value": "0", "label": "None" },
+          { "value": "0.02em", "label": "Slight" },
+          { "value": "0.06em", "label": "Wide" },
+          { "value": "0.12em", "label": "Wider" }
+        ],
+        "default": "0"
+      },
+      {
+        "type": "checkbox",
+        "id": "heading_capitalize",
+        "label": "Uppercase headings",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "heading_line_height",
+        "label": "Heading line height",
+        "options": [
+          { "value": "1.1", "label": "Tight" },
+          { "value": "1.2", "label": "Normal" },
+          { "value": "1.35", "label": "Relaxed" }
+        ],
+        "default": "1.2"
+      },
     ]
   },
   {
