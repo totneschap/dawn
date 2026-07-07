@@ -9,27 +9,20 @@
  */
 {
   "sections": {
-    "image_banner": {
+    "hero_banner": {
       "type": "image-banner",
       "blocks": {
-        "heading": {
+        "hero_heading": {
           "type": "heading",
           "settings": {
-            "heading": "Image banner",
+            "heading": "Made with care, worn with intent",
             "heading_size": "h0"
           }
         },
-        "text": {
-          "type": "text",
-          "settings": {
-            "text": "Give customers details about the banner image(s) or content on the template.",
-            "text_style": "body"
-          }
-        },
-        "button": {
+        "hero_btn": {
           "type": "buttons",
           "settings": {
-            "button_label_1": "Shop all",
+            "button_label_1": "Discover the collection",
             "button_link_1": "shopify://collections/all",
             "button_style_secondary_1": true,
             "button_label_2": "",
@@ -39,717 +32,176 @@
         }
       },
       "block_order": [
-        "heading",
-        "text",
-        "button"
+        "hero_heading",
+        "hero_btn"
       ],
       "settings": {
-        "image_overlay_opacity": 40,
+        "image_overlay_opacity": 30,
         "image_height": "large",
         "image_behavior": "none",
         "layout": "full_width",
-        "desktop_content_position": "bottom-center",
-        "desktop_content_alignment": "center",
+        "desktop_content_position": "bottom-left",
+        "desktop_content_alignment": "left",
         "show_text_box": false,
         "color_scheme": "scheme-3",
         "stack_images_on_mobile": false,
-        "mobile_content_alignment": "center",
+        "mobile_content_alignment": "left",
         "show_text_below": false,
         "uppercase_heading": false,
         "padding_top": 0,
         "padding_bottom": 0
       }
     },
-    "rich_text": {
-      "type": "rich-text",
+    "newsletter_welcome": {
+      "type": "newsletter-editorial",
+      "settings": {
+        "eyebrow": "Welcome",
+        "heading": "Join our world",
+        "body": "Be the first to hear about new arrivals, exclusive pieces and stories from behind the brand.",
+        "perks": "Early access to new collections, Exclusive member offers, Stories from behind the brand",
+        "show_name": false,
+        "email_placeholder": "Your email address",
+        "button_label": "Subscribe",
+        "success_message": "Thank you — welcome to the community.",
+        "disclaimer": "<p>By subscribing you agree to receive our newsletter. Unsubscribe any time.</p>",
+        "layout": "stacked",
+        "color_scheme": "scheme-2",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "collection_teasers": {
+      "type": "collection-tiles",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "tile_new": {
+          "type": "tile",
           "settings": {
-            "heading": "Talk about your brand",
-            "heading_size": "h1"
+            "label": "New Arrivals",
+            "subtitle": "Fresh pieces, updated weekly",
+            "cta": "Shop now",
+            "featured": false,
+            "overlay_opacity": 20
           }
         },
-        "text": {
-          "type": "text",
+        "tile_best": {
+          "type": "tile",
           "settings": {
-            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
+            "label": "Bestsellers",
+            "subtitle": "Our most loved pieces",
+            "cta": "Shop now",
+            "featured": false,
+            "overlay_opacity": 20
           }
         }
       },
       "block_order": [
-        "heading",
-        "text"
+        "tile_new",
+        "tile_best"
       ],
       "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "scheme-1",
+        "eyebrow": "",
+        "columns": "2",
+        "text_position": "overlay-bottom",
         "full_width": true,
-        "uppercase_heading": true,
-        "padding_top": 40,
-        "padding_bottom": 40
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
-    "featured_collection": {
+    "brand_statement": {
+      "type": "editorial-text",
+      "settings": {
+        "eyebrow": "",
+        "heading": "Everyday pieces for a considered life",
+        "heading_size": "xl",
+        "button_label": "Discover",
+        "button_link": "shopify://collections/all",
+        "button_style": "secondary",
+        "button_label_2": "",
+        "button_link_2": "",
+        "alignment": "center",
+        "full_width": false,
+        "full_height": false,
+        "color_scheme": "scheme-1",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "product_showcase": {
       "type": "featured-collection",
       "settings": {
-        "collection": "all",
-        "products_to_show": 8,
-        "title": "<strong>FEATURED PRODUCTS</strong>",
+        "title": "",
         "heading_size": "h1",
         "description": "",
         "show_description": false,
         "description_style": "body",
+        "collection": "all",
+        "products_to_show": 8,
         "columns_desktop": 4,
-        "enable_desktop_slider": false,
+        "enable_desktop_slider": true,
         "full_width": false,
-        "show_view_all": false,
-        "view_all_style": "solid",
+        "show_view_all": true,
+        "view_all_style": "outline",
         "color_scheme": "scheme-1",
-        "image_ratio": "adapt",
+        "image_ratio": "portrait",
         "image_shape": "default",
         "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": false,
         "quick_add": "none",
         "columns_mobile": "2",
-        "swipe_on_mobile": false,
-        "uppercase_heading": true,
-        "padding_top": 28,
-        "padding_bottom": 36
-      }
-    },
-    "collage": {
-      "type": "collage",
-      "blocks": {
-        "collection-0": {
-          "type": "collection",
-          "settings": {
-            "collection": ""
-          }
-        },
-        "product": {
-          "type": "product",
-          "settings": {
-            "product": "",
-            "second_image": false
-          }
-        },
-        "collection-1": {
-          "type": "collection",
-          "settings": {
-            "collection": ""
-          }
-        }
-      },
-      "block_order": [
-        "collection-0",
-        "product",
-        "collection-1"
-      ],
-      "settings": {
-        "heading": "Multimedia collage",
-        "heading_size": "h2",
-        "desktop_layout": "left",
-        "mobile_layout": "collage",
-        "card_styles": "product-card-wrapper",
-        "color_scheme": "scheme-1",
+        "swipe_on_mobile": true,
         "uppercase_heading": false,
         "padding_top": 36,
-        "padding_bottom": 36
+        "padding_bottom": 60
       }
     },
-    "video": {
-      "type": "video",
+    "brand_story": {
+      "type": "split-content",
       "settings": {
-        "heading": "",
-        "heading_size": "h1",
-        "enable_video_looping": false,
-        "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-        "description": "",
+        "eyebrow": "Our story",
+        "heading": "Craftsmanship at the heart of everything",
+        "heading_size": "md",
+        "body": "<p>Each piece is designed with intention — blending timeless craft with a contemporary sensibility. Made to be worn every day, by people who value quality over quantity.</p>",
+        "button_label": "Learn more",
+        "button_link": "/pages/about",
+        "button_style": "secondary",
+        "button_label_2": "",
+        "button_link_2": "",
+        "image_ratio": "portrait",
+        "image_swap": false,
+        "text_align_v": "middle",
+        "full_bleed_image": true,
         "full_width": false,
         "color_scheme": "scheme-1",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "multicolumn": {
-      "type": "multicolumn",
-      "blocks": {
-        "column1": {
-          "type": "column",
-          "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column2": {
-          "type": "column",
-          "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column3": {
-          "type": "column",
-          "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "column1",
-        "column2",
-        "column3"
-      ],
-      "settings": {
-        "title": "",
-        "heading_size": "h1",
-        "image_width": "third",
-        "image_ratio": "adapt",
-        "button_label": "",
-        "button_link": "",
-        "columns_desktop": 3,
-        "column_alignment": "center",
-        "background_style": "none",
-        "color_scheme": "scheme-1",
-        "columns_mobile": "1",
-        "swipe_on_mobile": false,
-        "uppercase_heading": false,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "nested_slideshow_PNcPHi": {
-      "type": "nested-slideshow",
-      "blocks": {
-        "slide_MebYYn": {
-          "type": "slide",
-          "settings": {
-            "overlay_opacity": 35,
-            "label": "Slide 1",
-            "subheading": "New season",
-            "heading": "First slide",
-            "heading_size": "h0",
-            "text": "",
-            "button_label": "Shop now",
-            "button_link": "",
-            "button_style_secondary": false,
-            "content_position": "middle-center",
-            "text_alignment": "center"
-          }
-        },
-        "slide_BerLq8": {
-          "type": "slide",
-          "settings": {
-            "overlay_opacity": 35,
-            "label": "Slide 2",
-            "subheading": "Explore more",
-            "heading": "Second slide",
-            "heading_size": "h0",
-            "text": "",
-            "button_label": "Shop now",
-            "button_link": "",
-            "button_style_secondary": false,
-            "content_position": "middle-center",
-            "text_alignment": "center"
-          }
-        },
-        "slide_RNnbWF": {
-          "type": "slide",
-          "settings": {
-            "overlay_opacity": 35,
-            "label": "Slide 3",
-            "subheading": "Discover",
-            "heading": "Third slide",
-            "heading_size": "h0",
-            "text": "",
-            "button_label": "Shop now",
-            "button_link": "",
-            "button_style_secondary": false,
-            "content_position": "middle-center",
-            "text_alignment": "center"
-          }
-        }
-      },
-      "block_order": [
-        "slide_MebYYn",
-        "slide_BerLq8",
-        "slide_RNnbWF"
-      ],
-      "name": "Nested slideshow",
-      "settings": {
-        "slide_height": "large",
-        "show_thumbnails": false,
-        "auto_rotate": true,
-        "change_slides_speed": 6
-      }
-    },
-    "text_columns_images_V6tgYq": {
-      "type": "text-columns-images",
-      "blocks": {
-        "column_AyJmmY": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/person-stands-on-rocks-poking-out-of-the-ocean-shoreline.jpg",
-            "title": "Column heading",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post.</p>",
-            "link_label": "",
-            "link": "shopify://collections/all",
-            "link_style": "link"
-          }
-        },
-        "column_qQetgD": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/man-poses-in-light-colored-overcoat.jpg",
-            "title": "Column heading",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post.</p>",
-            "link_label": "",
-            "link": "",
-            "link_style": "link"
-          }
-        },
-        "column_X4Nzpz": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/man-on-bike.jpg",
-            "title": "Column heading",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post.</p>",
-            "link_label": "",
-            "link": "",
-            "link_style": "link"
-          }
-        }
-      },
-      "block_order": [
-        "column_AyJmmY",
-        "column_qQetgD",
-        "column_X4Nzpz"
-      ],
-      "name": "Text columns with images",
-      "settings": {
-        "title": "Our features",
-        "description": "",
-        "heading_size": "h1",
-        "image_ratio": "square",
-        "columns_desktop": 3,
-        "columns_mobile": "1",
-        "swipe_on_mobile": false,
-        "row_alignment": "left",
-        "column_alignment": "left",
-        "card_style": false,
-        "color_scheme": "",
-        "uppercase_heading": true,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "video_banner_3EiAqX": {
-      "type": "video-banner",
-      "blocks": {
-        "subheading_dXBrD4": {
-          "type": "subheading",
-          "settings": {
-            "text": "New collection"
-          }
-        },
-        "heading_TQXVRn": {
-          "type": "heading",
-          "settings": {
-            "heading": "Bold statement here",
-            "heading_size": "h0"
-          }
-        },
-        "buttons_qk74mz": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Shop now",
-            "button_link_1": "",
-            "button_style_secondary_1": false,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": true
-          }
-        }
-      },
-      "block_order": [
-        "subheading_dXBrD4",
-        "heading_TQXVRn",
-        "buttons_qk74mz"
-      ],
-      "name": "Video banner",
-      "settings": {
-        "video_url": "",
-        "video_alt": "",
-        "section_height": "large",
-        "overlay_opacity": 40,
-        "desktop_content_position": "middle-center",
-        "desktop_content_alignment": "center",
-        "mobile_content_alignment": "center",
-        "uppercase_heading": false,
-        "padding_top": 80,
-        "padding_bottom": 80
-      }
-    },
-    "tab_collection_JDViAp": {
-      "type": "tab-collection",
-      "blocks": {
-        "collection_tab_ARaQ4C": {
-          "type": "collection_tab",
-          "settings": {
-            "collection": "frontpage",
-            "label": "new"
-          }
-        }
-      },
-      "block_order": [
-        "collection_tab_ARaQ4C"
-      ],
-      "name": "Tab collection",
-      "settings": {
-        "title": "Shop by collection",
-        "description": "",
-        "heading_size": "h1",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "columns_mobile": "2",
-        "image_ratio": "adapt",
-        "show_featured_image": false,
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "show_view_all": true,
-        "color_scheme": "",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "lookbook_6LbNAa": {
-      "type": "lookbook",
-      "blocks": {
-        "look_AQwbY8": {
-          "type": "look",
-          "settings": {
-            "layout": "split-left",
-            "image": "shopify://shop_images/person-fishing-on-the-beach-is-silhouetted-at-sunset.jpg",
-            "image_height": "portrait",
-            "collection_tag": "",
-            "collection_tag_url": "",
-            "title": "Summer Collection",
-            "subtitle": "Effortless pieces made to be worn all day.",
-            "button_label": "Shop the collection",
-            "button_url": "",
-            "text_position": "bottom-left",
-            "text_color": "dark",
-            "overlay_opacity": 15
-          }
-        }
-      },
-      "block_order": [
-        "look_AQwbY8"
-      ],
-      "name": "Lookbook",
-      "settings": {
-        "heading": "The Lookbook",
-        "heading_size": "h1",
-        "subheading": "",
-        "color_scheme": "",
-        "uppercase_heading": false,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "shop_the_look_zwL48K": {
-      "type": "shop-the-look",
-      "blocks": {
-        "product_NRn8Bp": {
-          "type": "product",
-          "settings": {
-            "product": "",
-            "button_label": "Shop now"
-          }
-        },
-        "product_Fgi8G3": {
-          "type": "product",
-          "settings": {
-            "product": "",
-            "button_label": "Shop now"
-          }
-        },
-        "product_Knqqwh": {
-          "type": "product",
-          "settings": {
-            "product": "",
-            "button_label": "Shop now"
-          }
-        }
-      },
-      "block_order": [
-        "product_NRn8Bp",
-        "product_Fgi8G3",
-        "product_Knqqwh"
-      ],
-      "name": "Shop the look",
-      "settings": {
-        "title": "Shop the look",
-        "heading_size": "h1",
-        "description": "<p>cheese</p>",
-        "content_position": "bottom-left",
-        "button_label": "view all",
-        "button_url": "shopify://collections/all",
-        "image_width": "50%",
-        "image_position": "left",
-        "color_scheme": "",
-        "uppercase_heading": false,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "countdown_timer_cVFr7B": {
-      "type": "countdown-timer",
-      "name": "Countdown timer",
-      "settings": {
-        "heading": "Sale ends in",
-        "heading_size": "h3",
-        "end_date": "2026-06-26 23:59",
-        "show_seconds": true,
-        "expired_text": "",
-        "color_scheme": "",
-        "uppercase_heading": false,
-        "padding_top": 28,
-        "padding_bottom": 28
-      }
-    },
-    "image_text_slider_tUmTNC": {
-      "type": "image-text-slider",
-      "blocks": {
-        "slide_Wn7YUH": {
-          "type": "slide",
-          "settings": {
-            "subheading": "Spring / Summer 2025",
-            "heading": "New arrivals are here",
-            "text": "<p>Discover our latest collection, crafted with care and designed to last.</p>",
-            "button_label": "Shop now",
-            "button_link": ""
-          }
-        },
-        "slide_xCDyfk": {
-          "type": "slide",
-          "settings": {
-            "subheading": "Our story",
-            "heading": "Made for the way you live",
-            "text": "<p>Sustainably sourced, beautifully made — pieces you'll reach for again and again.</p>",
-            "button_label": "Learn more",
-            "button_link": ""
-          }
-        }
-      },
-      "block_order": [
-        "slide_Wn7YUH",
-        "slide_xCDyfk"
-      ],
-      "name": "Image with text slider",
-      "settings": {
-        "image": "shopify://shop_images/fashion-portrait.jpg",
-        "image_position": "center",
-        "section_width": "full",
-        "text_position": "right",
-        "desktop_height": 600,
-        "mobile_height": 350,
-        "heading_size": "h1",
-        "autoplay": false,
-        "autoplay_speed": 5,
-        "color_scheme": "",
-        "uppercase_heading": false,
         "padding_top": 0,
         "padding_bottom": 0
       }
     },
-    "hotspot_c4pPbP": {
-      "type": "hotspot",
-      "blocks": {
-        "hotspot_TiC8zF": {
-          "type": "hotspot",
-          "settings": {
-            "product": "sample-coconut-bar-soap",
-            "x_position": 48,
-            "y_position": 32
-          }
-        },
-        "hotspot_DjAYAG": {
-          "type": "hotspot",
-          "settings": {
-            "product": "sample-coconut-bar-soap",
-            "x_position": 45,
-            "y_position": 60
-          }
-        }
-      },
-      "block_order": [
-        "hotspot_TiC8zF",
-        "hotspot_DjAYAG"
-      ],
-      "name": "Hotspot",
+    "magazine_section": {
+      "type": "featured-blog",
       "settings": {
-        "image": "shopify://shop_images/model-laughs-barefoot.jpg",
-        "heading": "",
-        "heading_size": "h1",
-        "color_scheme": "",
-        "uppercase_heading": false,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "social_feed_eEyACN": {
-      "type": "social-feed",
-      "blocks": {
-        "post_YyJJEk": {
-          "type": "post",
-          "settings": {
-            "image": "shopify://shop_images/rack-of-womens-clothing.jpg",
-            "caption": "test",
-            "link": ""
-          }
-        },
-        "post_EcEVYQ": {
-          "type": "post",
-          "settings": {
-            "caption": "",
-            "link": ""
-          }
-        },
-        "post_iaXz97": {
-          "type": "post",
-          "settings": {
-            "caption": "",
-            "link": ""
-          }
-        },
-        "post_FRhqPD": {
-          "type": "post",
-          "settings": {
-            "caption": "",
-            "link": ""
-          }
-        },
-        "post_3xwGyR": {
-          "type": "post",
-          "settings": {
-            "caption": "",
-            "link": ""
-          }
-        },
-        "post_TtCDPE": {
-          "type": "post",
-          "settings": {
-            "caption": "",
-            "link": ""
-          }
-        },
-        "post_LbN4iN": {
-          "type": "post",
-          "settings": {
-            "caption": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "post_YyJJEk",
-        "post_EcEVYQ",
-        "post_iaXz97",
-        "post_FRhqPD",
-        "post_3xwGyR",
-        "post_TtCDPE",
-        "post_LbN4iN"
-      ],
-      "name": "Social media feed",
-      "settings": {
-        "title": "Follow us on Instagram",
+        "heading": "From the magazine",
         "heading_size": "h2",
-        "username": "@yourbrand",
-        "profile_url": "",
-        "button_label": "Follow us",
-        "header_alignment": "left",
-        "layout": "carousel",
-        "platform": "instagram",
-        "columns_desktop": 6,
-        "columns_mobile": "3",
-        "image_gap": "small",
-        "show_caption": true,
-        "color_scheme": "",
-        "padding_top": 52,
-        "padding_bottom": 52
-      }
-    },
-    "tab_collection_BEbWUV": {
-      "type": "tab-collection",
-      "blocks": {
-        "collection_tab_pgDMCr": {
-          "type": "collection_tab",
-          "settings": {
-            "collection": "",
-            "label": ""
-          }
-        },
-        "collection_tab_XnccaQ": {
-          "type": "collection_tab",
-          "settings": {
-            "collection": "",
-            "label": ""
-          }
-        }
-      },
-      "block_order": [
-        "collection_tab_pgDMCr",
-        "collection_tab_XnccaQ"
-      ],
-      "name": "Tab collection",
-      "settings": {
-        "title": "Shop by collection",
-        "description": "",
-        "heading_size": "h1",
-        "products_to_show": 8,
+        "post_limit": 4,
         "columns_desktop": 4,
-        "columns_mobile": "2",
-        "image_ratio": "adapt",
-        "show_featured_image": false,
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "show_view_all": true,
-        "color_scheme": "",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "color_scheme": "scheme-1",
+        "show_image": true,
+        "show_date": true,
+        "show_author": false,
+        "uppercase_heading": false,
+        "padding_top": 60,
+        "padding_bottom": 60
       }
     }
   },
   "order": [
-    "image_banner",
-    "rich_text",
-    "featured_collection",
-    "collage",
-    "video",
-    "multicolumn",
-    "nested_slideshow_PNcPHi",
-    "text_columns_images_V6tgYq",
-    "video_banner_3EiAqX",
-    "tab_collection_JDViAp",
-    "lookbook_6LbNAa",
-    "shop_the_look_zwL48K",
-    "countdown_timer_cVFr7B",
-    "image_text_slider_tUmTNC",
-    "hotspot_c4pPbP",
-    "social_feed_eEyACN",
-    "tab_collection_BEbWUV"
+    "hero_banner",
+    "newsletter_welcome",
+    "collection_teasers",
+    "brand_statement",
+    "product_showcase",
+    "brand_story",
+    "magazine_section"
   ]
 }
