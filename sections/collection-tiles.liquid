@@ -1,0 +1,250 @@
+{{ 'section-collection-tiles.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  class="collection-tiles color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+  id="CollectionTiles-{{ section.id }}"
+>
+
+  {%- if section.settings.heading != blank or section.settings.eyebrow != blank -%}
+    <div class="collection-tiles__header page-width">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="collection-tiles__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="collection-tiles__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="collection-tiles__grid{% if section.settings.full_width %} collection-tiles__grid--full-width{% else %} page-width{% endif %} collection-tiles__grid--{{ section.settings.columns }}">
+    {%- for block in section.blocks -%}
+      {%- assign collection = block.settings.collection -%}
+      {%- assign label = block.settings.label | default: collection.title -%}
+      {%- assign custom_image = block.settings.image -%}
+      {%- assign featured = block.settings.featured -%}
+
+      {%- if custom_image != blank -%}
+        {%- assign tile_image = custom_image -%}
+      {%- elsif collection != blank and collection.featured_image != blank -%}
+        {%- assign tile_image = collection.featured_image -%}
+      {%- else -%}
+        {%- assign tile_image = nil -%}
+      {%- endif -%}
+
+      {%- if collection != blank -%}
+        {%- assign tile_url = collection.url -%}
+      {%- elsif block.settings.link != blank -%}
+        {%- assign tile_url = block.settings.link -%}
+      {%- else -%}
+        {%- assign tile_url = '#' -%}
+      {%- endif -%}
+
+      <a
+        href="{{ tile_url }}"
+        class="collection-tile{% if featured %} collection-tile--featured{% endif %} collection-tile--text-{{ section.settings.text_position }}"
+        {{ block.shopify_attributes }}
+      >
+        <div class="collection-tile__media">
+          {%- if tile_image != blank -%}
+            {{
+              tile_image
+              | image_url: width: 1200
+              | image_tag:
+                widths: '400, 600, 800, 1000, 1200',
+                loading: 'lazy',
+                class: 'collection-tile__img',
+                sizes: '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw'
+            }}
+          {%- else -%}
+            {{ 'collection-1' | placeholder_svg_tag: 'collection-tile__placeholder' }}
+          {%- endif -%}
+
+          <div class="collection-tile__overlay" style="opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+        </div>
+
+        <div class="collection-tile__content">
+          {%- if label != blank -%}
+            <h3 class="collection-tile__title">{{ label | escape }}</h3>
+          {%- endif -%}
+          {%- if block.settings.subtitle != blank -%}
+            <p class="collection-tile__subtitle">{{ block.settings.subtitle | escape }}</p>
+          {%- endif -%}
+          {%- if block.settings.cta != blank -%}
+            <span class="collection-tile__cta">{{ block.settings.cta | escape }}</span>
+          {%- endif -%}
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "Collection tiles",
+  "class": "section",
+  "tag": "section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Shop by category"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns (desktop)",
+      "options": [
+        { "value": "2", "label": "2 columns" },
+        { "value": "3", "label": "3 columns" },
+        { "value": "4", "label": "4 columns" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "select",
+      "id": "text_position",
+      "label": "Text position",
+      "options": [
+        { "value": "overlay-bottom", "label": "Overlay — bottom" },
+        { "value": "overlay-center", "label": "Overlay — center" },
+        { "value": "below",          "label": "Below image" }
+      ],
+      "default": "overlay-bottom"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width (no page margin)",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Collection tile",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom image",
+          "info": "Overrides the collection's featured image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Custom link",
+          "info": "Used if no collection is selected"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "Overrides the collection title"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle"
+        },
+        {
+          "type": "text",
+          "id": "cta",
+          "label": "CTA text",
+          "default": "Shop now"
+        },
+        {
+          "type": "checkbox",
+          "id": "featured",
+          "label": "Featured (spans 2 columns)",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Image overlay opacity",
+          "min": 0,
+          "max": 70,
+          "step": 5,
+          "unit": "%",
+          "default": 20
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection tiles",
+      "settings": {
+        "eyebrow": "Shop by category",
+        "columns": "3",
+        "text_position": "overlay-bottom"
+      },
+      "blocks": [
+        { "type": "tile", "settings": { "cta": "Shop now", "overlay_opacity": 20 } },
+        { "type": "tile", "settings": { "cta": "Shop now", "overlay_opacity": 20 } },
+        { "type": "tile", "settings": { "cta": "Shop now", "overlay_opacity": 20 } }
+      ]
+    }
+  ]
+}
+{% endschema %}

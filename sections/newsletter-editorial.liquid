@@ -1,0 +1,241 @@
+{{ 'section-newsletter-editorial.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  class="newsletter-editorial color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding newsletter-editorial--{{ section.settings.layout }}"
+  id="NewsletterEditorial-{{ section.id }}"
+>
+  <div class="newsletter-editorial__inner page-width">
+
+    <!-- Text column -->
+    <div class="newsletter-editorial__text">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="newsletter-editorial__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="newsletter-editorial__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.body != blank -%}
+        <p class="newsletter-editorial__body">{{ section.settings.body | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.perks != blank -%}
+        <ul class="newsletter-editorial__perks">
+          {%- assign perks_list = section.settings.perks | split: ',' -%}
+          {%- for perk in perks_list -%}
+            <li class="newsletter-editorial__perk">{{ perk | strip | escape }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <!-- Form column -->
+    <div class="newsletter-editorial__form-wrap">
+      {%- form 'customer', id: 'newsletter-editorial-{{ section.id }}', class: 'newsletter-editorial__form' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+
+        {%- if form.posted_successfully? -%}
+          <div class="newsletter-editorial__success" role="status">
+            <p>{{ section.settings.success_message | default: 'Thank you for subscribing.' | escape }}</p>
+          </div>
+        {%- else -%}
+          {%- if form.errors -%}
+            <div class="newsletter-editorial__errors" role="alert">
+              {%- for error in form.errors -%}
+                <p>{{ error }}: {{ form.errors.messages[error] }}</p>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          <div class="newsletter-editorial__input-group">
+            {%- if section.settings.show_name -%}
+              <input
+                type="text"
+                name="contact[first_name]"
+                id="newsletter-name-{{ section.id }}"
+                class="field__input newsletter-editorial__input"
+                placeholder="{{ section.settings.name_placeholder | default: 'First name' | escape }}"
+                autocomplete="given-name"
+              >
+            {%- endif -%}
+
+            <div class="newsletter-editorial__email-row">
+              <input
+                type="email"
+                name="contact[email]"
+                id="newsletter-email-{{ section.id }}"
+                class="field__input newsletter-editorial__input newsletter-editorial__email"
+                value="{% if customer %}{{ customer.email }}{% endif %}"
+                aria-required="true"
+                autocorrect="off"
+                autocapitalize="off"
+                autocomplete="email"
+                placeholder="{{ section.settings.email_placeholder | default: 'Your email address' | escape }}"
+                required
+              >
+              <button
+                type="submit"
+                name="commit"
+                class="newsletter-editorial__btn button button--primary"
+              >
+                {{ section.settings.button_label | default: 'Subscribe' | escape }}
+              </button>
+            </div>
+          </div>
+
+          {%- if section.settings.disclaimer != blank -%}
+            <p class="newsletter-editorial__disclaimer">{{ section.settings.disclaimer }}</p>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter (editorial)",
+  "class": "section",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Join the community"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Stay in the loop"
+    },
+    {
+      "type": "text",
+      "id": "body",
+      "label": "Body text",
+      "default": "New arrivals, exclusive offers, and stories from behind the brand — delivered to your inbox."
+    },
+    {
+      "type": "text",
+      "id": "perks",
+      "label": "Subscriber perks",
+      "info": "Comma-separated list of benefits shown as bullet points. E.g. Early access to new collections, 10% off your first order",
+      "default": "Early access to new collections, Exclusive member offers, Behind-the-scenes stories"
+    },
+    {
+      "type": "header",
+      "content": "Form"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_name",
+      "label": "Ask for first name",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "name_placeholder",
+      "label": "Name placeholder",
+      "default": "First name"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "Your email address"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thank you for subscribing."
+    },
+    {
+      "type": "richtext",
+      "id": "disclaimer",
+      "label": "Disclaimer / privacy note",
+      "default": "<p>By subscribing you agree to receive marketing emails. Unsubscribe any time.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "stacked", "label": "Stacked (text above form)" },
+        { "value": "split",   "label": "Split (text left, form right)" }
+      ],
+      "default": "split"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter (editorial)",
+      "settings": {
+        "eyebrow": "Join the community",
+        "heading": "Stay in the loop",
+        "layout": "split"
+      }
+    }
+  ]
+}
+{% endschema %}

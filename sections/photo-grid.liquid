@@ -1,0 +1,258 @@
+{{ 'section-photo-grid.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  class="photo-grid color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+  id="PhotoGrid-{{ section.id }}"
+>
+
+  {%- if section.settings.heading != blank or section.settings.eyebrow != blank -%}
+    <div class="photo-grid__header page-width">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="photo-grid__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="photo-grid__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="photo-grid__grid{% if section.settings.full_width %} photo-grid__grid--full-width{% else %} page-width{% endif %} photo-grid__grid--gap-{{ section.settings.gap }}">
+    {%- for block in section.blocks -%}
+      {%- assign featured = block.settings.featured -%}
+      {%- assign tall = block.settings.tall -%}
+
+      <div
+        class="photo-grid__item{% if featured %} photo-grid__item--wide{% endif %}{% if tall %} photo-grid__item--tall{% endif %}"
+        {{ block.shopify_attributes }}
+      >
+        {%- if block.settings.link != blank -%}
+          <a href="{{ block.settings.link }}" class="photo-grid__link">
+        {%- endif -%}
+
+        <div class="photo-grid__media photo-grid__media--{{ block.settings.ratio }}">
+          {%- if block.settings.image != blank -%}
+            {{
+              block.settings.image
+              | image_url: width: 1200
+              | image_tag:
+                widths: '400, 600, 800, 1000, 1200',
+                loading: 'lazy',
+                class: 'photo-grid__img',
+                sizes: '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw'
+            }}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'photo-grid__placeholder' }}
+          {%- endif -%}
+
+          {%- if block.settings.caption != blank or block.settings.label != blank -%}
+            <div class="photo-grid__caption photo-grid__caption--{{ block.settings.caption_position }}">
+              {%- if block.settings.label != blank -%}
+                <span class="photo-grid__label">{{ block.settings.label | escape }}</span>
+              {%- endif -%}
+              {%- if block.settings.caption != blank -%}
+                <p class="photo-grid__caption-text">{{ block.settings.caption | escape }}</p>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- if block.settings.link != blank -%}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- if section.settings.button_label != blank -%}
+    <div class="photo-grid__footer page-width">
+      <a href="{{ section.settings.button_link | default: '#' }}" class="button button--secondary">
+        {{ section.settings.button_label | escape }}
+      </a>
+    </div>
+  {%- endif -%}
+
+</section>
+
+{% schema %}
+{
+  "name": "Photo grid",
+  "class": "section",
+  "tag": "section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Editorial"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Magazine"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "gap",
+      "label": "Gap between images",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "sm",   "label": "Small" },
+        { "value": "md",   "label": "Medium" }
+      ],
+      "default": "sm"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width (no page margin)",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Footer button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "photo",
+      "name": "Photo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "select",
+          "id": "ratio",
+          "label": "Image ratio",
+          "options": [
+            { "value": "portrait",  "label": "Portrait (3:4)" },
+            { "value": "square",    "label": "Square (1:1)" },
+            { "value": "landscape", "label": "Landscape (4:3)" }
+          ],
+          "default": "portrait"
+        },
+        {
+          "type": "checkbox",
+          "id": "featured",
+          "label": "Wide (spans 2 columns)",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "tall",
+          "label": "Tall (spans 2 rows)",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Caption"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label (small uppercase tag)"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption text"
+        },
+        {
+          "type": "select",
+          "id": "caption_position",
+          "label": "Caption position",
+          "options": [
+            { "value": "bottom", "label": "Bottom (always visible)" },
+            { "value": "hover",  "label": "On hover" }
+          ],
+          "default": "hover"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Photo grid",
+      "settings": {
+        "eyebrow": "Editorial",
+        "heading": "The Magazine",
+        "gap": "sm"
+      },
+      "blocks": [
+        { "type": "photo", "settings": { "featured": true, "ratio": "landscape", "caption_position": "hover" } },
+        { "type": "photo", "settings": { "ratio": "portrait", "caption_position": "hover" } },
+        { "type": "photo", "settings": { "ratio": "portrait", "caption_position": "hover" } },
+        { "type": "photo", "settings": { "ratio": "portrait", "caption_position": "hover" } },
+        { "type": "photo", "settings": { "featured": true, "ratio": "landscape", "caption_position": "hover" } },
+        { "type": "photo", "settings": { "ratio": "portrait", "caption_position": "hover" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
