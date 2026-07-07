@@ -107,6 +107,7 @@
         "image_zoom": "hover",
         "hide_variants": true,
         "enable_video_looping": false,
+        "full_width": true,
         "padding_top": 36,
         "padding_bottom": 12
       }
@@ -124,6 +125,7 @@
         "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": false,
+        "full_width": true,
         "padding_top": 60,
         "padding_bottom": 60
       }

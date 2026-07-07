@@ -65,6 +65,7 @@
         "success_message": "Thank you — welcome to the community.",
         "disclaimer": "<p>By subscribing you agree to receive our newsletter. Unsubscribe any time.</p>",
         "layout": "stacked",
+        "full_width": true,
         "color_scheme": "scheme-2",
         "padding_top": 60,
         "padding_bottom": 60
@@ -130,13 +131,13 @@
     "product_showcase": {
       "type": "featured-collection",
       "settings": {
-        "collection": "all",
-        "products_to_show": 8,
         "title": "",
         "heading_size": "h1",
         "description": "",
         "show_description": false,
         "description_style": "body",
+        "collection": "all",
+        "products_to_show": 8,
         "columns_desktop": 4,
         "enable_desktop_slider": true,
         "full_width": true,
@@ -159,7 +160,6 @@
     "brand_story": {
       "type": "split-content",
       "settings": {
-        "image_ratio": "portrait",
         "eyebrow": "Our story",
         "heading": "Craftsmanship at the heart of everything",
         "heading_size": "md",
@@ -169,6 +169,7 @@
         "button_style": "secondary",
         "button_label_2": "",
         "button_link_2": "",
+        "image_ratio": "portrait",
         "image_swap": false,
         "text_align_v": "middle",
         "full_bleed_image": true,
@@ -181,14 +182,15 @@
     "magazine_section": {
       "type": "featured-blog",
       "settings": {
-        "post_limit": 4,
         "heading": "From the magazine",
         "heading_size": "h2",
+        "post_limit": 4,
         "columns_desktop": 4,
+        "full_width": true,
+        "color_scheme": "scheme-1",
         "show_image": true,
         "show_date": true,
         "show_author": false,
-        "color_scheme": "scheme-1",
         "uppercase_heading": false,
         "padding_top": 60,
         "padding_bottom": 60
