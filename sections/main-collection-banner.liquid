@@ -50,6 +50,10 @@
 </div>
 {%- endunless -%}
 
+{%- if section.settings.hide_banner -%}
+<div class="collection-category-nav"><p>nav placeholder</p></div>
+{%- endif -%}
+
 {% schema %}
 {
   "name": "t:sections.main-collection-banner.name",
