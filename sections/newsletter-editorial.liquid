@@ -17,7 +17,7 @@
   class="newsletter-editorial color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding newsletter-editorial--{{ section.settings.layout }}"
   id="NewsletterEditorial-{{ section.id }}"
 >
-  <div class="newsletter-editorial__inner page-width">
+  <div class="newsletter-editorial__inner{% unless section.settings.full_width %} page-width{% endunless %}">
 
     <!-- Text column -->
     <div class="newsletter-editorial__text">
@@ -195,6 +195,12 @@
         { "value": "split",   "label": "Split (text left, form right)" }
       ],
       "default": "split"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width layout",
+      "default": false
     },
     {
       "type": "color_scheme",
