@@ -52,7 +52,43 @@
 {%- endunless -%}
 
 {%- if section.settings.hide_banner -%}
-<div class="collection-category-nav"><p>nav placeholder</p></div>
+<div class="collection-category-nav page-width">
+  <ul class="collection-category-nav__list" role="list">
+    {%- for link in section.settings.category_menu.links -%}
+      {%- if link.type == 'collection_link' -%}
+        {%- assign col = link.object -%}
+        {%- assign is_active = false -%}
+        {%- if collection and collection.handle == col.handle -%}
+          {%- assign is_active = true -%}
+        {%- endif -%}
+        <li>
+          <a
+            href="{{ link.url }}"
+            class="collection-category-nav__link{% if is_active %} collection-category-nav__link--active{% endif %}"
+            {% if is_active %}aria-current="page"{% endif %}
+          >
+            <div class="collection-category-nav__image-wrapper">
+              {%- if col.featured_image != blank -%}
+                {{
+                  col.featured_image
+                  | image_url: width: 600
+                  | image_tag:
+                    class: 'collection-category-nav__image',
+                    loading: 'lazy',
+                    widths: '200, 300, 400, 600',
+                    sizes: '(min-width: 990px) 22vw, 50vw'
+                }}
+              {%- else -%}
+                <div class="collection-category-nav__image-placeholder"></div>
+              {%- endif -%}
+            </div>
+            <span class="collection-category-nav__label">{{ link.title | escape }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+</div>
 {%- endif -%}
 
 {% schema %}
