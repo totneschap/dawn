@@ -74,7 +74,7 @@
   {%- endif -%}
 
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
-  <div class="page-width">
+  <div{% unless section.settings.full_width %} class="page-width"{% endunless %}>
     <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
       <div class="grid__item product__media-wrapper">
         {% render 'product-media-gallery', variant_images: variant_images %}
@@ -951,7 +951,7 @@
 
   {%- assign first_available_variant = product.selected_or_first_available_variant -%}
   <sticky-atc class="sticky-atc" data-section-id="{{ section.id }}">
-    <div class="sticky-atc__inner page-width">
+    <div class="sticky-atc__inner{% unless section.settings.full_width %} page-width{% endunless %}">
       <div class="sticky-atc__product">
         <span class="sticky-atc__title">{{ product.title | escape }}</span>
         <span class="sticky-atc__variant sticky-atc__variant--hidden" id="StickyVariant-{{ section.id }}"></span>
@@ -3226,6 +3226,13 @@
       "id": "enable_video_looping",
       "default": false,
       "label": "t:sections.main-product.settings.enable_video_looping.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width layout",
+      "info": "Removes the page-width margin so the product fills the full browser width",
+      "default": false
     },
     {
       "type": "header",
