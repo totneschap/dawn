@@ -10,6 +10,7 @@
   {% endif %}
 >
   {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+  {{ 'component-sticky-atc.css' | asset_url | stylesheet_tag }}
   {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
   {{ 'component-price.css' | asset_url | stylesheet_tag }}
   {{ 'component-slider.css' | asset_url | stylesheet_tag }}
@@ -947,6 +948,36 @@
       {{ product | structured_data }}
     </script>
   </div>
+
+  {%- assign first_available_variant = product.selected_or_first_available_variant -%}
+  <sticky-atc class="sticky-atc" data-section-id="{{ section.id }}">
+    <div class="sticky-atc__inner page-width">
+      <div class="sticky-atc__product">
+        <span class="sticky-atc__title">{{ product.title | escape }}</span>
+        <span class="sticky-atc__variant sticky-atc__variant--hidden" id="StickyVariant-{{ section.id }}"></span>
+      </div>
+      <product-form data-section-id="{{ section.id }}">
+        {%- form 'product', product, id: 'sticky-form-' | append: section.id, class: 'sticky-atc__form' -%}
+          <input type="hidden" name="id" value="{{ first_available_variant.id }}" class="product-variant-id">
+          <input type="hidden" name="quantity" value="1">
+          <button
+            type="submit"
+            name="add"
+            class="sticky-atc__btn button button--primary"
+            {% if first_available_variant.available == false %}disabled{% endif %}
+          >
+            {%- if first_available_variant.available -%}
+              {{ 'products.product.add_to_cart' | t }}
+            {%- else -%}
+              {{ 'products.product.sold_out' | t }}
+            {%- endif -%}
+            {%- render 'loading-spinner' -%}
+          </button>
+        {%- endform -%}
+      </product-form>
+    </div>
+  </sticky-atc>
+  <script src="{{ 'component-sticky-atc.js' | asset_url }}" defer="defer"></script>
 </product-info>
 
 {% schema %}

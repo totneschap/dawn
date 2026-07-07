@@ -1,0 +1,128 @@
+{{ 'section-pull-quote.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  class="pull-quote-section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding{% if section.settings.full_width %} pull-quote-section--full-width{% endif %}"
+  id="PullQuote-{{ section.id }}"
+>
+  <div class="{% unless section.settings.full_width %}page-width {% endunless %}pull-quote-section__inner">
+    <figure class="pull-quote pull-quote--{{ section.settings.alignment }}">
+      {%- if section.settings.decorative_mark -%}
+        <span class="pull-quote__mark" aria-hidden="true">&ldquo;</span>
+      {%- endif -%}
+
+      <blockquote class="pull-quote__text {{ section.settings.quote_size }}">
+        {{ section.settings.quote }}
+      </blockquote>
+
+      {%- if section.settings.attribution != blank -%}
+        <figcaption class="pull-quote__attribution">
+          {{- section.settings.attribution | escape -}}
+        </figcaption>
+      {%- endif -%}
+    </figure>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Pull quote",
+  "class": "section",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "quote",
+      "label": "Quote",
+      "default": "<p>Style is a way to say who you are without having to speak.</p>"
+    },
+    {
+      "type": "text",
+      "id": "attribution",
+      "label": "Attribution",
+      "default": "— Rachel Zoe"
+    },
+    {
+      "type": "select",
+      "id": "quote_size",
+      "label": "Quote size",
+      "options": [
+        { "value": "pull-quote__text--small", "label": "Small" },
+        { "value": "pull-quote__text--medium", "label": "Medium" },
+        { "value": "pull-quote__text--large", "label": "Large" },
+        { "value": "pull-quote__text--xl", "label": "Extra large" }
+      ],
+      "default": "pull-quote__text--large"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "decorative_mark",
+      "label": "Show decorative quotation mark",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 52
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pull quote"
+    }
+  ]
+}
+{% endschema %}

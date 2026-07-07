@@ -1,0 +1,244 @@
+{{ 'section-before-after.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  #BeforeAfter-{{ section.id }} {
+    --ba-initial: {{ section.settings.initial_position }}%;
+  }
+{%- endstyle -%}
+
+<section
+  class="ba-section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+  id="BaSection-{{ section.id }}"
+>
+  {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+    <div class="page-width ba-section__header">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="ba-section__heading inline-richtext {{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="ba-section__subheading">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="{% unless section.settings.full_width %}page-width {% endunless %}ba-section__slider-wrap">
+    <before-after-slider
+      class="ba-slider"
+      id="BeforeAfter-{{ section.id }}"
+      role="img"
+      aria-label="{{ section.settings.before_label | default: 'Before' | escape }} / {{ section.settings.after_label | default: 'After' | escape }}"
+    >
+      {%- if section.settings.before_image != blank -%}
+        <div class="ba-before">
+          {{
+            section.settings.before_image
+            | image_url: width: 2000
+            | image_tag:
+              class: 'ba-img',
+              loading: 'lazy',
+              widths: '550, 750, 990, 1200, 1500, 2000',
+              sizes: '(min-width: 990px) calc(100vw - 10rem), 100vw'
+          }}
+          {%- if section.settings.before_label != blank -%}
+            <span class="ba-label ba-label--before">{{ section.settings.before_label | escape }}</span>
+          {%- endif -%}
+        </div>
+      {%- else -%}
+        <div class="ba-before">
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'ba-img ba-img--placeholder' }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.after_image != blank -%}
+        <div class="ba-after">
+          {{
+            section.settings.after_image
+            | image_url: width: 2000
+            | image_tag:
+              class: 'ba-img',
+              loading: 'lazy',
+              widths: '550, 750, 990, 1200, 1500, 2000',
+              sizes: '(min-width: 990px) calc(100vw - 10rem), 100vw'
+          }}
+          {%- if section.settings.after_label != blank -%}
+            <span class="ba-label ba-label--after">{{ section.settings.after_label | escape }}</span>
+          {%- endif -%}
+        </div>
+      {%- else -%}
+        <div class="ba-after">
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'ba-img ba-img--placeholder' }}
+        </div>
+      {%- endif -%}
+
+      <div class="ba-handle" aria-hidden="true">
+        <div class="ba-handle__line"></div>
+        <div class="ba-handle__circle">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M6 10L2 6M2 6L6 2M2 6H18M14 10L18 6M18 6L14 2M18 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </before-after-slider>
+  </div>
+</section>
+
+<script>
+  if (!customElements.get('before-after-slider')) {
+    customElements.define('before-after-slider', class extends HTMLElement {
+      connectedCallback() {
+        this._after = this.querySelector('.ba-after');
+        this._handle = this.querySelector('.ba-handle');
+        this._dragging = false;
+
+        const initial = parseFloat(getComputedStyle(this).getPropertyValue('--ba-initial')) || 50;
+        this._setPos(initial);
+
+        const onMove = (x) => {
+          if (!this._dragging) return;
+          const rect = this.getBoundingClientRect();
+          const pct = Math.max(2, Math.min(98, ((x - rect.left) / rect.width) * 100));
+          this._setPos(pct);
+        };
+
+        this.addEventListener('mousedown', (e) => { this._dragging = true; onMove(e.clientX); });
+        document.addEventListener('mouseup', () => { this._dragging = false; });
+        document.addEventListener('mousemove', (e) => onMove(e.clientX));
+
+        this.addEventListener('touchstart', (e) => {
+          this._dragging = true;
+          onMove(e.touches[0].clientX);
+        }, { passive: true });
+        document.addEventListener('touchend', () => { this._dragging = false; });
+        document.addEventListener('touchmove', (e) => {
+          if (this._dragging) onMove(e.touches[0].clientX);
+        }, { passive: true });
+      }
+
+      _setPos(pct) {
+        this.style.setProperty('--ba-pos', pct + '%');
+      }
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Before / After",
+  "class": "section",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "Before image"
+    },
+    {
+      "type": "text",
+      "id": "before_label",
+      "label": "Before label",
+      "default": "Before"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "After image"
+    },
+    {
+      "type": "text",
+      "id": "after_label",
+      "label": "After label",
+      "default": "After"
+    },
+    {
+      "type": "range",
+      "id": "initial_position",
+      "label": "Initial divider position",
+      "min": 10,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width slider",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Before / After"
+    }
+  ]
+}
+{% endschema %}

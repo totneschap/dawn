@@ -258,6 +258,29 @@
         line-height: var(--font-heading-line-height, 1.2);
       }
 
+      /* ---- Focus-visible: WCAG AA accessible focus styles ---- */
+      :focus-visible {
+        outline: 0.2rem solid rgb(var(--color-foreground));
+        outline-offset: 0.3rem;
+        border-radius: 0.2rem;
+      }
+
+      /* Suppress :focus for mouse users; only show for keyboard */
+      :focus:not(:focus-visible) {
+        outline: none;
+      }
+
+      /* Buttons and interactive elements get a more prominent focus ring */
+      .button:focus-visible,
+      .link:focus-visible,
+      select:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible {
+        outline: 0.2rem solid rgb(var(--color-foreground));
+        outline-offset: 0.3rem;
+        box-shadow: 0 0 0 0.4rem rgba(var(--color-foreground), 0.1);
+      }
+
       @media screen and (min-width: 750px) {
         body {
           font-size: 1.6rem;
