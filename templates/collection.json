@@ -9,10 +9,6 @@
  */
 {
   "sections": {
-    "category-nav": {
-      "type": "sienna-category-nav",
-      "settings": {}
-    },
     "product-grid": {
       "type": "main-collection-product-grid",
       "settings": {
@@ -36,7 +32,6 @@
     }
   },
   "order": [
-    "category-nav",
     "product-grid"
   ]
 }
