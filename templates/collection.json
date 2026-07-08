@@ -12,14 +12,10 @@
     "banner": {
       "type": "main-collection-banner",
       "settings": {
-        "hide_banner": false,
-        "tagline": "",
-        "text_alignment": "left",
         "show_collection_description": true,
         "show_collection_image": false,
-        "full_width": false,
         "color_scheme": "scheme-1",
-        "category_menu": "main-menu"
+        "hide_banner": true
       }
     },
     "product-grid": {
@@ -38,9 +34,7 @@
         "show_rating": false,
         "quick_add": "none",
         "enable_filtering": false,
-        "filter_type": "horizontal",
         "enable_sorting": false,
-        "full_width": false,
         "padding_top": 20,
         "padding_bottom": 60
       }
