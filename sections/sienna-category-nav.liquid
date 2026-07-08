@@ -1,0 +1,42 @@
+{{ 'section-collection-category-nav.css' | asset_url | stylesheet_tag }}
+
+<div class="collection-category-nav page-width">
+  <ul class="collection-category-nav__list" role="list">
+    {%- for link in section.settings.category_menu.links -%}
+      {%- if link.type == 'collection_link' -%}
+        {%- assign col = link.object -%}
+        {%- assign is_active = false -%}
+        {%- if collection and collection.handle == col.handle -%}
+          {%- assign is_active = true -%}
+        {%- endif -%}
+        <li>
+          <a
+            href="{{ link.url }}"
+            class="collection-category-nav__link{% if is_active %} collection-category-nav__link--active{% endif %}"
+            {% if is_active %}aria-current="page"{% endif %}
+          >[ {{ link.title | upcase | escape }} ]</a>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+</div>
+
+{% schema %}
+{
+  "name": "Category navigation",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "category_menu",
+      "label": "Category navigation menu",
+      "default": "main-menu"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category navigation"
+    }
+  ]
+}
+{% endschema %}
