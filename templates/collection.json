@@ -30,8 +30,8 @@
         "show_vendor": false,
         "show_rating": false,
         "quick_add": "none",
-        "enable_filtering": false,
-        "enable_sorting": false,
+        "enable_filtering": true,
+        "enable_sorting": true,
         "padding_top": 20,
         "padding_bottom": 60
       }
