@@ -9,6 +9,12 @@
  */
 {
   "sections": {
+    "category-nav": {
+      "type": "main-collection-banner",
+      "settings": {
+        "hide_banner": true
+      }
+    },
     "product-grid": {
       "type": "main-collection-product-grid",
       "settings": {
@@ -32,6 +38,7 @@
     }
   },
   "order": [
+    "category-nav",
     "product-grid"
   ]
 }
