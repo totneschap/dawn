@@ -24,6 +24,7 @@
         "show_vendor": false,
         "show_rating": false,
         "quick_add": "none",
+        "full_width": true,
         "enable_filtering": true,
         "enable_sorting": true,
         "padding_top": 20,
