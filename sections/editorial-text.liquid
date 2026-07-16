@@ -11,6 +11,11 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+  #EditorialText-{{ section.id }} .editorial-text__inner {
+    max-width: {{ section.settings.content_max_width }}px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 {%- endstyle -%}
 
 <section
@@ -199,6 +204,16 @@
       "id": "full_width",
       "label": "Full width (no page margin)",
       "default": false
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Content max width",
+      "min": 600,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "default": 1400
     },
     {
       "type": "checkbox",
