@@ -9,7 +9,8 @@
  */
 {
   "current": {
-    "logo_width": 90,
+    "logo": "shopify://shop_images/ChatGPT_Image_Jul_16_2026_12_37_24_PM.png",
+    "logo_width": 170,
     "type_header_font": "dm_sans_n4",
     "heading_scale": 100,
     "type_body_font": "dm_sans_n4",
@@ -157,9 +158,9 @@
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background": "#97B7C3",
+          "background": "#97b7c3",
           "background_gradient": "",
-          "text": "#2E0E17",
+          "text": "#2e0e17",
           "button": "#121212",
           "button_label": "#ffffff",
           "secondary_button_label": "#121212",
@@ -190,9 +191,9 @@
       },
       "scheme-4": {
         "settings": {
-          "background": "#2E0E17",
+          "background": "#2e0e17",
           "background_gradient": "",
-          "text": "#97B7C3",
+          "text": "#97b7c3",
           "button": "#ffffff",
           "button_label": "#121212",
           "secondary_button_label": "#ffffff",
@@ -201,9 +202,9 @@
       },
       "scheme-5": {
         "settings": {
-          "background": "#FEF5EA",
+          "background": "#fef5ea",
           "background_gradient": "",
-          "text": "#2E0E17",
+          "text": "#2e0e17",
           "button": "#ffffff",
           "button_label": "#334fb4",
           "secondary_button_label": "#ffffff",
