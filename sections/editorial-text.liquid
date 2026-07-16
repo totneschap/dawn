@@ -14,7 +14,7 @@
 {%- endstyle -%}
 
 <section
-  class="editorial-text color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding{% if section.settings.full_height %} editorial-text--full-height{% endif %}"
+  class="editorial-text color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding{% if section.settings.full_height %} editorial-text--full-height{% endif %}{% if section.settings.parallax %} editorial-text--parallax{% endif %}"
   id="EditorialText-{{ section.id }}"
 >
   <div class="editorial-text__inner{% unless section.settings.full_width %} page-width{% endunless %} editorial-text--{{ section.settings.alignment }}">
@@ -56,6 +56,38 @@
 
   </div>
 </section>
+
+{%- if section.settings.parallax -%}
+<script>
+  (function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var section = document.getElementById('EditorialText-{{ section.id }}');
+    if (!section) return;
+    var inner = section.querySelector('.editorial-text__inner');
+    if (!inner) return;
+
+    var raf = null;
+    var maxOffset = 60;
+
+    function update() {
+      var rect = section.getBoundingClientRect();
+      var vh = window.innerHeight;
+      var sectionCenter = rect.top + rect.height / 2;
+      var dist = (sectionCenter - vh / 2) / (vh / 2 + rect.height / 2);
+      if (dist > 1) dist = 1;
+      if (dist < -1) dist = -1;
+      inner.style.transform = 'translateY(' + (dist * maxOffset).toFixed(1) + 'px)';
+      raf = null;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!raf) raf = requestAnimationFrame(update);
+    }, { passive: true });
+
+    update();
+  })();
+</script>
+{%- endif -%}
 
 {% schema %}
 {
@@ -152,6 +184,13 @@
       "type": "checkbox",
       "id": "full_height",
       "label": "Full viewport height",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "parallax",
+      "label": "Parallax scroll effect",
+      "info": "Content scrolls at a slower rate, creating a depth effect",
       "default": false
     },
     {
