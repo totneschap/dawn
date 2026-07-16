@@ -10,6 +10,42 @@
   will-change: transform;
 }
 
+.editorial-text--has-image {
+  position: relative;
+}
+
+.editorial-text__bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.editorial-text__bg-img {
+  display: block;
+  width: 100%;
+  height: calc(100% + 120px);
+  margin-top: -60px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.editorial-text--parallax .editorial-text__bg-img {
+  will-change: transform;
+}
+
+.editorial-text__bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  pointer-events: none;
+}
+
+.editorial-text--has-image .editorial-text__inner {
+  position: relative;
+  z-index: 1;
+}
+
 .editorial-text--full-height {
   display: flex;
   align-items: center;
