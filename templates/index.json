@@ -98,6 +98,7 @@
         "button_link_2": "",
         "alignment": "center",
         "full_width": true,
+        "content_max_width": 1150,
         "full_height": false,
         "parallax": true,
         "color_scheme": "scheme-4",
