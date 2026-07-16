@@ -55,6 +55,35 @@
         "padding_bottom": 0
       }
     },
+    "product_showcase": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "all",
+        "products_to_show": 8,
+        "title": "Featured Collection",
+        "heading_size": "h1",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 4,
+        "enable_desktop_slider": true,
+        "full_width": true,
+        "show_view_all": true,
+        "view_all_style": "outline",
+        "color_scheme": "scheme-1",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "uppercase_heading": false,
+        "padding_top": 36,
+        "padding_bottom": 60
+      }
+    },
     "newsletter_welcome": {
       "type": "newsletter-editorial",
       "settings": {
@@ -138,35 +167,6 @@
         "padding_bottom": 80
       }
     },
-    "product_showcase": {
-      "type": "featured-collection",
-      "settings": {
-        "collection": "all",
-        "products_to_show": 8,
-        "title": "",
-        "heading_size": "h1",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "columns_desktop": 4,
-        "enable_desktop_slider": true,
-        "full_width": true,
-        "show_view_all": true,
-        "view_all_style": "outline",
-        "color_scheme": "scheme-1",
-        "image_ratio": "portrait",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "swipe_on_mobile": true,
-        "uppercase_heading": false,
-        "padding_top": 36,
-        "padding_bottom": 60
-      }
-    },
     "brand_story": {
       "type": "split-content",
       "settings": {
@@ -211,10 +211,10 @@
   },
   "order": [
     "hero_banner",
+    "product_showcase",
     "newsletter_welcome",
     "collection_teasers",
     "brand_statement",
-    "product_showcase",
     "brand_story",
     "magazine_section"
   ]
