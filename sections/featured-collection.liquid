@@ -36,6 +36,12 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+  {%- if section.settings.full_width -%}
+    #collection-{{ section.id }} {
+      padding-left: var(--section-padding-h);
+      padding-right: var(--section-padding-h);
+    }
+  {%- endif -%}
 {%- endstyle -%}
 
 {%- liquid

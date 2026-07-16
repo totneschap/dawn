@@ -248,6 +248,21 @@
         "default": 8,
         "unit": "px",
         "label": "t:settings_schema.layout.settings.spacing_grid_vertical.label"
+      },
+      {
+        "type": "header",
+        "content": "Full-width section padding"
+      },
+      {
+        "type": "range",
+        "id": "section_padding_h",
+        "label": "Side padding (full-width sections)",
+        "info": "Breathing room on left and right edges when sections are set to full width",
+        "min": 0,
+        "max": 80,
+        "step": 4,
+        "unit": "px",
+        "default": 20
       }
     ]
   },
