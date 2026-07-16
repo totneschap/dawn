@@ -8,23 +8,24 @@
   position: relative;
 }
 
-/* Expanding underline indicator */
+/* Directional underline: slides in from left, exits to the right */
 .header__inline-menu .header__menu-item::after {
   content: '';
   position: absolute;
   bottom: -1px;
-  left: 50%;
-  right: 50%;
+  left: 0;
+  width: 100%;
   height: 1.5px;
   background-color: rgb(var(--color-foreground));
-  transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1),
-              right 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .header__inline-menu .header__menu-item:hover::after,
 .header__inline-menu .mega-menu[open] > .header__menu-item::after {
-  left: 0;
-  right: 0;
+  transform: scaleX(1);
+  transform-origin: left center;
 }
 
 /* The ::after bar is the sole underline indicator — suppress all text-decoration */
@@ -44,8 +45,7 @@
 
 /* Active page: keep ::after bar permanently expanded */
 .header__inline-menu .header__menu-item[aria-current='page']::after {
-  left: 0;
-  right: 0;
+  transform: scaleX(1);
 }
 
 /* Caret rotation */
