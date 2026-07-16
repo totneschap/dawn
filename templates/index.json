@@ -107,6 +107,30 @@
     "collection_teasers": {
       "type": "collection-tiles",
       "blocks": {
+        "tile_ayHQkH": {
+          "type": "tile",
+          "settings": {
+            "collection": "",
+            "link": "",
+            "label": "",
+            "subtitle": "",
+            "cta": "Shop now",
+            "featured": false,
+            "overlay_opacity": 20
+          }
+        },
+        "tile_7FUQkH": {
+          "type": "tile",
+          "settings": {
+            "collection": "",
+            "link": "",
+            "label": "",
+            "subtitle": "",
+            "cta": "Shop now",
+            "featured": false,
+            "overlay_opacity": 20
+          }
+        },
         "tile_new": {
           "type": "tile",
           "settings": {
@@ -133,14 +157,16 @@
         }
       },
       "block_order": [
+        "tile_ayHQkH",
+        "tile_7FUQkH",
         "tile_new",
         "tile_best"
       ],
       "settings": {
         "eyebrow": "",
         "heading": "",
-        "columns": "2",
-        "text_position": "overlay-bottom",
+        "columns": "4",
+        "text_position": "below",
         "full_width": true,
         "color_scheme": "scheme-1",
         "padding_top": 0,
