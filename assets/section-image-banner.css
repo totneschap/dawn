@@ -17,6 +17,19 @@
   object-position: center center;
 }
 
+/* When a mobile image is set alongside two split desktop images,
+   collapse the banner to a single full-width slot showing the mobile image. */
+@media screen and (max-width: 749px) {
+  .banner--has-mobile-image .banner__media-half {
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+  .banner--has-mobile-image .banner__media-half + .banner__media-half {
+    display: none !important;
+  }
+}
+
 .banner-section--padded {
   max-width: var(--page-width, 120rem);
   margin-left: auto;
