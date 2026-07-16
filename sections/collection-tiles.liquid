@@ -14,11 +14,16 @@
   #CollectionTiles-{{ section.id }} .collection-tiles__grid {
     gap: {{ section.settings.item_gap }}px;
   }
+  #CollectionTiles-{{ section.id }} .collection-tile__content {
+    gap: 0;
+  }
   #CollectionTiles-{{ section.id }} .collection-tile__title {
     font-size: {{ section.settings.tile_title_size }}px;
+    margin-bottom: {{ section.settings.tile_title_margin_bottom }}px;
   }
   #CollectionTiles-{{ section.id }} .collection-tile__subtitle {
     font-size: {{ section.settings.tile_subtitle_size }}px;
+    margin-bottom: {{ section.settings.tile_subtitle_margin_bottom }}px;
   }
   #CollectionTiles-{{ section.id }} .collection-tile--text-overlay-bottom .collection-tile__content,
   #CollectionTiles-{{ section.id }} .collection-tile--text-overlay-center .collection-tile__content {
@@ -188,6 +193,16 @@
     },
     {
       "type": "range",
+      "id": "tile_title_margin_bottom",
+      "label": "Title margin bottom",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
       "id": "tile_subtitle_size",
       "label": "Subtitle font size",
       "min": 10,
@@ -195,6 +210,16 @@
       "step": 1,
       "unit": "px",
       "default": 13
+    },
+    {
+      "type": "range",
+      "id": "tile_subtitle_margin_bottom",
+      "label": "Subtitle margin bottom",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 4
     },
     {
       "type": "range",
