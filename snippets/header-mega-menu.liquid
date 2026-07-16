@@ -56,7 +56,7 @@
                 class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
                 tabindex="-1"
               >
-                <div class="mega-menu__inner page-width{% if promo_block and has_child_images == false %} mega-menu__inner--has-promo{% elsif promo_block %} mega-menu__inner--has-promo{% endif %}">
+                <div class="mega-menu__inner{% unless section.settings.full_width %} page-width{% endunless %}{% if promo_block and has_child_images == false %} mega-menu__inner--has-promo{% elsif promo_block %} mega-menu__inner--has-promo{% endif %}">
 
                   <ul
                     class="mega-menu__list{% if link.levels == 1 and has_child_images == false %} mega-menu__list--condensed{% endif %}{% if has_child_images %} mega-menu__list--image-grid{% endif %}"
