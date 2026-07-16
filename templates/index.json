@@ -36,14 +36,17 @@
         "hero_btn"
       ],
       "settings": {
+        "image": "shopify://shop_images/stacked-bracelets.jpg",
+        "image_2": "shopify://shop_images/dainty-gold-necklace.jpg",
         "image_overlay_opacity": 30,
         "image_height": "large",
         "image_behavior": "none",
         "layout": "full_width",
-        "desktop_content_position": "bottom-left",
-        "desktop_content_alignment": "left",
+        "desktop_content_position": "middle-center",
+        "desktop_content_alignment": "center",
         "show_text_box": false,
         "color_scheme": "scheme-3",
+        "mobile_image": "shopify://shop_images/stacked-bracelets.jpg",
         "stack_images_on_mobile": false,
         "mobile_content_alignment": "left",
         "show_text_below": false,
@@ -60,6 +63,7 @@
         "body": "Be the first to hear about new arrivals, exclusive pieces and stories from behind the brand.",
         "perks": "Early access to new collections, Exclusive member offers, Stories from behind the brand",
         "show_name": false,
+        "name_placeholder": "First name",
         "email_placeholder": "Your email address",
         "button_label": "Subscribe",
         "success_message": "Thank you — welcome to the community.",
@@ -77,6 +81,8 @@
         "tile_new": {
           "type": "tile",
           "settings": {
+            "collection": "",
+            "link": "",
             "label": "New Arrivals",
             "subtitle": "Fresh pieces, updated weekly",
             "cta": "Shop now",
@@ -87,6 +93,8 @@
         "tile_best": {
           "type": "tile",
           "settings": {
+            "collection": "",
+            "link": "",
             "label": "Bestsellers",
             "subtitle": "Our most loved pieces",
             "cta": "Shop now",
@@ -101,6 +109,7 @@
       ],
       "settings": {
         "eyebrow": "",
+        "heading": "",
         "columns": "2",
         "text_position": "overlay-bottom",
         "full_width": true,
@@ -115,6 +124,7 @@
         "eyebrow": "",
         "heading": "Everyday pieces for a considered life",
         "heading_size": "xl",
+        "subheading": "",
         "button_label": "Discover",
         "button_link": "shopify://collections/all",
         "button_style": "secondary",
@@ -131,13 +141,13 @@
     "product_showcase": {
       "type": "featured-collection",
       "settings": {
+        "collection": "all",
+        "products_to_show": 8,
         "title": "",
         "heading_size": "h1",
         "description": "",
         "show_description": false,
         "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
         "columns_desktop": 4,
         "enable_desktop_slider": true,
         "full_width": true,
@@ -160,6 +170,7 @@
     "brand_story": {
       "type": "split-content",
       "settings": {
+        "image_ratio": "portrait",
         "eyebrow": "Our story",
         "heading": "Craftsmanship at the heart of everything",
         "heading_size": "md",
@@ -169,7 +180,6 @@
         "button_style": "secondary",
         "button_label_2": "",
         "button_link_2": "",
-        "image_ratio": "portrait",
         "image_swap": false,
         "text_align_v": "middle",
         "full_bleed_image": true,
@@ -182,16 +192,18 @@
     "magazine_section": {
       "type": "featured-blog",
       "settings": {
+        "blog": "",
+        "post_limit": 4,
         "heading": "From the magazine",
         "heading_size": "h2",
-        "post_limit": 4,
         "columns_desktop": 4,
-        "full_width": true,
-        "color_scheme": "scheme-1",
+        "show_view_all": true,
         "show_image": true,
         "show_date": true,
         "show_author": false,
+        "color_scheme": "scheme-1",
         "uppercase_heading": false,
+        "full_width": true,
         "padding_top": 60,
         "padding_bottom": 60
       }
