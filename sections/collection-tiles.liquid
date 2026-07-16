@@ -14,6 +14,12 @@
   #CollectionTiles-{{ section.id }} .collection-tiles__grid {
     gap: {{ section.settings.item_gap }}px;
   }
+  {%- if section.settings.full_width -%}
+    #CollectionTiles-{{ section.id }} .collection-tiles__grid {
+      padding-left: {{ section.settings.side_padding }}px;
+      padding-right: {{ section.settings.side_padding }}px;
+    }
+  {%- endif -%}
   #CollectionTiles-{{ section.id }} .collection-tile__content {
     gap: 0;
   }
@@ -254,6 +260,16 @@
     {
       "type": "header",
       "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "side_padding",
+      "label": "Side padding (full width only)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 20
     },
     {
       "type": "range",
