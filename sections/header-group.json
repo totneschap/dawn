@@ -90,7 +90,7 @@
         "font_size": "small",
         "font_size_custom": 8,
         "separator": "-",
-        "color_scheme": "",
+        "color_scheme": "scheme-5",
         "padding_top": 28,
         "padding_bottom": 28
       }
