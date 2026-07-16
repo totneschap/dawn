@@ -11,6 +11,9 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+  #CollectionTiles-{{ section.id }} .collection-tiles__grid {
+    gap: {{ section.settings.item_gap }}px;
+  }
 {%- endstyle -%}
 
 <section
@@ -141,6 +144,16 @@
       "id": "full_width",
       "label": "Full width (no page margin)",
       "default": false
+    },
+    {
+      "type": "range",
+      "id": "item_gap",
+      "label": "Gap between tiles",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 8
     },
     {
       "type": "color_scheme",
