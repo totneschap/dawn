@@ -25,6 +25,9 @@
     font-size: {{ section.settings.tile_subtitle_size }}px;
     margin-bottom: {{ section.settings.tile_subtitle_margin_bottom }}px;
   }
+  #CollectionTiles-{{ section.id }} .collection-tile__cta {
+    font-size: {{ section.settings.tile_cta_size }}px;
+  }
   #CollectionTiles-{{ section.id }} .collection-tile--text-overlay-bottom .collection-tile__content,
   #CollectionTiles-{{ section.id }} .collection-tile--text-overlay-center .collection-tile__content {
     padding-left: {{ section.settings.tile_text_padding }}px;
@@ -220,6 +223,16 @@
       "step": 2,
       "unit": "px",
       "default": 4
+    },
+    {
+      "type": "range",
+      "id": "tile_cta_size",
+      "label": "CTA font size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 11
     },
     {
       "type": "range",
