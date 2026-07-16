@@ -104,6 +104,47 @@
         "padding_bottom": 60
       }
     },
+    "scrolling_text_YjEQc6": {
+      "type": "scrolling-text",
+      "blocks": {
+        "text_item_KyDVXq": {
+          "type": "text_item",
+          "settings": {
+            "text": "Free shipping on orders over £50"
+          }
+        },
+        "text_item_GNNt9a": {
+          "type": "text_item",
+          "settings": {
+            "text": "New arrivals every week"
+          }
+        },
+        "text_item_pFBHT6": {
+          "type": "text_item",
+          "settings": {
+            "text": "Sustainably made"
+          }
+        }
+      },
+      "block_order": [
+        "text_item_KyDVXq",
+        "text_item_GNNt9a",
+        "text_item_pFBHT6"
+      ],
+      "name": "Scrolling text",
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "speed": 5,
+        "direction": "left",
+        "font_size": "large",
+        "font_size_custom": 0,
+        "separator": "",
+        "color_scheme": "scheme-5",
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
     "collection_teasers": {
       "type": "collection-tiles",
       "blocks": {
@@ -111,6 +152,7 @@
           "type": "tile",
           "settings": {
             "collection": "",
+            "image": "shopify://shop_images/dainty-gold-necklace.jpg",
             "link": "",
             "label": "",
             "subtitle": "",
@@ -123,6 +165,7 @@
           "type": "tile",
           "settings": {
             "collection": "",
+            "image": "shopify://shop_images/boho-earrings.jpg",
             "link": "",
             "label": "",
             "subtitle": "",
@@ -135,6 +178,7 @@
           "type": "tile",
           "settings": {
             "collection": "",
+            "image": "shopify://shop_images/an-engagment-ring-sits-in-a-blue-box.jpg",
             "link": "",
             "label": "New Arrivals",
             "subtitle": "Fresh pieces, updated weekly",
@@ -147,6 +191,7 @@
           "type": "tile",
           "settings": {
             "collection": "",
+            "image": "shopify://shop_images/anchor-bracelet-mens.jpg",
             "link": "",
             "label": "Bestsellers",
             "subtitle": "Our most loved pieces",
@@ -168,7 +213,7 @@
         "columns": "4",
         "text_position": "below",
         "full_width": true,
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-5",
         "padding_top": 0,
         "padding_bottom": 0
       }
@@ -239,6 +284,7 @@
     "hero_banner",
     "product_showcase",
     "newsletter_welcome",
+    "scrolling_text_YjEQc6",
     "collection_teasers",
     "brand_statement",
     "brand_story",
