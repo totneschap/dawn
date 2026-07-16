@@ -148,6 +148,11 @@
   /* inherits page-width max-width */
 }
 
+.header-wrapper--full-width .mega-menu__inner {
+  padding-left: var(--section-padding-h);
+  padding-right: var(--section-padding-h);
+}
+
 /* ---- Column grid ---- */
 
 .mega-menu__list {
