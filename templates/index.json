@@ -84,24 +84,24 @@
         "padding_bottom": 60
       }
     },
-    "newsletter_welcome": {
-      "type": "newsletter-editorial",
+    "brand_statement": {
+      "type": "editorial-text",
       "settings": {
-        "eyebrow": "Welcome",
-        "heading": "Join our world",
-        "body": "Be the first to hear about new arrivals, exclusive pieces and stories from behind the brand.",
-        "perks": "Early access to new collections, Exclusive member offers, Stories from behind the brand",
-        "show_name": false,
-        "name_placeholder": "First name",
-        "email_placeholder": "Your email address",
-        "button_label": "Subscribe",
-        "success_message": "Thank you — welcome to the community.",
-        "disclaimer": "<p>By subscribing you agree to receive our newsletter. Unsubscribe any time.</p>",
-        "layout": "stacked",
+        "eyebrow": "",
+        "heading": "Everyday pieces for a considered life",
+        "heading_size": "xl",
+        "subheading": "",
+        "button_label": "Discover",
+        "button_link": "shopify://collections/all",
+        "button_style": "secondary",
+        "button_label_2": "",
+        "button_link_2": "",
+        "alignment": "center",
         "full_width": true,
-        "color_scheme": "scheme-2",
-        "padding_top": 60,
-        "padding_bottom": 60
+        "full_height": false,
+        "color_scheme": "scheme-4",
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     },
     "scrolling_text_YjEQc6": {
@@ -218,26 +218,6 @@
         "padding_bottom": 0
       }
     },
-    "brand_statement": {
-      "type": "editorial-text",
-      "settings": {
-        "eyebrow": "",
-        "heading": "Everyday pieces for a considered life",
-        "heading_size": "xl",
-        "subheading": "",
-        "button_label": "Discover",
-        "button_link": "shopify://collections/all",
-        "button_style": "secondary",
-        "button_label_2": "",
-        "button_link_2": "",
-        "alignment": "center",
-        "full_width": true,
-        "full_height": false,
-        "color_scheme": "scheme-1",
-        "padding_top": 80,
-        "padding_bottom": 80
-      }
-    },
     "brand_story": {
       "type": "split-content",
       "settings": {
@@ -278,16 +258,36 @@
         "padding_top": 60,
         "padding_bottom": 60
       }
+    },
+    "newsletter_welcome": {
+      "type": "newsletter-editorial",
+      "settings": {
+        "eyebrow": "Welcome",
+        "heading": "Join our world",
+        "body": "Be the first to hear about new arrivals, exclusive pieces and stories from behind the brand.",
+        "perks": "Early access to new collections, Exclusive member offers, Stories from behind the brand",
+        "show_name": false,
+        "name_placeholder": "First name",
+        "email_placeholder": "Your email address",
+        "button_label": "Subscribe",
+        "success_message": "Thank you — welcome to the community.",
+        "disclaimer": "<p>By subscribing you agree to receive our newsletter. Unsubscribe any time.</p>",
+        "layout": "stacked",
+        "full_width": true,
+        "color_scheme": "scheme-2",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
     }
   },
   "order": [
     "hero_banner",
     "product_showcase",
-    "newsletter_welcome",
+    "brand_statement",
     "scrolling_text_YjEQc6",
     "collection_teasers",
-    "brand_statement",
     "brand_story",
-    "magazine_section"
+    "magazine_section",
+    "newsletter_welcome"
   ]
 }
