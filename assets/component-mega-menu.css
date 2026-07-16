@@ -61,6 +61,12 @@
   height: 1rem;
 }
 
+/* base.css rotates .icon-caret directly; cancel that so only the parent span rotates */
+.header__inline-menu .mega-menu .icon-caret {
+  transform: none !important;
+  transition: none;
+}
+
 .mega-menu[open] > summary .mega-menu__caret {
   transform: rotate(180deg);
 }
