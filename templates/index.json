@@ -98,7 +98,7 @@
         "button_link_2": "",
         "alignment": "center",
         "full_width": true,
-        "full_height": true,
+        "full_height": false,
         "parallax": true,
         "color_scheme": "scheme-4",
         "image": "shopify://shop_images/necklaces-hanging-on-black.jpg",
