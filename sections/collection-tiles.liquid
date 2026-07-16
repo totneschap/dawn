@@ -20,6 +20,12 @@
       padding-right: {{ section.settings.side_padding }}px;
     }
   {%- endif -%}
+  {%- if section.settings.header_full_width -%}
+    #CollectionTiles-{{ section.id }} .collection-tiles__header {
+      padding-left: {{ section.settings.header_side_padding }}px;
+      padding-right: {{ section.settings.header_side_padding }}px;
+    }
+  {%- endif -%}
   #CollectionTiles-{{ section.id }} .collection-tile__content {
     gap: 0;
   }
@@ -53,7 +59,7 @@
 >
 
   {%- if section.settings.heading != blank or section.settings.eyebrow != blank -%}
-    <div class="collection-tiles__header page-width">
+    <div class="collection-tiles__header{% unless section.settings.header_full_width %} page-width{% endunless %}">
       {%- if section.settings.eyebrow != blank -%}
         <p class="collection-tiles__eyebrow">{{ section.settings.eyebrow | escape }}</p>
       {%- endif -%}
@@ -169,6 +175,22 @@
         { "value": "below",          "label": "Below image" }
       ],
       "default": "overlay-bottom"
+    },
+    {
+      "type": "checkbox",
+      "id": "header_full_width",
+      "label": "Header full width",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "header_side_padding",
+      "label": "Header side padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 20
     },
     {
       "type": "checkbox",
