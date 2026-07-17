@@ -957,7 +957,8 @@
         <span class="sticky-atc__variant sticky-atc__variant--hidden" id="StickyVariant-{{ section.id }}"></span>
       </div>
       <product-form data-section-id="{{ section.id }}">
-        {%- form 'product', product, id: 'sticky-form-' | append: section.id, class: 'sticky-atc__form' -%}
+        {%- assign sticky_form_id = 'sticky-form-' | append: section.id -%}
+        {%- form 'product', product, id: sticky_form_id, class: 'sticky-atc__form' -%}
           <input type="hidden" name="id" value="{{ first_available_variant.id }}" class="product-variant-id">
           <input type="hidden" name="quantity" value="1">
           <button
