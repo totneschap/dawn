@@ -1,10 +1,11 @@
 {%- if product != blank -%}
 <div
-  class="related-products color-{{ section.settings.color_scheme }}"
+  class="related-products full-width color-{{ section.settings.color_scheme }}"
   id="related-products-{{ section.id }}"
   data-product-id="{{ product.id }}"
   data-section-id="{{ section.id }}"
   data-limit="{{ section.settings.products_to_show }}"
+  hidden
 >
 
   <div class="related-products__header">
@@ -22,7 +23,7 @@
 .related-products {
   background-color: var(--color-background);
   color: var(--color-text);
-  padding: var(--section-spacing, 6rem) 0;
+  padding: var(--section-spacing, 6rem) var(--page-margin, 2rem);
 }
 
 .related-products__header {
@@ -183,14 +184,10 @@
       var newGrid = tmp.querySelector('.related-products__grid');
       if (newGrid && newGrid.children.length > 0) {
         grid.innerHTML = newGrid.innerHTML;
-      } else {
-        /* No recommendations — hide the whole section */
-        section.hidden = true;
+        section.hidden = false;
       }
     })
-    .catch(function () {
-      section.hidden = true;
-    });
+    .catch(function () {});
 
   /* Quick add (guard handles deduplication across sections) */
   if (!window.__siennaQuickAdd) {

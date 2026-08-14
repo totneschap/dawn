@@ -20,6 +20,7 @@
   style="
     --iwt-col-image: {{ col_image }};
     --iwt-col-text:  {{ col_text }};
+    margin-top: {{ section.settings.margin_top }}px;
   "
 >
   <div class="image-with-text__grid{% if img_pos == 'right' %} image-with-text__grid--reverse{% endif %}">
@@ -330,6 +331,20 @@
         { "value": "outline", "label": "Outline" }
       ],
       "default": "outline"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "label": "Top margin",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
     },
     {
       "type": "header",

@@ -146,46 +146,61 @@
     <!-- Nav columns -->
     {%- if section.settings.menu_1 != blank -%}
       <div class="footer__nav-col">
-        {%- if section.settings.menu_1_heading != blank -%}
-          <h4 class="footer__nav-heading">{{ section.settings.menu_1_heading }}</h4>
-        {%- endif -%}
-        <ul class="footer__nav-list">
-          {%- for link in section.settings.menu_1.links -%}
-            <li class="footer__nav-item">
-              <a href="{{ link.url }}" class="footer__nav-link">{{ link.title }}</a>
-            </li>
-          {%- endfor -%}
-        </ul>
+        <details class="footer__nav-details">
+          {%- if section.settings.menu_1_heading != blank -%}
+            <summary class="footer__nav-heading">
+              {{ section.settings.menu_1_heading }}
+              <span class="footer__nav-chevron">{{ 'icon-chevron-down.svg' | inline_asset_content }}</span>
+            </summary>
+          {%- endif -%}
+          <ul class="footer__nav-list">
+            {%- for link in section.settings.menu_1.links -%}
+              <li class="footer__nav-item">
+                <a href="{{ link.url }}" class="footer__nav-link">{{ link.title }}</a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </details>
       </div>
     {%- endif -%}
 
     {%- if section.settings.menu_2 != blank -%}
       <div class="footer__nav-col">
-        {%- if section.settings.menu_2_heading != blank -%}
-          <h4 class="footer__nav-heading">{{ section.settings.menu_2_heading }}</h4>
-        {%- endif -%}
-        <ul class="footer__nav-list">
-          {%- for link in section.settings.menu_2.links -%}
-            <li class="footer__nav-item">
-              <a href="{{ link.url }}" class="footer__nav-link">{{ link.title }}</a>
-            </li>
-          {%- endfor -%}
-        </ul>
+        <details class="footer__nav-details">
+          {%- if section.settings.menu_2_heading != blank -%}
+            <summary class="footer__nav-heading">
+              {{ section.settings.menu_2_heading }}
+              <span class="footer__nav-chevron">{{ 'icon-chevron-down.svg' | inline_asset_content }}</span>
+            </summary>
+          {%- endif -%}
+          <ul class="footer__nav-list">
+            {%- for link in section.settings.menu_2.links -%}
+              <li class="footer__nav-item">
+                <a href="{{ link.url }}" class="footer__nav-link">{{ link.title }}</a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </details>
       </div>
     {%- endif -%}
 
     {%- if section.settings.menu_3 != blank -%}
       <div class="footer__nav-col">
-        {%- if section.settings.menu_3_heading != blank -%}
-          <h4 class="footer__nav-heading">{{ section.settings.menu_3_heading }}</h4>
-        {%- endif -%}
-        <ul class="footer__nav-list">
-          {%- for link in section.settings.menu_3.links -%}
-            <li class="footer__nav-item">
-              <a href="{{ link.url }}" class="footer__nav-link">{{ link.title }}</a>
-            </li>
-          {%- endfor -%}
-        </ul>
+        <details class="footer__nav-details">
+          {%- if section.settings.menu_3_heading != blank -%}
+            <summary class="footer__nav-heading">
+              {{ section.settings.menu_3_heading }}
+              <span class="footer__nav-chevron">{{ 'icon-chevron-down.svg' | inline_asset_content }}</span>
+            </summary>
+          {%- endif -%}
+          <ul class="footer__nav-list">
+            {%- for link in section.settings.menu_3.links -%}
+              <li class="footer__nav-item">
+                <a href="{{ link.url }}" class="footer__nav-link">{{ link.title }}</a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </details>
       </div>
     {%- endif -%}
 
@@ -259,6 +274,7 @@
   opacity: 0.75;
   margin-bottom: 2.4rem;
   line-height: 1.6;
+  cursor: default;
 }
 
 .footer__newsletter-form {
@@ -321,7 +337,8 @@
   width: 100%;
 }
 
-.footer__brand {
+.footer__brand,
+.footer__nav-col {
   grid-column: 1 / -1;
 }
 
@@ -333,6 +350,10 @@
 
   .footer__brand {
     grid-column: 1;
+  }
+
+  .footer__nav-col {
+    grid-column: auto;
   }
 }
 
@@ -360,6 +381,7 @@
   letter-spacing: var(--font-heading--letter-spacing, 0);
   text-transform: var(--font-heading--transform, none);
   font-weight: 400;
+  cursor: default;
 }
 
 .footer__tagline {
@@ -369,6 +391,7 @@
   margin-top: 0.8rem;
   margin-bottom: 2rem;
   max-width: 28rem;
+  cursor: default;
 }
 
 /* Social icons */
@@ -410,6 +433,10 @@
    ================================================ */
 
 .footer__nav-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   font-family: var(--font-body--family, sans-serif);
   font-size: 1.2rem;
   font-weight: 600;
@@ -417,12 +444,56 @@
   text-transform: uppercase;
   margin-bottom: 1.6rem;
   opacity: 0.6;
+  cursor: pointer;
+  list-style: none;
+}
+
+.footer__nav-heading::-webkit-details-marker {
+  display: none;
+}
+
+.footer__nav-heading::marker {
+  display: none;
+}
+
+.footer__nav-chevron {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+  opacity: 0.7;
+}
+
+.footer__nav-chevron svg {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.footer__nav-details[open] .footer__nav-chevron {
+  transform: rotate(180deg);
 }
 
 .footer__nav-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding-bottom: 0.4rem;
+}
+
+@media screen and (min-width: 750px) {
+  .footer__nav-heading {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .footer__nav-chevron {
+    display: none;
+  }
+
+  .footer__nav-list {
+    display: flex !important;
+    padding-bottom: 0;
+  }
 }
 
 .footer__nav-link {
@@ -472,6 +543,7 @@
 .footer__powered-by {
   font-size: 1.2rem;
   opacity: 0.65;
+  cursor: default;
 }
 
 .footer__copyright a,

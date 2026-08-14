@@ -6,19 +6,17 @@
   <div class="featured-collection__header">
     <div class="featured-collection__header-text">
       {%- if section.settings.heading != blank -%}
-        <h2 class="featured-collection__heading">
-          {{- section.settings.heading -}}
-          {%- if section.settings.view_all and collection != blank -%}
-            <a href="{{ collection.url }}" class="featured-collection__view-all">
-              {{ section.settings.view_all_label | default: 'View collection' }}
-            </a>
-          {%- endif -%}
-        </h2>
+        <h2 class="featured-collection__heading">{{- section.settings.heading -}}</h2>
       {%- endif -%}
       {%- if section.settings.subtext != blank -%}
         <p class="featured-collection__subtext">{{ section.settings.subtext }}</p>
       {%- endif -%}
     </div>
+    {%- if section.settings.view_all and collection != blank -%}
+      <a href="{{ collection.url }}" class="featured-collection__view-all">
+        {{ section.settings.view_all_label | default: 'View collection' }}
+      </a>
+    {%- endif -%}
   </div>
 
   <!-- Carousel -->
@@ -107,8 +105,12 @@
 
 /* Header */
 .featured-collection__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.6rem;
   margin-bottom: 3.2rem;
-  max-width: var(--page-width, 1200px);
 }
 
 .featured-collection__heading {
@@ -116,10 +118,6 @@
   font-weight: 400;
   line-height: 1.05;
   letter-spacing: var(--font-heading--letter-spacing, 0);
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 1.6rem;
 }
 
 .featured-collection__view-all {
@@ -134,6 +132,7 @@
   white-space: nowrap;
   font-weight: 400;
   transition: opacity 0.2s ease;
+  flex-shrink: 0;
 }
 .featured-collection__view-all:hover { opacity: 0.5; }
 

@@ -25,7 +25,8 @@
 <div
   class="hero-banner full-width{% if section.settings.light_text %} hero-banner--light{% endif %}"
   style="
-    --hero-height: {{ section.settings.height }};
+    --hero-height-mobile: {{ section.settings.height_mobile }};
+    --hero-height-desktop: {{ section.settings.height }};
     --hero-overlay: {{ overlay_dec }};
     --hero-v: {{ v_align }};
     --hero-h: {{ h_align }};
@@ -35,37 +36,89 @@
 
   <!-- Media -->
   <div class="hero-banner__media">
-    {%- if section.settings.image != blank -%}
-      {%- if section.settings.image_mobile != blank -%}
-        {%- assign mobile_img_alt = section.settings.image_mobile.alt | default: section.settings.heading | escape -%}
-        {{ section.settings.image_mobile | image_url: width: 900 | image_tag:
-          widths: '600, 750, 900',
+    {%- if section.settings.layout == 'split' -%}
+      <div class="hero-banner__split">
+
+        <div class="hero-banner__split-item">
+          {%- if section.settings.split_image_1_link != blank -%}<a href="{{ section.settings.split_image_1_link }}" class="hero-banner__split-link">{%- endif -%}
+          {%- if section.settings.split_image_1 != blank -%}
+            {%- assign split_1_alt = section.settings.split_image_1.alt | default: section.settings.split_image_1_caption | escape -%}
+            {{ section.settings.split_image_1 | image_url: width: 1600 | image_tag:
+              widths: '600, 900, 1200, 1600',
+              loading: 'eager',
+              fetchpriority: 'high',
+              width: section.settings.split_image_1.width,
+              height: section.settings.split_image_1.height,
+              alt: split_1_alt,
+              class: 'hero-banner__split-img'
+            }}
+          {%- else -%}
+            <div class="hero-banner__placeholder"></div>
+          {%- endif -%}
+          <div class="hero-banner__split-overlay"></div>
+          {%- if section.settings.split_image_1_caption != blank -%}
+            <span class="hero-banner__split-caption">{{ section.settings.split_image_1_caption }}</span>
+          {%- endif -%}
+          {%- if section.settings.split_image_1_link != blank -%}</a>{%- endif -%}
+        </div>
+
+        <div class="hero-banner__split-item">
+          {%- if section.settings.split_image_2_link != blank -%}<a href="{{ section.settings.split_image_2_link }}" class="hero-banner__split-link">{%- endif -%}
+          {%- if section.settings.split_image_2 != blank -%}
+            {%- assign split_2_alt = section.settings.split_image_2.alt | default: section.settings.split_image_2_caption | escape -%}
+            {{ section.settings.split_image_2 | image_url: width: 1600 | image_tag:
+              widths: '600, 900, 1200, 1600',
+              loading: 'eager',
+              fetchpriority: 'high',
+              width: section.settings.split_image_2.width,
+              height: section.settings.split_image_2.height,
+              alt: split_2_alt,
+              class: 'hero-banner__split-img'
+            }}
+          {%- else -%}
+            <div class="hero-banner__placeholder"></div>
+          {%- endif -%}
+          <div class="hero-banner__split-overlay"></div>
+          {%- if section.settings.split_image_2_caption != blank -%}
+            <span class="hero-banner__split-caption">{{ section.settings.split_image_2_caption }}</span>
+          {%- endif -%}
+          {%- if section.settings.split_image_2_link != blank -%}</a>{%- endif -%}
+        </div>
+
+      </div>
+    {%- else -%}
+      {%- if section.settings.image != blank -%}
+        {%- if section.settings.image_mobile != blank -%}
+          {%- assign mobile_img_alt = section.settings.image_mobile.alt | default: section.settings.heading | escape -%}
+          {{ section.settings.image_mobile | image_url: width: 900 | image_tag:
+            widths: '600, 750, 900',
+            loading: 'eager',
+            fetchpriority: 'high',
+            width: section.settings.image_mobile.width,
+            height: section.settings.image_mobile.height,
+            alt: mobile_img_alt,
+            class: 'hero-banner__img hero-banner__img--mobile'
+          }}
+        {%- endif -%}
+        {%- assign hero_img_alt = section.settings.image.alt | default: section.settings.heading | escape -%}
+        {%- assign hero_desktop_class = 'hero-banner__img hero-banner__img--desktop' -%}
+        {%- if section.settings.image_mobile != blank -%}
+          {%- assign hero_desktop_class = hero_desktop_class | append: ' hero-banner__img--hide-mobile' -%}
+        {%- endif -%}
+        {{ section.settings.image | image_url: width: 2400 | image_tag:
+          widths: '900, 1200, 1600, 2000, 2400',
           loading: 'eager',
           fetchpriority: 'high',
-          width: section.settings.image_mobile.width,
-          height: section.settings.image_mobile.height,
-          alt: mobile_img_alt,
-          class: 'hero-banner__img hero-banner__img--mobile'
+          width: section.settings.image.width,
+          height: section.settings.image.height,
+          alt: hero_img_alt,
+          class: hero_desktop_class
         }}
+      {%- else -%}
+        <div class="hero-banner__placeholder"></div>
       {%- endif -%}
-      {%- assign hero_img_alt = section.settings.image.alt | default: section.settings.heading | escape -%}
-      {%- assign hero_desktop_class = 'hero-banner__img hero-banner__img--desktop' -%}
-      {%- if section.settings.image_mobile != blank -%}
-        {%- assign hero_desktop_class = hero_desktop_class | append: ' hero-banner__img--hide-mobile' -%}
-      {%- endif -%}
-      {{ section.settings.image | image_url: width: 2400 | image_tag:
-        widths: '900, 1200, 1600, 2000, 2400',
-        loading: 'eager',
-        fetchpriority: 'high',
-        width: section.settings.image.width,
-        height: section.settings.image.height,
-        alt: hero_img_alt,
-        class: hero_desktop_class
-      }}
-    {%- else -%}
-      <div class="hero-banner__placeholder"></div>
+      <div class="hero-banner__overlay"></div>
     {%- endif -%}
-    <div class="hero-banner__overlay"></div>
   </div>
 
   <!-- Content -->
@@ -108,11 +161,17 @@
 
 .hero-banner {
   position: relative;
-  height: var(--hero-height, 85vh);
+  height: var(--hero-height-mobile, 70vh);
   min-height: 32rem;
   overflow: hidden;
   display: flex;
   align-items: var(--hero-v, center);
+}
+
+@media screen and (min-width: 750px) {
+  .hero-banner {
+    height: var(--hero-height-desktop, 85vh);
+  }
 }
 
 /* Media */
@@ -147,6 +206,62 @@
   position: absolute;
   inset: 0;
   background: rgba(0,0,0,var(--hero-overlay, 0.3));
+}
+
+/* Split layout */
+.hero-banner__split {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  z-index: 0;
+}
+
+.hero-banner__split-item {
+  position: relative;
+  flex: 1 1 50%;
+  height: 100%;
+  overflow: hidden;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+@media screen and (max-width: 749px) {
+  .hero-banner__split-item:nth-child(2) {
+    display: none;
+  }
+
+  .hero-banner__split-item:first-child {
+    flex: 1 1 100%;
+  }
+}
+
+.hero-banner__split-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.hero-banner__split-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, var(--hero-overlay, 0.3));
+  pointer-events: none;
+}
+
+.hero-banner__split-caption {
+  position: absolute;
+  left: 50%;
+  bottom: 2.4rem;
+  transform: translateX(-50%);
+  font-size: 1.3rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid currentColor;
+  white-space: nowrap;
 }
 
 /* Inner layout */
@@ -197,7 +312,8 @@
 /* Light-text mode */
 .hero-banner--light .hero-banner__subheading,
 .hero-banner--light .hero-banner__heading,
-.hero-banner--light .hero-banner__content {
+.hero-banner--light .hero-banner__content,
+.hero-banner--light .hero-banner__split-caption {
   color: #fff;
 }
 
@@ -234,15 +350,65 @@
       "content": "Image"
     },
     {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "single", "label": "Single image" },
+        { "value": "split",  "label": "Split (two images)" }
+      ],
+      "default": "single"
+    },
+    {
       "type": "image_picker",
       "id": "image",
-      "label": "Desktop image"
+      "label": "Desktop image",
+      "visible_if": "{{ section.settings.layout == 'single' }}"
     },
     {
       "type": "image_picker",
       "id": "image_mobile",
       "label": "Mobile image",
-      "info": "Optional. Displayed below 750px. Recommended: portrait crop."
+      "info": "Optional. Displayed below 750px. Recommended: portrait crop.",
+      "visible_if": "{{ section.settings.layout == 'single' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "split_image_1",
+      "label": "Left image",
+      "visible_if": "{{ section.settings.layout == 'split' }}"
+    },
+    {
+      "type": "url",
+      "id": "split_image_1_link",
+      "label": "Left image link",
+      "visible_if": "{{ section.settings.layout == 'split' }}"
+    },
+    {
+      "type": "text",
+      "id": "split_image_1_caption",
+      "label": "Left image caption",
+      "default": "Shop women",
+      "visible_if": "{{ section.settings.layout == 'split' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "split_image_2",
+      "label": "Right image",
+      "visible_if": "{{ section.settings.layout == 'split' }}"
+    },
+    {
+      "type": "url",
+      "id": "split_image_2_link",
+      "label": "Right image link",
+      "visible_if": "{{ section.settings.layout == 'split' }}"
+    },
+    {
+      "type": "text",
+      "id": "split_image_2_caption",
+      "label": "Right image caption",
+      "default": "Shop men",
+      "visible_if": "{{ section.settings.layout == 'split' }}"
     },
     {
       "type": "range",
@@ -261,7 +427,7 @@
     {
       "type": "select",
       "id": "height",
-      "label": "Section height",
+      "label": "Section height (desktop)",
       "options": [
         { "value": "50vh",  "label": "Small (50vh)" },
         { "value": "70vh",  "label": "Medium (70vh)" },
@@ -269,6 +435,18 @@
         { "value": "100vh", "label": "Full screen (100vh)" }
       ],
       "default": "85vh"
+    },
+    {
+      "type": "select",
+      "id": "height_mobile",
+      "label": "Section height (mobile)",
+      "options": [
+        { "value": "50vh",  "label": "Small (50vh)" },
+        { "value": "70vh",  "label": "Medium (70vh)" },
+        { "value": "85vh",  "label": "Large (85vh)" },
+        { "value": "100vh", "label": "Full screen (100vh)" }
+      ],
+      "default": "70vh"
     },
     {
       "type": "select",

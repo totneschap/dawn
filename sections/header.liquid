@@ -10,15 +10,25 @@
 >
   <div class="header">
 
-    <!-- Hamburger (mobile only) -->
-    <button
-      class="header__hamburger"
-      aria-label="{{ 'accessibility.open_nav' | t }}"
-      aria-controls="mobile-nav-drawer"
-      aria-expanded="false"
-    >
-      {{ 'icon-hamburger.svg' | inline_asset_content }}
-    </button>
+    <!-- Mobile-only: hamburger + search -->
+    <div class="header__mobile-left">
+      <button
+        class="header__hamburger"
+        aria-label="{{ 'accessibility.open_nav' | t }}"
+        aria-controls="mobile-nav-drawer"
+        aria-expanded="false"
+      >
+        {{ 'icon-hamburger.svg' | inline_asset_content }}
+      </button>
+      <button
+        class="header__icon header__icon--search-mobile"
+        aria-label="{{ 'accessibility.open_search' | t }}"
+        aria-controls="search-overlay"
+        aria-expanded="false"
+      >
+        {{ 'icon-search.svg' | inline_asset_content }}
+      </button>
+    </div>
 
     <!-- Logo -->
     <div class="header__logo">
@@ -47,28 +57,76 @@
               class="header__nav-link{%- if link.current %} is-active{%- endif -%}"
               {%- if link.links.size > 0 %} aria-haspopup="true" aria-expanded="false"{%- endif -%}
             >
+              <span class="header__nav-link-inner">
               {{- link.title -}}
               {%- if link.links.size > 0 -%}
                 <span class="header__nav-chevron">{{ 'icon-chevron-down.svg' | inline_asset_content }}</span>
               {%- endif -%}
+              </span>
             </a>
             {%- if link.links.size > 0 -%}
-              <ul class="header__dropdown" role="menu">
-                <li class="header__dropdown-item">
-                  <a href="{{ link.url }}" class="header__dropdown-link" role="menuitem">
-                    {{ 'View all' }} {{ link.title }}
-                  </a>
-                </li>
-                {%- for child in link.links -%}
-                  <li class="header__dropdown-item">
-                    <a
-                      href="{{ child.url }}"
-                      class="header__dropdown-link{%- if child.current %} is-active{%- endif -%}"
-                      role="menuitem"
-                    >{{ child.title }}</a>
-                  </li>
-                {%- endfor -%}
-              </ul>
+              {%- assign has_columns = false -%}
+              {%- for child in link.links -%}
+                {%- if child.links.size > 0 -%}
+                  {%- assign has_columns = true -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+              <div class="header__megamenu" role="menu">
+                <div class="header__megamenu-inner">
+                  {%- if has_columns -%}
+                    <div class="header__megamenu-content header__megamenu-content--columns">
+                      {%- for child in link.links -%}
+                        <div class="header__megamenu-col">
+                          <a
+                            href="{{ child.url }}"
+                            class="header__megamenu-col-title{%- if child.current %} is-active{%- endif -%}"
+                            role="menuitem"
+                          >{{ child.title }}</a>
+                          {%- if child.links.size > 0 -%}
+                            <ul class="header__megamenu-list">
+                              {%- for grandchild in child.links -%}
+                                <li>
+                                  <a
+                                    href="{{ grandchild.url }}"
+                                    class="header__megamenu-link{%- if grandchild.current %} is-active{%- endif -%}"
+                                    role="menuitem"
+                                  >{{ grandchild.title }}</a>
+                                </li>
+                              {%- endfor -%}
+                            </ul>
+                          {%- endif -%}
+                        </div>
+                      {%- endfor -%}
+                      <div class="header__megamenu-col">
+                        <a href="{{ link.url }}" class="header__megamenu-col-title" role="menuitem">
+                          {{ 'View all' }} {{ link.title }}
+                        </a>
+                      </div>
+                    </div>
+                  {%- else -%}
+                    <div class="header__megamenu-content">
+                      <ul class="header__megamenu-list header__megamenu-list--flat">
+                        {%- for child in link.links -%}
+                          <li>
+                            <a
+                              href="{{ child.url }}"
+                              class="header__megamenu-link{%- if child.current %} is-active{%- endif -%}"
+                              role="menuitem"
+                            >{{ child.title }}</a>
+                          </li>
+                        {%- endfor -%}
+                        <li>
+                          <a href="{{ link.url }}" class="header__megamenu-link" role="menuitem">
+                            {{ 'View all' }} {{ link.title }}
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
             {%- endif -%}
           </li>
         {%- endfor -%}
@@ -78,7 +136,7 @@
     <!-- Header icons -->
     <div class="header__icons">
       <button
-        class="header__icon"
+        class="header__icon header__icon--search-desktop"
         aria-label="{{ 'accessibility.open_search' | t }}"
         aria-controls="search-overlay"
         aria-expanded="false"
@@ -112,6 +170,7 @@
 
   </div>
 </div>
+<div class="header-spacer"></div>
 
 <!-- ===== SEARCH OVERLAY ===== -->
 <div
@@ -178,29 +237,19 @@
     </div>
 
     <nav class="mobile-nav__nav" aria-label="Mobile navigation">
-      <ul class="mobile-nav__list">
+      <ul class="mobile-nav__list mobile-nav__level mobile-nav__level--root">
         {%- for link in section.settings.menu.links -%}
           <li class="mobile-nav__item">
             {%- if link.links.size > 0 -%}
-              <details class="mobile-nav__details">
-                <summary class="mobile-nav__summary">
-                  {{ link.title }}
-                  <span class="mobile-nav__chevron">{{ 'icon-chevron-down.svg' | inline_asset_content }}</span>
-                </summary>
-                <ul class="mobile-nav__sub">
-                  <li class="mobile-nav__sub-item">
-                    <a href="{{ link.url }}" class="mobile-nav__sub-link">View all {{ link.title }}</a>
-                  </li>
-                  {%- for child in link.links -%}
-                    <li class="mobile-nav__sub-item">
-                      <a
-                        href="{{ child.url }}"
-                        class="mobile-nav__sub-link{%- if child.current %} is-active{%- endif -%}"
-                      >{{ child.title }}</a>
-                    </li>
-                  {%- endfor -%}
-                </ul>
-              </details>
+              <button
+                type="button"
+                class="mobile-nav__link mobile-nav__link--parent"
+                aria-expanded="false"
+                aria-controls="mobile-nav-sub-{{ forloop.index0 }}"
+              >
+                {{ link.title }}
+                <span class="mobile-nav__chevron">{{ 'icon-chevron-down.svg' | inline_asset_content }}</span>
+              </button>
             {%- else -%}
               <a
                 href="{{ link.url }}"
@@ -210,6 +259,31 @@
           </li>
         {%- endfor -%}
       </ul>
+
+      {%- for link in section.settings.menu.links -%}
+        {%- if link.links.size > 0 -%}
+          <div class="mobile-nav__level mobile-nav__level--sub" id="mobile-nav-sub-{{ forloop.index0 }}">
+            <button type="button" class="mobile-nav__back">
+              <span class="mobile-nav__back-icon">{{ 'icon-chevron-down.svg' | inline_asset_content }}</span>
+              {{ 'Back' }}
+            </button>
+            <div class="mobile-nav__sub-title">{{ link.title }}</div>
+            <ul class="mobile-nav__sub">
+              <li class="mobile-nav__sub-item">
+                <a href="{{ link.url }}" class="mobile-nav__sub-link">View all {{ link.title }}</a>
+              </li>
+              {%- for child in link.links -%}
+                <li class="mobile-nav__sub-item">
+                  <a
+                    href="{{ child.url }}"
+                    class="mobile-nav__sub-link{%- if child.current %} is-active{%- endif -%}"
+                  >{{ child.title }}</a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
     </nav>
 
     {%- if shop.customer_accounts_enabled -%}
@@ -268,20 +342,35 @@
    ================================================ */
 
 .header-wrapper {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 200;
   background-color: var(--color-background);
   color: var(--color-text);
   border-bottom: 1px solid rgba(46,14,23,0.1);
+  opacity: 1;
+  transition: opacity 0.25s ease;
+}
+
+.header-wrapper--pinned {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.header-wrapper--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.header-spacer {
+  height: 0;
 }
 
 .header {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  max-width: var(--page-width, 1200px);
-  margin: 0 auto;
   padding: 0 var(--page-margin, 20px);
   height: 7rem;
   width: 100%;
@@ -290,6 +379,14 @@
 /* ================================================
    HAMBURGER
    ================================================ */
+
+.header__mobile-left {
+  display: flex;
+  align-items: center;
+  grid-column: 1;
+  justify-self: start;
+  margin-left: -0.8rem;
+}
 
 .header__hamburger {
   display: flex;
@@ -300,8 +397,6 @@
   cursor: pointer;
   color: currentColor;
   padding: 0.8rem;
-  margin-left: -0.8rem;
-  grid-column: 1;
 }
 
 .header__hamburger svg {
@@ -310,7 +405,7 @@
 }
 
 @media screen and (min-width: 990px) {
-  .header__hamburger {
+  .header__mobile-left {
     display: none;
   }
 }
@@ -358,32 +453,31 @@
 @media screen and (min-width: 990px) {
   .header__nav {
     display: flex;
-    align-items: center;
+    align-items: stretch;
+    align-self: stretch;
     grid-column: 1;
     grid-row: 1;
     justify-self: start;
-  }
-
-  .header__hamburger {
-    display: none;
   }
 }
 
 .header__nav-list {
   display: flex;
-  align-items: center;
+  align-items: stretch;
+  height: 100%;
   gap: 0;
 }
 
 .header__nav-item {
-  position: relative;
+  position: static;
+  display: flex;
 }
 
 .header__nav-link {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.8rem 1.2rem;
+  height: 100%;
+  padding: 0 1.2rem;
   font-family: var(--font-body--family, sans-serif);
   font-size: 1.25rem;
   font-weight: 500;
@@ -392,15 +486,21 @@
   text-decoration: none;
   color: currentColor;
   white-space: nowrap;
-  position: relative;
 }
 
-.header__nav-link::after {
+.header__nav-link-inner {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.header__nav-link-inner::after {
   content: '';
   position: absolute;
-  bottom: 0.2rem;
-  left: 1.2rem;
-  right: 1.2rem;
+  bottom: -0.4rem;
+  left: 0;
+  right: 0;
   height: 1px;
   background: currentColor;
   transform: scaleX(0);
@@ -408,8 +508,8 @@
   transition: transform 0.25s ease;
 }
 
-.header__nav-link:hover::after,
-.header__nav-link.is-active::after {
+.header__nav-link:hover .header__nav-link-inner::after,
+.header__nav-link.is-active .header__nav-link-inner::after {
   transform: scaleX(1);
 }
 
@@ -430,45 +530,98 @@
   transform: rotate(180deg);
 }
 
-/* Dropdown */
-.header__dropdown {
+/* Mega menu */
+.header__megamenu {
   position: absolute;
   top: 100%;
   left: 0;
-  min-width: 20rem;
+  right: 0;
   background-color: var(--color-background);
-  border: 1px solid rgba(255,255,255,0.12);
-  padding: 0.6rem 0;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
   opacity: 0;
   pointer-events: none;
   transform: translateY(-6px);
   transition: opacity 0.2s ease, transform 0.2s ease;
   z-index: 10;
-  list-style: none;
 }
 
-.has-dropdown:hover .header__dropdown,
-.has-dropdown:focus-within .header__dropdown {
+.has-dropdown:hover .header__megamenu,
+.has-dropdown:focus-within .header__megamenu {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
 }
 
-.header__dropdown-link {
+.header__megamenu-inner {
+  padding: 3.2rem var(--page-margin, 2rem);
+  padding-left: calc(var(--page-margin, 2rem) + 1.2rem);
+}
+
+.header__megamenu-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 4rem;
+}
+
+.header__megamenu-content--columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 2.4rem 3.2rem;
+}
+
+.header__megamenu-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.header__megamenu-col-title {
   display: block;
-  padding: 0.9rem 1.6rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: currentColor;
+  padding-bottom: 0.8rem;
+  margin-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.header__megamenu-col-title:hover {
+  opacity: 0.7;
+}
+
+.header__megamenu-col-title.is-active {
+  opacity: 0.6;
+}
+
+.header__megamenu-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.header__megamenu-list--flat {
+  min-width: 18rem;
+}
+
+.header__megamenu-link {
+  display: block;
+  padding: 0.5rem 0;
   font-size: 1.3rem;
   text-decoration: none;
   color: currentColor;
   white-space: nowrap;
-  letter-spacing: 0.04em;
+  opacity: 0.75;
+  transition: opacity 0.15s ease;
 }
 
-.header__dropdown-link:hover {
-  opacity: 0.65;
+.header__megamenu-link:hover {
+  opacity: 1;
 }
 
-.header__dropdown-link.is-active {
+.header__megamenu-link.is-active {
+  opacity: 1;
   font-weight: 600;
 }
 
@@ -508,9 +661,15 @@
   display: block;
 }
 
-/* Hide account icon on mobile (it's in mobile nav) */
+/* Search icon: mobile copy sits next to the hamburger, desktop copy stays with the other icons */
 @media screen and (max-width: 989px) {
-  .header__account {
+  .header__icon--search-desktop {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .header__icon--search-mobile {
     display: none;
   }
 }
@@ -700,6 +859,10 @@
 
 .mobile-nav__nav {
   flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .mobile-nav__list {
@@ -710,57 +873,100 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-.mobile-nav__link,
-.mobile-nav__summary {
+.mobile-nav__link {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
   padding: 1.4rem var(--page-margin, 20px);
+  font: inherit;
   font-size: 1.4rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
   text-decoration: none;
+  background: none;
+  border: none;
   color: currentColor;
   cursor: pointer;
   list-style: none;
+  text-align: left;
 }
 
 .mobile-nav__link.is-active {
   opacity: 0.65;
 }
 
-.mobile-nav__summary::-webkit-details-marker {
-  display: none;
-}
-
-.mobile-nav__summary::marker {
-  display: none;
-}
-
 .mobile-nav__chevron {
   display: inline-flex;
   align-items: center;
-  transition: transform 0.2s ease;
   opacity: 0.6;
 }
 
 .mobile-nav__chevron svg {
   width: 1.6rem;
   height: 1.6rem;
+  transform: rotate(-90deg);
 }
 
-.mobile-nav__details[open] .mobile-nav__chevron {
-  transform: rotate(180deg);
+/* Slide-over sub levels */
+.mobile-nav__level--sub {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  background-color: var(--color-background);
+  transform: translateX(100%);
+  transition: transform 0.32s ease;
+  padding-bottom: 1rem;
+}
+
+.mobile-nav__level--sub.is-active {
+  transform: translateX(0);
+}
+
+.mobile-nav__back {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 1.4rem var(--page-margin, 20px);
+  font: inherit;
+  font-size: 1.3rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  color: currentColor;
+  cursor: pointer;
+}
+
+.mobile-nav__back-icon {
+  display: inline-flex;
+  align-items: center;
+  opacity: 0.6;
+}
+
+.mobile-nav__back-icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+  transform: rotate(90deg);
+}
+
+.mobile-nav__sub-title {
+  padding: 1.2rem var(--page-margin, 20px) 0.4rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.55;
 }
 
 .mobile-nav__sub {
-  background: rgba(0, 0, 0, 0.12);
   padding: 0.4rem 0 1rem;
 }
 
 .mobile-nav__sub-link {
   display: block;
-  padding: 0.9rem var(--page-margin, 20px) 0.9rem calc(var(--page-margin, 20px) + 1.2rem);
+  padding: 0.9rem var(--page-margin, 20px);
   font-size: 1.3rem;
   text-decoration: none;
   color: currentColor;
@@ -940,6 +1146,16 @@
       '.mobile-nav[aria-hidden="false"], .cart-drawer[aria-hidden="false"], .search-overlay[aria-hidden="false"]'
     );
     if (!anyOpen) document.body.style.overflow = '';
+
+    if (el.id === 'mobile-nav-drawer') resetMobileNavLevels(el);
+  }
+
+  function resetMobileNavLevels(mobileNavEl) {
+    mobileNavEl.querySelectorAll('.mobile-nav__level--sub.is-active').forEach(function (panel) {
+      panel.classList.remove('is-active');
+      var trigger = mobileNavEl.querySelector('[aria-controls="' + panel.id + '"]');
+      if (trigger) trigger.setAttribute('aria-expanded', 'false');
+    });
   }
 
   function onOverlay(el, overlaySelector, toggleBtn) {
@@ -958,6 +1174,61 @@
     });
   }
 
+  /* ---------- PIN HEADER PAST ANNOUNCEMENT BAR / HIDE ON SCROLL / REVEAL NEAR TOP ---------- */
+  var headerWrapper = document.querySelector('.header-wrapper');
+  var headerSpacer = document.querySelector('.header-spacer');
+
+  if (headerWrapper) {
+    var announcementBar = document.querySelector('.announcement-bar');
+    var lastScrollY = window.scrollY;
+    var revealZone = 60;
+    var ticking = false;
+
+    function pinThreshold() {
+      return announcementBar ? announcementBar.offsetHeight : 0;
+    }
+
+    function updateHeaderVisibility() {
+      var currentY = window.scrollY;
+      var threshold = pinThreshold();
+
+      if (currentY > threshold) {
+        if (!headerWrapper.classList.contains('header-wrapper--pinned')) {
+          if (headerSpacer) headerSpacer.style.height = headerWrapper.offsetHeight + 'px';
+          headerWrapper.classList.add('header-wrapper--pinned');
+        }
+
+        if (currentY > lastScrollY) {
+          headerWrapper.classList.add('header-wrapper--hidden');
+        } else {
+          headerWrapper.classList.remove('header-wrapper--hidden');
+        }
+      } else {
+        headerWrapper.classList.remove('header-wrapper--pinned');
+        headerWrapper.classList.remove('header-wrapper--hidden');
+        if (headerSpacer) headerSpacer.style.height = '0px';
+      }
+
+      lastScrollY = currentY;
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(updateHeaderVisibility);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    document.addEventListener('mousemove', function (e) {
+      if (e.clientY <= revealZone) {
+        headerWrapper.classList.remove('header-wrapper--hidden');
+      }
+    });
+
+    updateHeaderVisibility();
+  }
+
   /* ---------- MOBILE NAV ---------- */
   var hamburger = document.querySelector('.header__hamburger');
   var mobileNav = document.getElementById('mobile-nav-drawer');
@@ -972,6 +1243,31 @@
     if (mobileClose) mobileClose.addEventListener('click', function () { closeDrawer(mobileNav, hamburger); });
 
     onOverlay(mobileNav, '.mobile-nav__overlay', hamburger);
+
+    mobileNav.querySelectorAll('.mobile-nav__link--parent').forEach(function (trigger) {
+      trigger.addEventListener('click', function () {
+        var panel = document.getElementById(trigger.getAttribute('aria-controls'));
+        if (!panel) return;
+        panel.classList.add('is-active');
+        trigger.setAttribute('aria-expanded', 'true');
+        panel.scrollTop = 0;
+        var back = panel.querySelector('.mobile-nav__back');
+        if (back) setTimeout(function () { back.focus(); }, 50);
+      });
+    });
+
+    mobileNav.querySelectorAll('.mobile-nav__back').forEach(function (backBtn) {
+      backBtn.addEventListener('click', function () {
+        var panel = backBtn.closest('.mobile-nav__level--sub');
+        if (!panel) return;
+        panel.classList.remove('is-active');
+        var trigger = mobileNav.querySelector('[aria-controls="' + panel.id + '"]');
+        if (trigger) {
+          trigger.setAttribute('aria-expanded', 'false');
+          setTimeout(function () { trigger.focus(); }, 50);
+        }
+      });
+    });
   }
 
   /* ---------- SEARCH ---------- */

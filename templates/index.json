@@ -49,7 +49,8 @@
         "color_scheme": "scheme-2",
         "heading": "Made with intention",
         "text": "<p>We create jewellery for the everyday — pieces that move with you, tell your story, and last a lifetime. Each design is crafted in limited editions using ethically sourced materials.</p>",
-        "button_label": "Our story"
+        "button_label": "Our story",
+        "margin_top": 60
       }
     },
     "journal": {
