@@ -146,7 +146,7 @@
     <!-- Nav columns -->
     {%- if section.settings.menu_1 != blank -%}
       <div class="footer__nav-col">
-        <details class="footer__nav-details">
+        <details class="footer__nav-details" open>
           {%- if section.settings.menu_1_heading != blank -%}
             <summary class="footer__nav-heading">
               {{ section.settings.menu_1_heading }}
@@ -166,7 +166,7 @@
 
     {%- if section.settings.menu_2 != blank -%}
       <div class="footer__nav-col">
-        <details class="footer__nav-details">
+        <details class="footer__nav-details" open>
           {%- if section.settings.menu_2_heading != blank -%}
             <summary class="footer__nav-heading">
               {{ section.settings.menu_2_heading }}
@@ -186,7 +186,7 @@
 
     {%- if section.settings.menu_3 != blank -%}
       <div class="footer__nav-col">
-        <details class="footer__nav-details">
+        <details class="footer__nav-details" open>
           {%- if section.settings.menu_3_heading != blank -%}
             <summary class="footer__nav-heading">
               {{ section.settings.menu_3_heading }}
@@ -491,7 +491,6 @@
   }
 
   .footer__nav-list {
-    display: flex !important;
     padding-bottom: 0;
   }
 }
@@ -571,6 +570,19 @@
 }
 
 {% endstylesheet %}
+
+{% javascript %}
+(function () {
+  /* The <details> elements default to open in the markup so the nav
+     lists render reliably on desktop across all browsers. On mobile,
+     collapse them at load so they start as closed accordions. */
+  if (window.matchMedia('(max-width: 749px)').matches) {
+    document.querySelectorAll('.footer__nav-details').forEach(function (details) {
+      details.removeAttribute('open');
+    });
+  }
+})();
+{% endjavascript %}
 
 {% schema %}
 {

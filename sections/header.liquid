@@ -1188,7 +1188,9 @@
       return announcementBar ? announcementBar.offsetHeight : 0;
     }
 
-    function updateHeaderVisibility() {
+    /* Pin/unpin + spacer only — safe to re-run at any time without
+       affecting the hide-on-scroll-down/reveal-on-scroll-up state. */
+    function updatePinState() {
       var currentY = window.scrollY;
       var threshold = pinThreshold();
 
@@ -1197,27 +1199,46 @@
           if (headerSpacer) headerSpacer.style.height = headerWrapper.offsetHeight + 'px';
           headerWrapper.classList.add('header-wrapper--pinned');
         }
+      } else {
+        headerWrapper.classList.remove('header-wrapper--pinned');
+        headerWrapper.classList.remove('header-wrapper--hidden');
+        if (headerSpacer) headerSpacer.style.height = '0px';
+      }
+    }
 
+    function updateHeaderVisibility() {
+      var currentY = window.scrollY;
+      var threshold = pinThreshold();
+
+      updatePinState();
+
+      if (currentY > threshold) {
         if (currentY > lastScrollY) {
           headerWrapper.classList.add('header-wrapper--hidden');
         } else {
           headerWrapper.classList.remove('header-wrapper--hidden');
         }
-      } else {
-        headerWrapper.classList.remove('header-wrapper--pinned');
-        headerWrapper.classList.remove('header-wrapper--hidden');
-        if (headerSpacer) headerSpacer.style.height = '0px';
       }
 
       lastScrollY = currentY;
       ticking = false;
     }
 
+    var settleTimer = null;
+
     window.addEventListener('scroll', function () {
       if (!ticking) {
         window.requestAnimationFrame(updateHeaderVisibility);
         ticking = true;
       }
+
+      /* Safety net: re-check the pin state shortly after scrolling settles,
+         in case a rapid/short scroll gesture caused the rAF-throttled
+         handler to miss the final position. Only touches pin/spacer —
+         never the hide/reveal state, so it can't fight the scroll-
+         direction logic once scrolling stops. */
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(updatePinState, 150);
     }, { passive: true });
 
     document.addEventListener('mousemove', function (e) {
