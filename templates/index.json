@@ -1,0 +1,70 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-banner",
+      "settings": {
+        "subheading": "New collection",
+        "heading": "Made to be worn",
+        "heading_size": "large",
+        "button_1_label": "Shop now",
+        "button_1_style": "filled",
+        "light_text": true,
+        "height": "85vh",
+        "content_position": "middle-center",
+        "overlay_opacity": 35
+      }
+    },
+    "featured-products": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Shop the edit",
+        "columns_desktop": "4",
+        "products_to_show": 8,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "category-cards": {
+      "type": "collection-tiles",
+      "blocks": {
+        "tile-rings": {
+          "type": "tile",
+          "settings": {
+            "title": "Rings",
+            "link_label": "Shop rings"
+          }
+        },
+        "tile-earrings": {
+          "type": "tile",
+          "settings": {
+            "title": "Earrings",
+            "link_label": "Shop earrings"
+          }
+        }
+      },
+      "block_order": ["tile-rings", "tile-earrings"]
+    },
+    "brand-story": {
+      "type": "image-with-text",
+      "settings": {
+        "color_scheme": "scheme-2",
+        "heading": "Made with intention",
+        "text": "<p>We create jewellery for the everyday — pieces that move with you, tell your story, and last a lifetime. Each design is crafted in limited editions using ethically sourced materials.</p>",
+        "button_label": "Our story"
+      }
+    },
+    "journal": {
+      "type": "featured-blog",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "heading": "From the journal"
+      }
+    },
+  },
+  "order": [
+    "hero",
+    "featured-products",
+    "category-cards",
+    "brand-story",
+    "journal"
+  ]
+}

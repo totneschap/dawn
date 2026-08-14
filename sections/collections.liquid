@@ -1,0 +1,197 @@
+<div class="collections-grid color-{{ section.settings.color_scheme }}">
+
+  <div class="collections-grid__header">
+    <h1 class="collections-grid__title">
+      {{- 'collections.title' | t -}}
+    </h1>
+    {%- if section.settings.subtext != blank -%}
+      <p class="collections-grid__subtext">{{ section.settings.subtext }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- if collections.size > 0 -%}
+    <ul
+      class="collections-grid__list"
+      role="list"
+      style="--cg-cols: {{ section.settings.columns_desktop }};"
+    >
+      {%- for collection in collections -%}
+        <li class="collections-grid__item">
+          <a href="{{ collection.url }}" class="collection-card">
+
+            <div class="collection-card__media">
+              {%- if collection.featured_image -%}
+                {%- assign coll_img_alt = collection.featured_image.alt | default: collection.title | escape -%}
+                {{ collection.featured_image | image_url: width: 800 | image_tag:
+                  widths: '400, 600, 800',
+                  loading: 'lazy',
+                  width: collection.featured_image.width,
+                  height: collection.featured_image.height,
+                  alt: coll_img_alt,
+                  class: 'collection-card__img'
+                }}
+              {%- else -%}
+                <div class="collection-card__placeholder"></div>
+              {%- endif -%}
+
+              <div class="collection-card__overlay">
+                <h2 class="collection-card__title">{{ collection.title }}</h2>
+                {%- if section.settings.show_product_count -%}
+                  <p class="collection-card__count">{{ collection.products_count }} products</p>
+                {%- endif -%}
+              </div>
+            </div>
+
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+
+</div>
+
+{% stylesheet %}
+
+.collections-grid {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  padding: var(--section-spacing, 6rem) 0;
+}
+
+.collections-grid__header {
+  margin-bottom: 4rem;
+}
+
+.collections-grid__title {
+  font-size: clamp(var(--text-h3, 2.8rem), 4vw, var(--text-h2, 3.6rem));
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: var(--font-heading--letter-spacing, 0);
+}
+
+.collections-grid__subtext {
+  font-size: 1.4rem;
+  opacity: 0.55;
+  margin-top: 1rem;
+  max-width: 56ch;
+  line-height: 1.65;
+}
+
+.collections-grid__list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+@media screen and (min-width: 750px) {
+  .collections-grid__list {
+    grid-template-columns: repeat(var(--cg-cols, 3), 1fr);
+    gap: 2.4rem;
+  }
+}
+
+/* Collection card */
+.collection-card {
+  display: block;
+  text-decoration: none;
+  color: currentColor;
+}
+
+.collection-card__media {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: var(--style-card-radius, 0);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.collection-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.collection-card:hover .collection-card__img {
+  transform: scale(1.04);
+}
+
+.collection-card__placeholder {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.07);
+}
+
+.collection-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2.4rem;
+  transition: background 0.4s ease;
+}
+
+.collection-card:hover .collection-card__overlay {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0,0,0,0.1) 60%);
+}
+
+.collection-card__title {
+  font-family: var(--font-heading--family, serif);
+  font-size: clamp(1.8rem, 2.5vw, 2.6rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: var(--font-heading--letter-spacing, 0);
+  color: #fff;
+}
+
+.collection-card__count {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin-top: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collections",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Subtext"
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "label": "Show product count",
+      "default": false
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

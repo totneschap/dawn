@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    {%- render 'css-variables' -%}
+
+    {%- unless settings.type_heading_font.system? -%}
+      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+      {{ settings.type_heading_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {%- endunless -%}
+
+    {%- unless settings.type_body_font.system? -%}
+      {{ settings.type_body_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {%- endunless -%}
+
+    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
+
+    {%- render 'meta-tags' -%}
+
+    {%- if settings.favicon != blank -%}
+      <link rel="shortcut icon" href="{{ settings.favicon | image_url: width: 32, height: 32 }}" type="image/png">
+    {%- endif -%}
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="color-scheme-1">
+    <a href="#MainContent" class="skip-to-content-link">
+      {{- 'accessibility.skip_to_content' | t -}}
+    </a>
+
+    {% sections 'header-group' %}
+
+    <main id="MainContent" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+  </body>
+</html>

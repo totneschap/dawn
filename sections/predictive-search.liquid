@@ -1,0 +1,275 @@
+{%- comment -%}Predictive search — no visible HTML, JS enhancement only{%- endcomment -%}
+
+{% stylesheet %}
+
+.predictive-search {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border-top: 1px solid var(--color-border);
+  max-height: 55vh;
+  overflow-y: auto;
+  z-index: 1;
+  -webkit-overflow-scrolling: touch;
+}
+
+.predictive-search__label {
+  font-size: 1rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.45;
+  padding: 1.6rem 2.4rem 0.6rem;
+}
+
+.predictive-search__list { padding: 0; }
+
+.predictive-search__link {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  padding: 1.1rem 2.4rem;
+  text-decoration: none;
+  color: currentColor;
+  transition: background-color 0.12s ease;
+}
+
+.predictive-search__link:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.predictive-search__img {
+  width: 4.4rem;
+  height: 4.4rem;
+  object-fit: cover;
+  flex-shrink: 0;
+  border-radius: var(--style-card-radius, 0);
+}
+
+.predictive-search__img--placeholder {
+  background: rgba(0, 0, 0, 0.07);
+}
+
+.predictive-search__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.predictive-search__title {
+  font-size: 1.4rem;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.predictive-search__title mark {
+  background: none;
+  color: currentColor;
+  font-weight: 600;
+}
+
+.predictive-search__price {
+  font-size: 1.2rem;
+  opacity: 0.6;
+}
+
+.predictive-search__all {
+  display: block;
+  padding: 1.2rem 2.4rem;
+  font-size: 1.25rem;
+  border-top: 1px solid var(--color-border);
+  color: currentColor;
+  text-decoration: none;
+  opacity: 0.65;
+  transition: opacity 0.15s ease;
+}
+
+.predictive-search__all:hover { opacity: 1; }
+
+{% endstylesheet %}
+
+{% javascript %}
+(function () {
+  var overlay = document.getElementById('search-overlay');
+  var searchInput = overlay && overlay.querySelector('.search-overlay__input');
+  if (!searchInput || !overlay) return;
+
+  /* Create dropdown, append inside overlay (positioned below panel via JS) */
+  var dropdown = document.createElement('div');
+  dropdown.className = 'predictive-search';
+  dropdown.setAttribute('aria-live', 'polite');
+  dropdown.setAttribute('aria-label', 'Search suggestions');
+  dropdown.hidden = true;
+  overlay.appendChild(dropdown);
+
+  var debounceTimer;
+  var currentQuery = '';
+
+  /* Position dropdown below the search panel */
+  function positionDropdown() {
+    var panel = overlay.querySelector('.search-overlay__panel');
+    if (panel) dropdown.style.top = panel.offsetHeight + 'px';
+  }
+
+  /* Input handler — debounced */
+  searchInput.addEventListener('input', function () {
+    var q = searchInput.value.trim();
+    clearTimeout(debounceTimer);
+
+    if (q.length < 2) {
+      hideDropdown();
+      return;
+    }
+
+    debounceTimer = setTimeout(function () {
+      if (q !== currentQuery) {
+        currentQuery = q;
+        fetchSuggestions(q);
+      }
+    }, 250);
+  });
+
+  /* Re-show dropdown when search reopened with existing query */
+  searchInput.addEventListener('focus', function () {
+    if (!dropdown.hidden || !dropdown.innerHTML) return;
+    var q = searchInput.value.trim();
+    if (q.length >= 2) {
+      positionDropdown();
+      dropdown.hidden = false;
+    }
+  });
+
+  /* Close on ESC (in addition to header overlay close) */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') hideDropdown();
+  });
+
+  /* Close on click outside the dropdown and search input */
+  document.addEventListener('click', function (e) {
+    if (!dropdown.contains(e.target) && e.target !== searchInput) {
+      hideDropdown();
+    }
+  });
+
+  /* Hide dropdown when overlay closes */
+  var overlayObserver = new MutationObserver(function (mutations) {
+    mutations.forEach(function (m) {
+      if (m.attributeName === 'aria-hidden' && overlay.getAttribute('aria-hidden') === 'true') {
+        hideDropdown();
+        currentQuery = '';
+      }
+    });
+  });
+  overlayObserver.observe(overlay, { attributes: true });
+
+  function fetchSuggestions(q) {
+    var url = '/search/suggest.json'
+      + '?q=' + encodeURIComponent(q)
+      + '&resources[type]=product,article'
+      + '&resources[limit]=5'
+      + '&resources[options][unavailable_products]=last';
+
+    fetch(url)
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        renderResults(data.resources && data.resources.results, q);
+      })
+      .catch(function () { hideDropdown(); });
+  }
+
+  function renderResults(results, q) {
+    if (!results) { hideDropdown(); return; }
+
+    var products = results.products || [];
+    var articles = results.articles || [];
+
+    if (products.length === 0 && articles.length === 0) {
+      hideDropdown();
+      return;
+    }
+
+    var html = '';
+
+    if (products.length > 0) {
+      html += '<p class="predictive-search__label">Products</p><ul class="predictive-search__list">';
+      products.forEach(function (p) {
+        var price = p.price ? fmtMoney(p.price) : '';
+        var imgSrc = p.featured_image && p.featured_image.url
+          ? p.featured_image.url + '&width=88'
+          : '';
+        var img = imgSrc
+          ? '<img src="' + imgSrc + '" alt="" class="predictive-search__img" loading="lazy" width="44" height="44">'
+          : '<div class="predictive-search__img predictive-search__img--placeholder"></div>';
+
+        html += '<li><a href="' + escHtml(p.url) + '" class="predictive-search__link">'
+          + img
+          + '<span class="predictive-search__info">'
+          + '<span class="predictive-search__title">' + highlight(p.title, q) + '</span>'
+          + (price ? '<span class="predictive-search__price">' + escHtml(price) + '</span>' : '')
+          + '</span></a></li>';
+      });
+      html += '</ul>';
+    }
+
+    if (articles.length > 0) {
+      html += '<p class="predictive-search__label">Articles</p><ul class="predictive-search__list">';
+      articles.forEach(function (a) {
+        html += '<li><a href="' + escHtml(a.url) + '" class="predictive-search__link">'
+          + '<span class="predictive-search__title">' + highlight(a.title, q) + '</span>'
+          + '</a></li>';
+      });
+      html += '</ul>';
+    }
+
+    html += '<a href="/search?q=' + encodeURIComponent(q) + '&type=product,article,page" class="predictive-search__all">'
+      + 'See all results for &ldquo;' + escHtml(q) + '&rdquo;</a>';
+
+    dropdown.innerHTML = html;
+    positionDropdown();
+    dropdown.hidden = false;
+  }
+
+  function hideDropdown() {
+    dropdown.hidden = true;
+  }
+
+  function highlight(text, q) {
+    var safe = escHtml(text);
+    var safeQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    try {
+      return safe.replace(new RegExp('(' + escHtml(safeQ) + ')', 'gi'), '<mark>$1</mark>');
+    } catch (e) {
+      return safe;
+    }
+  }
+
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function fmtMoney(cents) {
+    if (window.Shopify && Shopify.formatMoney) {
+      return Shopify.formatMoney(cents, '£{{amount}}');
+    }
+    return '£' + (cents / 100).toFixed(2);
+  }
+})();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Predictive search",
+  "settings": [],
+  "enabled_on": {
+    "groups": ["header"]
+  }
+}
+{% endschema %}

@@ -1,0 +1,155 @@
+{%- if section.settings.text != blank -%}
+<div class="announcement-bar color-{{ section.settings.color_scheme }} full-width">
+  {%- if section.settings.enable_marquee -%}
+    <div class="announcement-bar__track" aria-hidden="true">
+      <ul class="announcement-bar__list" style="--marquee-duration: {{ section.settings.marquee_speed }}s">
+        {%- for i in (1..6) -%}
+          <li class="announcement-bar__item">
+            {%- if section.settings.link != blank -%}
+              <a href="{{ section.settings.link }}" class="announcement-bar__link">{{ section.settings.text }}</a>
+            {%- else -%}
+              <span>{{ section.settings.text }}</span>
+            {%- endif -%}
+            <span class="announcement-bar__sep" aria-hidden="true">&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+      <ul class="announcement-bar__list" aria-hidden="true" style="--marquee-duration: {{ section.settings.marquee_speed }}s">
+        {%- for i in (1..6) -%}
+          <li class="announcement-bar__item">
+            {%- if section.settings.link != blank -%}
+              <a href="{{ section.settings.link }}" class="announcement-bar__link">{{ section.settings.text }}</a>
+            {%- else -%}
+              <span>{{ section.settings.text }}</span>
+            {%- endif -%}
+            <span class="announcement-bar__sep" aria-hidden="true">&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+    <p class="visually-hidden">{{ section.settings.text }}</p>
+  {%- else -%}
+    <p class="announcement-bar__static">
+      {%- if section.settings.link != blank -%}
+        <a href="{{ section.settings.link }}" class="announcement-bar__link">{{ section.settings.text }}</a>
+      {%- else -%}
+        {{ section.settings.text }}
+      {%- endif -%}
+    </p>
+  {%- endif -%}
+</div>
+{%- endif -%}
+
+{% stylesheet %}
+  .announcement-bar {
+    overflow: hidden;
+    font-size: 1.2rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    line-height: 1;
+  }
+
+  .announcement-bar__static {
+    text-align: center;
+    padding: 1.2rem var(--page-margin, 20px);
+  }
+
+  .announcement-bar__link {
+    text-decoration: none;
+    color: currentColor;
+  }
+
+  .announcement-bar__link:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+
+  /* Marquee */
+  .announcement-bar__track {
+    display: flex;
+    width: 100%;
+  }
+
+  .announcement-bar__list {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    padding: 1.2rem 0;
+    animation: marquee-scroll var(--marquee-duration, 20s) linear infinite;
+  }
+
+  .announcement-bar__item {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    padding: 0 0.8rem;
+  }
+
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-100%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .announcement-bar__list {
+      animation: none;
+    }
+    .announcement-bar__track .announcement-bar__list + .announcement-bar__list {
+      display: none;
+    }
+    .announcement-bar__track {
+      justify-content: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Announcement text",
+      "default": "Free UK shipping on orders over £50"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link (optional)"
+    },
+    {
+      "type": "header",
+      "content": "Marquee"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_marquee",
+      "label": "Enable scrolling marquee",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "marquee_speed",
+      "label": "Scroll speed",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "default": 25
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-4"
+    }
+  ]
+}
+{% endschema %}

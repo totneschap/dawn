@@ -1,0 +1,386 @@
+{%- liquid
+  assign content_pos = section.settings.content_position
+  assign overlay_dec = section.settings.overlay_opacity | divided_by: 100.0
+
+  if content_pos contains 'top'
+    assign v_align = 'flex-start'
+  elsif content_pos contains 'bottom'
+    assign v_align = 'flex-end'
+  else
+    assign v_align = 'center'
+  endif
+
+  if content_pos contains 'left'
+    assign h_align = 'flex-start'
+    assign text_align = 'left'
+  elsif content_pos contains 'right'
+    assign h_align = 'flex-end'
+    assign text_align = 'right'
+  else
+    assign h_align = 'center'
+    assign text_align = 'center'
+  endif
+-%}
+
+<div
+  class="hero-banner full-width{% if section.settings.light_text %} hero-banner--light{% endif %}"
+  style="
+    --hero-height: {{ section.settings.height }};
+    --hero-overlay: {{ overlay_dec }};
+    --hero-v: {{ v_align }};
+    --hero-h: {{ h_align }};
+    --hero-text: {{ text_align }};
+  "
+>
+
+  <!-- Media -->
+  <div class="hero-banner__media">
+    {%- if section.settings.image != blank -%}
+      {%- if section.settings.image_mobile != blank -%}
+        {%- assign mobile_img_alt = section.settings.image_mobile.alt | default: section.settings.heading | escape -%}
+        {{ section.settings.image_mobile | image_url: width: 900 | image_tag:
+          widths: '600, 750, 900',
+          loading: 'eager',
+          fetchpriority: 'high',
+          width: section.settings.image_mobile.width,
+          height: section.settings.image_mobile.height,
+          alt: mobile_img_alt,
+          class: 'hero-banner__img hero-banner__img--mobile'
+        }}
+      {%- endif -%}
+      {%- assign hero_img_alt = section.settings.image.alt | default: section.settings.heading | escape -%}
+      {%- assign hero_desktop_class = 'hero-banner__img hero-banner__img--desktop' -%}
+      {%- if section.settings.image_mobile != blank -%}
+        {%- assign hero_desktop_class = hero_desktop_class | append: ' hero-banner__img--hide-mobile' -%}
+      {%- endif -%}
+      {{ section.settings.image | image_url: width: 2400 | image_tag:
+        widths: '900, 1200, 1600, 2000, 2400',
+        loading: 'eager',
+        fetchpriority: 'high',
+        width: section.settings.image.width,
+        height: section.settings.image.height,
+        alt: hero_img_alt,
+        class: hero_desktop_class
+      }}
+    {%- else -%}
+      <div class="hero-banner__placeholder"></div>
+    {%- endif -%}
+    <div class="hero-banner__overlay"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="hero-banner__inner">
+    <div class="hero-banner__content">
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="hero-banner__subheading">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="hero-banner__heading hero-banner__heading--{{ section.settings.heading_size }}">
+          {{ section.settings.heading }}
+        </h2>
+      {%- endif -%}
+
+      {%- if section.settings.button_1_label != blank or section.settings.button_2_label != blank -%}
+        <div class="hero-banner__buttons">
+          {%- if section.settings.button_1_label != blank -%}
+            <a
+              href="{{ section.settings.button_1_link | default: '#' }}"
+              class="button{% if section.settings.button_1_style == 'outline' %} button--outline{% endif %} hero-banner__btn"
+            >{{ section.settings.button_1_label }}</a>
+          {%- endif -%}
+          {%- if section.settings.button_2_label != blank -%}
+            <a
+              href="{{ section.settings.button_2_link | default: '#' }}"
+              class="button{% if section.settings.button_2_style == 'outline' %} button--outline{% endif %} hero-banner__btn"
+            >{{ section.settings.button_2_label }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+
+</div>
+
+{% stylesheet %}
+
+.hero-banner {
+  position: relative;
+  height: var(--hero-height, 85vh);
+  min-height: 32rem;
+  overflow: hidden;
+  display: flex;
+  align-items: var(--hero-v, center);
+}
+
+/* Media */
+.hero-banner__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-banner__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.hero-banner__img--hide-mobile { display: none; }
+
+@media screen and (min-width: 750px) {
+  .hero-banner__img--hide-mobile { display: block; }
+  .hero-banner__img--mobile     { display: none; }
+}
+
+.hero-banner__placeholder {
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.15);
+}
+
+.hero-banner__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,var(--hero-overlay, 0.3));
+}
+
+/* Inner layout */
+.hero-banner__inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--page-width, 120rem);
+  margin: 0 auto;
+  padding: 5rem var(--page-margin, 2rem);
+  display: flex;
+  justify-content: var(--hero-h, center);
+}
+
+.hero-banner__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  max-width: 64rem;
+  text-align: var(--hero-text, center);
+  align-items: var(--hero-h, center);
+}
+
+/* Text (defaults to theme scheme; --light overrides to white) */
+.hero-banner__subheading {
+  font-size: 1.2rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.hero-banner__heading {
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.hero-banner__heading--small   { font-size: clamp(2.8rem, 4vw, 4.2rem); }
+.hero-banner__heading--medium  { font-size: clamp(4rem,   6vw, 6.4rem); }
+.hero-banner__heading--large   { font-size: clamp(5.6rem, 8vw, 9.6rem); }
+.hero-banner__heading--display { font-size: clamp(7rem,  12vw, 14rem);  }
+
+.hero-banner__buttons {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  justify-content: inherit;
+}
+
+/* Light-text mode */
+.hero-banner--light .hero-banner__subheading,
+.hero-banner--light .hero-banner__heading,
+.hero-banner--light .hero-banner__content {
+  color: #fff;
+}
+
+.hero-banner--light .hero-banner__btn.button {
+  background: #fff;
+  color: #111;
+  border-color: #fff;
+}
+
+.hero-banner--light .hero-banner__btn.button:hover {
+  background: transparent;
+  color: #fff;
+}
+
+.hero-banner--light .hero-banner__btn.button--outline {
+  background: transparent;
+  color: #fff;
+  border-color: #fff;
+}
+
+.hero-banner--light .hero-banner__btn.button--outline:hover {
+  background: #fff;
+  color: #111;
+}
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile image",
+      "info": "Optional. Displayed below 750px. Recommended: portrait crop."
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Image overlay opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 35
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Section height",
+      "options": [
+        { "value": "50vh",  "label": "Small (50vh)" },
+        { "value": "70vh",  "label": "Medium (70vh)" },
+        { "value": "85vh",  "label": "Large (85vh)" },
+        { "value": "100vh", "label": "Full screen (100vh)" }
+      ],
+      "default": "85vh"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "Content position",
+      "options": [
+        { "value": "top-left",     "label": "Top left" },
+        { "value": "top-center",   "label": "Top center" },
+        { "value": "middle-left",  "label": "Middle left" },
+        { "value": "middle-center","label": "Middle center" },
+        { "value": "middle-right", "label": "Middle right" },
+        { "value": "bottom-left",  "label": "Bottom left" },
+        { "value": "bottom-center","label": "Bottom center" }
+      ],
+      "default": "middle-center"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "light_text",
+      "label": "Use light (white) text and buttons",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "New collection"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Made to be worn"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small",   "label": "Small" },
+        { "value": "medium",  "label": "Medium" },
+        { "value": "large",   "label": "Large" },
+        { "value": "display", "label": "Display" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "button_1_label",
+      "label": "Button 1 label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "button_1_link",
+      "label": "Button 1 link"
+    },
+    {
+      "type": "select",
+      "id": "button_1_style",
+      "label": "Button 1 style",
+      "options": [
+        { "value": "filled",  "label": "Filled" },
+        { "value": "outline", "label": "Outline" }
+      ],
+      "default": "filled"
+    },
+    {
+      "type": "text",
+      "id": "button_2_label",
+      "label": "Button 2 label"
+    },
+    {
+      "type": "url",
+      "id": "button_2_link",
+      "label": "Button 2 link"
+    },
+    {
+      "type": "select",
+      "id": "button_2_style",
+      "label": "Button 2 style",
+      "options": [
+        { "value": "filled",  "label": "Filled" },
+        { "value": "outline", "label": "Outline" }
+      ],
+      "default": "outline"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero banner",
+      "settings": {
+        "heading": "Made to be worn",
+        "subheading": "New collection",
+        "button_1_label": "Shop now",
+        "button_1_style": "filled",
+        "light_text": true,
+        "height": "85vh",
+        "content_position": "middle-center"
+      }
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

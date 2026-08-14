@@ -1,0 +1,195 @@
+<div class="accordion-section color-{{ section.settings.color_scheme }}">
+
+  {%- if section.settings.heading != blank or section.settings.subtext != blank -%}
+    <div class="accordion-section__header">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="accordion-section__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subtext != blank -%}
+        <p class="accordion-section__subtext">{{ section.settings.subtext }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="accordion-section__list">
+      {%- for block in section.blocks -%}
+        <details class="accordion-item" {{ block.shopify_attributes }}>
+          <summary class="accordion-item__summary">
+            <span class="accordion-item__question">{{ block.settings.heading }}</span>
+            <span class="accordion-item__icon" aria-hidden="true">
+              {{ 'icon-chevron-down.svg' | inline_asset_content }}
+            </span>
+          </summary>
+          <div class="accordion-item__body rte">
+            {{ block.settings.content }}
+          </div>
+        </details>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+</div>
+
+{% stylesheet %}
+
+.accordion-section {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  padding: var(--section-spacing, 6rem) 0;
+}
+
+.accordion-section__header {
+  max-width: 56rem;
+  margin-bottom: 4rem;
+}
+
+.accordion-section__heading {
+  font-size: clamp(var(--text-h3, 2.8rem), 4vw, var(--text-h2, 3.6rem));
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.accordion-section__subtext {
+  font-size: 1.5rem;
+  opacity: 0.65;
+  margin-top: 1rem;
+  line-height: 1.65;
+  max-width: 48ch;
+}
+
+.accordion-section__list {
+  max-width: 72rem;
+}
+
+.accordion-item {
+  border-top: 1px solid var(--color-border);
+}
+
+.accordion-item:last-child {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.accordion-item__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem 0;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.accordion-item__summary::-webkit-details-marker { display: none; }
+.accordion-item__summary::marker { display: none; }
+
+.accordion-item__question {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.accordion-item__icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.accordion-item__icon svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.accordion-item[open] .accordion-item__icon {
+  transform: rotate(180deg);
+}
+
+.accordion-item__body {
+  padding-bottom: 2.4rem;
+  font-size: 1.45rem;
+  line-height: 1.75;
+  opacity: 0.85;
+}
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Accordion",
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Question",
+          "default": "What is your return policy?"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Answer",
+          "default": "<p>We accept returns within 30 days of purchase. Items must be in original condition.</p>"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Subtext"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accordion",
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {
+            "heading": "What is your return policy?",
+            "content": "<p>We accept returns within 30 days of purchase. Items must be unworn and in original packaging.</p>"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "heading": "How long does shipping take?",
+            "content": "<p>Standard delivery takes 3–5 working days. Express next-day delivery is available at checkout.</p>"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "heading": "Do you ship internationally?",
+            "content": "<p>Yes, we ship worldwide. International delivery times vary by destination.</p>"
+          }
+        }
+      ],
+      "settings": {
+        "heading": "Frequently asked questions",
+        "color_scheme": "scheme-1"
+      }
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

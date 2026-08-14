@@ -1,0 +1,28 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "tagline": "Refined fashion for the modern woman.",
+        "show_newsletter": true,
+        "newsletter_heading": "Join the edit",
+        "newsletter_subtext": "Be the first to know about new collections and exclusive offers.",
+        "newsletter_placeholder": "Your email address",
+        "newsletter_button": "Subscribe",
+        "newsletter_success": "You're subscribed — thank you!",
+        "menu_1_heading": "Shop",
+        "menu_2_heading": "About",
+        "menu_3_heading": "Help",
+        "show_follow_on_shop": true,
+        "show_payment_icons": true,
+        "newsletter_color_scheme": "scheme-3",
+        "color_scheme": "scheme-4"
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

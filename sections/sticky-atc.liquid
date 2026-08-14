@@ -1,0 +1,247 @@
+{%- if product != blank -%}
+<div
+  class="sticky-atc color-{{ section.settings.color_scheme }}"
+  id="sticky-atc-{{ section.id }}"
+  aria-hidden="true"
+>
+  <div class="sticky-atc__inner">
+
+    <div class="sticky-atc__product">
+      {%- if product.featured_image -%}
+        {%- assign atc_img_alt = product.title | escape -%}
+        {{ product.featured_image | image_url: width: 96 | image_tag:
+          loading: 'lazy',
+          width: 96,
+          height: 96,
+          alt: atc_img_alt,
+          class: 'sticky-atc__img'
+        }}
+      {%- endif -%}
+
+      <div class="sticky-atc__meta">
+        <p class="sticky-atc__title">{{ product.title }}</p>
+        {%- unless product.has_only_default_variant -%}
+          <p class="sticky-atc__variant" id="sticky-atc-variant-{{ section.id }}">
+            {{- product.selected_or_first_available_variant.title -}}
+          </p>
+        {%- endunless -%}
+      </div>
+
+      <p
+        class="sticky-atc__price"
+        id="sticky-atc-price-{{ section.id }}"
+        data-money-format="{{ shop.money_format | escape }}"
+      >{{ product.selected_or_first_available_variant.price | money }}</p>
+    </div>
+
+    <button
+      type="button"
+      class="button sticky-atc__btn"
+      id="sticky-atc-btn-{{ section.id }}"
+      {%- unless product.selected_or_first_available_variant.available %} disabled{%- endunless -%}
+    >
+      {%- if product.selected_or_first_available_variant.available -%}
+        Add to cart
+      {%- else -%}
+        Sold out
+      {%- endif -%}
+    </button>
+
+  </div>
+</div>
+{%- endif -%}
+
+{% stylesheet %}
+
+.sticky-atc {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 150;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  padding: 1.2rem var(--page-margin, 2rem);
+}
+
+.sticky-atc[aria-hidden="false"] {
+  transform: translateY(0);
+}
+
+.sticky-atc__inner {
+  max-width: var(--page-width, 1200px);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2.4rem;
+  justify-content: space-between;
+}
+
+.sticky-atc__product {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.sticky-atc__img {
+  width: 5.6rem;
+  height: 5.6rem;
+  object-fit: cover;
+  flex-shrink: 0;
+  border-radius: var(--style-card-radius, 0);
+}
+
+.sticky-atc__meta {
+  min-width: 0;
+  flex: 1;
+}
+
+.sticky-atc__title {
+  font-size: 1.4rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sticky-atc__variant {
+  font-size: 1.2rem;
+  opacity: 0.6;
+  margin-top: 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sticky-atc__price {
+  font-size: 1.5rem;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sticky-atc__btn {
+  flex-shrink: 0;
+  padding: 1.2rem 2.8rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+.sticky-atc__btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media screen and (max-width: 479px) {
+  .sticky-atc__img,
+  .sticky-atc__price { display: none; }
+}
+
+{% endstylesheet %}
+
+{% javascript %}
+(function () {
+  var bar     = document.getElementById('sticky-atc-{{ section.id }}');
+  var btn     = document.getElementById('sticky-atc-btn-{{ section.id }}');
+  var priceEl = document.getElementById('sticky-atc-price-{{ section.id }}');
+  var varEl   = document.getElementById('sticky-atc-variant-{{ section.id }}');
+
+  if (!bar || !btn) return;
+
+  /* Watch main ATC button — show bar when it scrolls out of view */
+  var mainAtc = document.querySelector('.product__atc');
+  if (mainAtc) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        bar.setAttribute('aria-hidden', entry.isIntersecting ? 'true' : 'false');
+      });
+    }, { threshold: 0.5 });
+    observer.observe(mainAtc);
+  }
+
+  /* Sync price + variant label when option changes */
+  document.addEventListener('variant:changed', function (e) {
+    var v = e.detail && e.detail.variant;
+    if (!v) return;
+
+    if (priceEl) {
+      priceEl.textContent = fmtMoney(v.price, priceEl.dataset.moneyFormat);
+    }
+    if (varEl) {
+      varEl.textContent = v.title;
+    }
+    btn.disabled = !v.available;
+    btn.textContent = v.available ? 'Add to cart' : 'Sold out';
+  });
+
+  /* Click: add current variant to cart */
+  btn.addEventListener('click', function () {
+    var variantInput = document.querySelector('input[id^="variant-id-"]');
+    var qtyInput     = document.querySelector('input[id^="qty-"]');
+    if (!variantInput) return;
+
+    var origText = btn.textContent;
+    btn.disabled  = true;
+    btn.textContent = 'Adding…';
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: JSON.stringify({
+        id: parseInt(variantInput.value, 10),
+        quantity: qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1
+      })
+    })
+      .then(function (r) {
+        if (!r.ok) return r.json().then(function (d) { throw new Error(d.description || 'Error'); });
+        return fetch('/cart.js');
+      })
+      .then(function (r) { return r.json(); })
+      .then(function (cart) {
+        document.dispatchEvent(new CustomEvent('cart:updated', { detail: { item_count: cart.item_count } }));
+        document.dispatchEvent(new CustomEvent('cart:open-drawer'));
+        btn.textContent = 'Added!';
+        setTimeout(function () { btn.textContent = origText; btn.disabled = false; }, 1500);
+      })
+      .catch(function () {
+        btn.textContent = 'Error — try again';
+        setTimeout(function () { btn.textContent = origText; btn.disabled = false; }, 2000);
+      });
+  });
+
+  function fmtMoney(cents, format) {
+    if (window.Shopify && Shopify.formatMoney && format) {
+      return Shopify.formatMoney(cents, format);
+    }
+    return '£' + (cents / 100).toFixed(2);
+  }
+})();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Sticky add to cart",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

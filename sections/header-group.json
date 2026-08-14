@@ -1,0 +1,30 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "text": "Free UK shipping on orders over £50",
+        "enable_marquee": true,
+        "marquee_speed": 25,
+        "color_scheme": "scheme-4"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "color_scheme": "scheme-3"
+      }
+    },
+    "predictive-search": {
+      "type": "predictive-search",
+      "settings": {}
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header",
+    "predictive-search"
+  ]
+}

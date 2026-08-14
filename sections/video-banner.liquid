@@ -1,0 +1,304 @@
+{%- liquid
+  assign overlay_dec = section.settings.overlay_opacity | divided_by: 100.0
+  assign has_video   = false
+  if section.settings.video != null
+    assign has_video = true
+  endif
+-%}
+
+<div
+  class="video-banner full-width{% if section.settings.light_text %} video-banner--light{% endif %}"
+  style="
+    --vb-height: {{ section.settings.height }};
+    --vb-overlay: {{ overlay_dec }};
+  "
+>
+
+  <!-- Media -->
+  <div class="video-banner__media">
+
+    {%- if has_video -%}
+      {{- section.settings.video | video_tag:
+        autoplay: true,
+        loop: true,
+        muted: true,
+        playsinline: true,
+        class: 'video-banner__video'
+      -}}
+    {%- endif -%}
+
+    {%- if section.settings.fallback_image != blank -%}
+      <img
+        src="{{ section.settings.fallback_image | image_url: width: 2000 }}"
+        alt="{{ section.settings.fallback_image.alt | default: section.settings.heading | escape }}"
+        loading="eager"
+        class="video-banner__fallback{% if has_video %} video-banner__fallback--hidden{% endif %}"
+        width="{{ section.settings.fallback_image.width }}"
+        height="{{ section.settings.fallback_image.height }}"
+      >
+    {%- elsif has_video == false -%}
+      <div class="video-banner__placeholder"></div>
+    {%- endif -%}
+
+    <div class="video-banner__overlay"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="video-banner__inner">
+    <div class="video-banner__content">
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="video-banner__subheading">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="video-banner__heading video-banner__heading--{{ section.settings.heading_size }}">
+          {{ section.settings.heading }}
+        </h2>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank -%}
+        <a
+          href="{{ section.settings.button_link | default: '#' }}"
+          class="button{% if section.settings.button_style == 'outline' %} button--outline{% endif %} video-banner__btn"
+        >{{ section.settings.button_label }}</a>
+      {%- endif -%}
+
+    </div>
+  </div>
+
+</div>
+
+{% stylesheet %}
+
+.video-banner {
+  position: relative;
+  height: var(--vb-height, 80vh);
+  min-height: 32rem;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Media */
+.video-banner__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.video-banner__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.video-banner__fallback {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: absolute;
+  inset: 0;
+}
+
+.video-banner__fallback--hidden { display: none; }
+
+.video-banner__placeholder {
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.2);
+}
+
+.video-banner__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,var(--vb-overlay, 0.35));
+}
+
+/* Content */
+.video-banner__inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--page-width, 120rem);
+  margin: 0 auto;
+  padding: 5rem var(--page-margin, 2rem);
+  display: flex;
+  justify-content: center;
+}
+
+.video-banner__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 60rem;
+  text-align: center;
+  align-items: center;
+}
+
+.video-banner__subheading {
+  font-size: 1.2rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.video-banner__heading {
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.video-banner__heading--small  { font-size: clamp(2.8rem, 4vw, 4.2rem); }
+.video-banner__heading--medium { font-size: clamp(4rem,   6vw, 6.4rem); }
+.video-banner__heading--large  { font-size: clamp(5.6rem, 8vw, 9.6rem); }
+
+/* Light text */
+.video-banner--light .video-banner__subheading,
+.video-banner--light .video-banner__heading,
+.video-banner--light .video-banner__content {
+  color: #fff;
+}
+
+.video-banner--light .video-banner__btn.button {
+  background: #fff;
+  color: #111;
+  border-color: #fff;
+}
+
+.video-banner--light .video-banner__btn.button:hover {
+  background: transparent;
+  color: #fff;
+}
+
+.video-banner--light .video-banner__btn.button--outline {
+  background: transparent;
+  color: #fff;
+  border-color: #fff;
+}
+
+.video-banner--light .video-banner__btn.button--outline:hover {
+  background: #fff;
+  color: #111;
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .video-banner__video { display: none; }
+  .video-banner__fallback--hidden { display: block; }
+}
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Video banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Upload a video to Shopify. Short, looping clips work best (5–15 seconds)."
+    },
+    {
+      "type": "image_picker",
+      "id": "fallback_image",
+      "label": "Fallback image",
+      "info": "Shown on mobile if video doesn't load, and for reduced-motion preferences."
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 35
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Section height",
+      "options": [
+        { "value": "50vh",  "label": "Small (50vh)" },
+        { "value": "70vh",  "label": "Medium (70vh)" },
+        { "value": "85vh",  "label": "Large (85vh)" },
+        { "value": "100vh", "label": "Full screen (100vh)" }
+      ],
+      "default": "70vh"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "light_text",
+      "label": "Use light (white) text",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The new season"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small",  "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large",  "label": "Large" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        { "value": "filled",  "label": "Filled" },
+        { "value": "outline", "label": "Outline" }
+      ],
+      "default": "outline"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video banner",
+      "settings": {
+        "heading": "The new season",
+        "heading_size": "large",
+        "light_text": true,
+        "height": "80vh"
+      }
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

@@ -1,0 +1,157 @@
+<div class="rich-text full-width color-{{ section.settings.color_scheme }}">
+  <div class="rich-text__inner rich-text__inner--{{ section.settings.content_width }}">
+
+    {%- if section.settings.label != blank -%}
+      <p class="rich-text__label">{{ section.settings.label }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.heading != blank -%}
+      <h2 class="rich-text__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.content != blank -%}
+      <div class="rich-text__content rte">{{ section.settings.content }}</div>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank -%}
+      <a
+        href="{{ section.settings.button_link | default: '#' }}"
+        class="button{% if section.settings.button_style == 'outline' %} button--outline{% endif %} rich-text__btn"
+      >{{ section.settings.button_label }}</a>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% stylesheet %}
+
+.rich-text {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  padding: var(--section-spacing, 6rem) var(--page-margin, 2rem);
+}
+
+.rich-text__inner {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+.rich-text__inner--narrow {
+  max-width: 72rem;
+  text-align: center;
+  align-items: center;
+}
+
+.rich-text__inner--wide {
+  max-width: var(--page-width, 1200px);
+}
+
+.rich-text__label {
+  font-size: 1.1rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.rich-text__heading {
+  font-size: clamp(var(--text-h3, 2.8rem), 4vw, var(--text-h2, 3.6rem));
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.rich-text__content {
+  font-size: 1.5rem;
+  line-height: 1.8;
+  max-width: 65ch;
+}
+
+.rich-text__inner--narrow .rich-text__content {
+  max-width: none;
+}
+
+.rich-text__btn { margin-top: 0.8rem; }
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Rich text",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Content width",
+      "options": [
+        { "value": "narrow", "label": "Narrow (centred)" },
+        { "value": "wide",   "label": "Wide" }
+      ],
+      "default": "narrow"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        { "value": "filled",  "label": "Filled" },
+        { "value": "outline", "label": "Outline" }
+      ],
+      "default": "outline"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich text",
+      "settings": {
+        "heading": "Tell your story",
+        "content": "<p>Share something about your brand, your values, or your story. This section works well for introductions, editorial content, or any copy-heavy message you want to highlight.</p>",
+        "content_width": "narrow",
+        "color_scheme": "scheme-1"
+      }
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

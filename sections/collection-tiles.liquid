@@ -1,0 +1,228 @@
+<div class="collection-tiles full-width">
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="collection-tiles__grid" style="--ct-cols: {{ section.blocks.size }};">
+
+      {%- for block in section.blocks -%}
+        {%- assign tile_col = block.settings.collection -%}
+
+        <a
+          href="{{ tile_col.url | default: block.settings.link | default: '#' }}"
+          class="collection-tile"
+          {{ block.shopify_attributes }}
+        >
+          <div class="collection-tile__media">
+
+            {%- if block.settings.image != blank -%}
+              {%- assign tile_alt = block.settings.image.alt | default: block.settings.title | escape -%}
+              {{ block.settings.image | image_url: width: 1600 | image_tag:
+                widths: '750, 1000, 1400, 1600',
+                loading: 'lazy',
+                width: block.settings.image.width,
+                height: block.settings.image.height,
+                alt: tile_alt,
+                class: 'collection-tile__img'
+              }}
+            {%- elsif tile_col != blank and tile_col.featured_image != blank -%}
+              {%- assign tile_alt = tile_col.featured_image.alt | default: tile_col.title | escape -%}
+              {{ tile_col.featured_image | image_url: width: 1600 | image_tag:
+                widths: '750, 1000, 1400, 1600',
+                loading: 'lazy',
+                width: tile_col.featured_image.width,
+                height: tile_col.featured_image.height,
+                alt: tile_alt,
+                class: 'collection-tile__img'
+              }}
+            {%- else -%}
+              <div class="collection-tile__placeholder"></div>
+            {%- endif -%}
+
+            <div class="collection-tile__overlay"></div>
+
+            <div class="collection-tile__content">
+              <h2 class="collection-tile__title">
+                {{- block.settings.title | default: tile_col.title -}}
+              </h2>
+              {%- if block.settings.link_label != blank -%}
+                <span class="collection-tile__cta">{{ block.settings.link_label }}</span>
+              {%- endif -%}
+            </div>
+
+          </div>
+        </a>
+      {%- endfor -%}
+
+    </div>
+  {%- endif -%}
+
+</div>
+
+{% stylesheet %}
+
+.collection-tiles {
+  /* full-width — no section padding, tiles touch the edges */
+}
+
+.collection-tiles__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 750px) {
+  .collection-tiles__grid {
+    grid-template-columns: repeat(var(--ct-cols, 2), 1fr);
+  }
+}
+
+/* Individual tile */
+.collection-tile {
+  display: block;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.collection-tile__media {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+@media screen and (min-width: 750px) {
+  .collection-tile__media {
+    aspect-ratio: auto;
+    height: 72vh;
+    min-height: 52rem;
+  }
+}
+
+.collection-tile__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.7s ease;
+}
+
+.collection-tile:hover .collection-tile__img {
+  transform: scale(1.04);
+}
+
+.collection-tile__placeholder {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.12);
+}
+
+/* Overlay */
+.collection-tile__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.05) 55%);
+  transition: background 0.4s ease;
+}
+
+.collection-tile:hover .collection-tile__overlay {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.1) 60%);
+}
+
+/* Content */
+.collection-tile__content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 3.2rem;
+  color: #fff;
+}
+
+.collection-tile__title {
+  font-family: var(--font-heading--family, serif);
+  font-size: clamp(2.4rem, 3.5vw, 4.4rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: var(--font-heading--letter-spacing, 0);
+}
+
+.collection-tile__cta {
+  display: inline-block;
+  margin-top: 1.4rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  padding-bottom: 0.2rem;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.collection-tile:hover .collection-tile__cta {
+  color: #fff;
+  border-color: #fff;
+}
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection tiles",
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Tile",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Overrides the collection featured image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "info": "Overrides the collection title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Used if no collection is selected"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label",
+          "default": "Shop now"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Collection tiles",
+      "blocks": [
+        {
+          "type": "tile",
+          "settings": { "title": "Rings", "link_label": "Shop rings" }
+        },
+        {
+          "type": "tile",
+          "settings": { "title": "Earrings", "link_label": "Shop earrings" }
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

@@ -1,0 +1,362 @@
+{% layout none %}
+
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    {%- render 'css-variables' -%}
+    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
+    {%- render 'meta-tags' -%}
+    {%- unless settings.type_heading_font.system? -%}
+      {{ settings.type_heading_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {%- endunless -%}
+    {%- unless settings.type_body_font.system? -%}
+      {{ settings.type_body_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {%- endunless -%}
+
+    {% style %}
+      /* ================================================
+         GIFT CARD PAGE
+         ================================================ */
+
+      *,
+      *::before,
+      *::after { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background-color: var(--color-background);
+        color: var(--color-text);
+        font-family: var(--font-body--family, sans-serif);
+        font-size: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 2rem;
+      }
+
+      .gc-page {
+        width: 100%;
+        max-width: 52rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4rem;
+        text-align: center;
+      }
+
+      /* ---- Logo ---- */
+      .gc-logo__img {
+        max-width: 16rem;
+        height: auto;
+        display: block;
+      }
+
+      .gc-logo__name {
+        font-family: var(--font-heading--family, serif);
+        font-size: 2.4rem;
+        font-weight: 400;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      /* ---- Card visual ---- */
+      .gc-card {
+        width: 100%;
+        max-width: 36rem;
+        aspect-ratio: 85.6 / 53.98; /* ISO/IEC 7810 ID-1 */
+        background: var(--color-text);
+        color: var(--color-background);
+        padding: 2.8rem 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .gc-card::before {
+        content: '';
+        position: absolute;
+        right: -4rem;
+        top: -4rem;
+        width: 16rem;
+        height: 16rem;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.06);
+      }
+
+      .gc-card::after {
+        content: '';
+        position: absolute;
+        right: 2rem;
+        bottom: -6rem;
+        width: 20rem;
+        height: 20rem;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.04);
+      }
+
+      .gc-card__label {
+        font-size: 1.1rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        opacity: 0.6;
+      }
+
+      .gc-card__balance {
+        font-family: var(--font-heading--family, serif);
+        font-size: clamp(3.6rem, 8vw, 5.2rem);
+        font-weight: 400;
+        line-height: 1;
+      }
+
+      .gc-card__shop-name {
+        font-size: 1.2rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        opacity: 0.7;
+      }
+
+      /* ---- Status notices ---- */
+      .gc-notice {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        font-size: 1.3rem;
+        opacity: 0.7;
+      }
+
+      .gc-notice--expired {
+        color: #a93226;
+        opacity: 1;
+        font-weight: 500;
+      }
+
+      /* ---- QR code ---- */
+      .gc-qr {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.2rem;
+      }
+
+      .gc-qr__img {
+        width: 14rem;
+        height: 14rem;
+        display: block;
+      }
+
+      .gc-qr__label {
+        font-size: 1.1rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        opacity: 0.5;
+      }
+
+      /* ---- Code ---- */
+      .gc-code-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.2rem;
+      }
+
+      .gc-code-label {
+        font-size: 1.1rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        opacity: 0.5;
+      }
+
+      .gc-code {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: clamp(1.6rem, 4vw, 2.2rem);
+        letter-spacing: 0.2em;
+        word-break: break-all;
+      }
+
+      .gc-copy-btn {
+        background: none;
+        border: 1px solid var(--color-border);
+        color: var(--color-text);
+        font-family: var(--font-body--family, sans-serif);
+        font-size: 1.2rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 0.8rem 2rem;
+        cursor: pointer;
+        transition: background-color 0.15s ease, color 0.15s ease;
+      }
+
+      .gc-copy-btn:hover {
+        background: var(--color-text);
+        color: var(--color-background);
+      }
+
+      /* ---- Instructions ---- */
+      .gc-instructions {
+        font-size: 1.4rem;
+        line-height: 1.7;
+        opacity: 0.65;
+        max-width: 36rem;
+      }
+
+      /* ---- Actions ---- */
+      .gc-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.2rem;
+        width: 100%;
+      }
+
+      .gc-apple-wallet img {
+        height: 5rem;
+        width: auto;
+        display: block;
+      }
+
+      .gc-print-btn {
+        background: none;
+        border: none;
+        font-family: var(--font-body--family, sans-serif);
+        font-size: 1.2rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-decoration: underline;
+        text-underline-offset: 0.3em;
+        color: var(--color-text);
+        opacity: 0.5;
+        cursor: pointer;
+        padding: 0;
+        transition: opacity 0.15s ease;
+      }
+
+      .gc-print-btn:hover { opacity: 1; }
+
+      /* ---- Print styles ---- */
+      @media print {
+        .gc-actions { display: none; }
+      }
+    {% endstyle %}
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="color-scheme-1">
+    <main class="gc-page">
+
+      <!-- Logo -->
+      <div class="gc-logo">
+        {%- if settings.logo -%}
+          {{ settings.logo | image_url: width: 300 | image_tag:
+            alt: shop.name,
+            class: 'gc-logo__img',
+            loading: 'eager'
+          }}
+        {%- else -%}
+          <p class="gc-logo__name">{{ shop.name }}</p>
+        {%- endif -%}
+      </div>
+
+      <!-- Card visual -->
+      <div class="gc-card">
+        <p class="gc-card__label">Gift card</p>
+        <p class="gc-card__balance">{{ gift_card.balance | money }}</p>
+        <p class="gc-card__shop-name">{{ shop.name }}</p>
+      </div>
+
+      <!-- Status notices -->
+      <div class="gc-notice">
+        {%- if gift_card.enabled == false or gift_card.expired -%}
+          <p class="gc-notice--expired">{{ 'gift_card.expired' | t }}</p>
+        {%- endif -%}
+        {%- if gift_card.expires_on -%}
+          {%- assign expires_on = gift_card.expires_on | date: '%B %e, %Y' -%}
+          <p>{{ 'gift_card.expires_on' | t: expires_on: expires_on }}</p>
+        {%- endif -%}
+      </div>
+
+      <!-- QR code -->
+      <div class="gc-qr">
+        <img
+          src="{{ gift_card.qr_identifier }}"
+          alt="QR code for this gift card"
+          width="160"
+          height="160"
+          class="gc-qr__img"
+        >
+        <p class="gc-qr__label">Scan at checkout</p>
+      </div>
+
+      <!-- Code -->
+      <div class="gc-code-wrap">
+        <p class="gc-code-label">{{ 'gift_card.use_at_checkout' | t }}</p>
+        <samp
+          class="gc-code"
+          id="gift-card-code"
+          data-code="{{ gift_card.code }}"
+        >{{ gift_card.code | format_code }}</samp>
+        <button type="button" class="gc-copy-btn" id="copy-code-btn">
+          Copy code
+        </button>
+      </div>
+
+      <!-- Actions -->
+      <div class="gc-actions">
+        {%- if gift_card.pass_url -%}
+          <a href="{{ gift_card.pass_url }}" class="gc-apple-wallet">
+            <img
+              src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}"
+              alt="{{ 'gift_card.add_to_apple_wallet' | t }}"
+              width="200"
+              height="60"
+            >
+          </a>
+        {%- endif -%}
+        <button type="button" class="gc-print-btn" id="print-btn">
+          Print this gift card
+        </button>
+      </div>
+
+    </main>
+
+    <script>
+      (function () {
+        /* Copy code */
+        var copyBtn = document.getElementById('copy-code-btn');
+        var codeEl  = document.getElementById('gift-card-code');
+
+        if (copyBtn && codeEl) {
+          copyBtn.addEventListener('click', function () {
+            var code = codeEl.dataset.code || codeEl.textContent;
+            if (navigator.clipboard) {
+              navigator.clipboard.writeText(code).then(function () {
+                copyBtn.textContent = 'Copied!';
+                setTimeout(function () { copyBtn.textContent = 'Copy code'; }, 2500);
+              });
+            } else {
+              /* Fallback for older browsers */
+              var tmp = document.createElement('textarea');
+              tmp.value = code;
+              document.body.appendChild(tmp);
+              tmp.select();
+              document.execCommand('copy');
+              document.body.removeChild(tmp);
+              copyBtn.textContent = 'Copied!';
+              setTimeout(function () { copyBtn.textContent = 'Copy code'; }, 2500);
+            }
+          });
+        }
+
+        /* Print */
+        var printBtn = document.getElementById('print-btn');
+        if (printBtn) {
+          printBtn.addEventListener('click', function () { window.print(); });
+        }
+      })();
+    </script>
+  </body>
+</html>

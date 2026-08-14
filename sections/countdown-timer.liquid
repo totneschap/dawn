@@ -1,0 +1,295 @@
+<div
+  class="countdown full-width color-{{ section.settings.color_scheme }}"
+  data-countdown-target="{{ section.settings.target_date }}"
+  id="countdown-{{ section.id }}"
+>
+
+  {%- if section.settings.label != blank -%}
+    <p class="countdown__label">{{ section.settings.label }}</p>
+  {%- endif -%}
+
+  {%- if section.settings.heading != blank -%}
+    <h2 class="countdown__heading">{{ section.settings.heading }}</h2>
+  {%- endif -%}
+
+  <!-- Timer units (shown while counting) -->
+  <div class="countdown__units" id="countdown-units-{{ section.id }}">
+
+    {%- if section.settings.show_days -%}
+      <div class="countdown__unit">
+        <span class="countdown__value" data-days>00</span>
+        <span class="countdown__unit-label">Days</span>
+      </div>
+      <span class="countdown__colon" aria-hidden="true">:</span>
+    {%- endif -%}
+
+    {%- if section.settings.show_hours -%}
+      <div class="countdown__unit">
+        <span class="countdown__value" data-hours>00</span>
+        <span class="countdown__unit-label">Hours</span>
+      </div>
+      <span class="countdown__colon" aria-hidden="true">:</span>
+    {%- endif -%}
+
+    {%- if section.settings.show_minutes -%}
+      <div class="countdown__unit">
+        <span class="countdown__value" data-minutes>00</span>
+        <span class="countdown__unit-label">Minutes</span>
+      </div>
+      <span class="countdown__colon" aria-hidden="true">:</span>
+    {%- endif -%}
+
+    <div class="countdown__unit">
+      <span class="countdown__value" data-seconds>00</span>
+      <span class="countdown__unit-label">Seconds</span>
+    </div>
+
+  </div>
+
+  <!-- Expired message (hidden until timer ends) -->
+  {%- if section.settings.expired_text != blank -%}
+    <p class="countdown__expired" id="countdown-expired-{{ section.id }}" hidden>
+      {{ section.settings.expired_text }}
+    </p>
+  {%- endif -%}
+
+  {%- if section.settings.button_label != blank -%}
+    <div class="countdown__cta">
+      <a
+        href="{{ section.settings.button_link | default: '#' }}"
+        class="button{% if section.settings.button_style == 'outline' %} button--outline{% endif %}"
+      >{{ section.settings.button_label }}</a>
+    </div>
+  {%- endif -%}
+
+</div>
+
+{% stylesheet %}
+
+.countdown {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  padding: var(--section-spacing, 6rem) var(--page-margin, 2rem);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.4rem;
+}
+
+.countdown__label {
+  font-size: 1.1rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.countdown__heading {
+  font-size: clamp(var(--text-h3, 2.8rem), 4vw, var(--text-h2, 3.6rem));
+  font-weight: 400;
+  line-height: 1.1;
+  max-width: 40rem;
+}
+
+/* Units row */
+.countdown__units {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.countdown__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 7rem;
+}
+
+.countdown__value {
+  font-family: var(--font-heading--family, serif);
+  font-size: clamp(3.6rem, 8vw, 6.4rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  tabular-nums: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown__unit-label {
+  font-size: 1rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.45;
+}
+
+.countdown__colon {
+  font-family: var(--font-heading--family, serif);
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 300;
+  opacity: 0.3;
+  margin-bottom: 2rem;
+  align-self: flex-start;
+  padding-top: 0.2em;
+}
+
+/* Expired */
+.countdown__expired {
+  font-size: 1.8rem;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.countdown__cta { margin-top: 0.4rem; }
+
+{% endstylesheet %}
+
+{% javascript %}
+(function () {
+  var section     = document.getElementById('countdown-{{ section.id }}');
+  var unitsEl     = document.getElementById('countdown-units-{{ section.id }}');
+  var expiredEl   = document.getElementById('countdown-expired-{{ section.id }}');
+
+  if (!section) return;
+
+  var targetStr = section.dataset.countdownTarget;
+  if (!targetStr) return;
+
+  var target = new Date(targetStr);
+  if (isNaN(target.getTime())) return;
+
+  var daysEl  = section.querySelector('[data-days]');
+  var hoursEl = section.querySelector('[data-hours]');
+  var minsEl  = section.querySelector('[data-minutes]');
+  var secsEl  = section.querySelector('[data-seconds]');
+
+  function pad(n) { return n < 10 ? '0' + n : String(n); }
+
+  function tick() {
+    var diff = target - Date.now();
+
+    if (diff <= 0) {
+      if (unitsEl)   unitsEl.setAttribute('hidden', '');
+      if (expiredEl) expiredEl.removeAttribute('hidden');
+      return;
+    }
+
+    var totalSecs = Math.floor(diff / 1000);
+    var d  = Math.floor(totalSecs / 86400);
+    var h  = Math.floor((totalSecs % 86400) / 3600);
+    var m  = Math.floor((totalSecs % 3600) / 60);
+    var s  = totalSecs % 60;
+
+    if (daysEl)  daysEl.textContent  = pad(d);
+    if (hoursEl) hoursEl.textContent = pad(h);
+    if (minsEl)  minsEl.textContent  = pad(m);
+    if (secsEl)  secsEl.textContent  = pad(s);
+
+    setTimeout(tick, 1000);
+  }
+
+  tick();
+})();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Countdown timer",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Timer"
+    },
+    {
+      "type": "text",
+      "id": "target_date",
+      "label": "End date and time",
+      "info": "Format: YYYY-MM-DD HH:MM:SS (e.g. 2025-12-25 00:00:00). Uses the browser's local time.",
+      "default": "2025-12-25 00:00:00"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_days",
+      "label": "Show days",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hours",
+      "label": "Show hours",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_minutes",
+      "label": "Show minutes",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Sale ends in"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "expired_text",
+      "label": "Expired message",
+      "default": "The sale has ended."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        { "value": "filled",  "label": "Filled" },
+        { "value": "outline", "label": "Outline" }
+      ],
+      "default": "filled"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Countdown timer",
+      "settings": {
+        "label": "Sale ends in",
+        "target_date": "2025-12-25 00:00:00",
+        "show_days": true,
+        "show_hours": true,
+        "show_minutes": true,
+        "color_scheme": "scheme-1"
+      }
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

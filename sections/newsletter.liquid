@@ -1,0 +1,274 @@
+<div class="newsletter full-width color-{{ section.settings.color_scheme }}">
+  <div class="newsletter__inner newsletter__inner--{{ section.settings.layout }}">
+
+    <div class="newsletter__content">
+      {%- if section.settings.label != blank -%}
+        <p class="newsletter__label">{{ section.settings.label }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="newsletter__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.subtext != blank -%}
+        <p class="newsletter__subtext">{{ section.settings.subtext }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="newsletter__form-wrap">
+      {%- form 'customer', id: 'newsletter-form-{{ section.id }}', class: 'newsletter__form' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+
+        {%- if form.posted_successfully? -%}
+          <p class="newsletter__success" role="status">
+            {{ section.settings.success_message | default: 'Thanks for subscribing!' }}
+          </p>
+        {%- else -%}
+          {%- if form.errors -%}
+            <p class="newsletter__error" role="alert">{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}</p>
+          {%- endif -%}
+
+          <div class="newsletter__input-wrap">
+            <label for="newsletter-email-{{ section.id }}" class="visually-hidden">
+              Email address
+            </label>
+            <input
+              type="email"
+              name="contact[email]"
+              id="newsletter-email-{{ section.id }}"
+              class="newsletter__input"
+              placeholder="{{ section.settings.placeholder | default: 'Your email address' }}"
+              autocomplete="email"
+              required
+              value="{{ form.value }}"
+            >
+            <button type="submit" class="button newsletter__submit">
+              {{ section.settings.button_label | default: 'Subscribe' }}
+            </button>
+          </div>
+
+          {%- if section.settings.disclaimer != blank -%}
+            <p class="newsletter__disclaimer">{{ section.settings.disclaimer }}</p>
+          {%- endif -%}
+        {%- endif -%}
+
+      {%- endform -%}
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+
+.newsletter {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  padding: var(--section-spacing, 6rem) var(--page-margin, 2rem);
+}
+
+.newsletter__inner {
+  max-width: var(--page-width, 1200px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+/* Stacked: centred single column */
+.newsletter__inner--stacked {
+  align-items: center;
+  text-align: center;
+  max-width: 64rem;
+}
+
+/* Side by side: content left, form right */
+@media screen and (min-width: 750px) {
+  .newsletter__inner--side-by-side {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6rem;
+  }
+
+  .newsletter__inner--side-by-side .newsletter__content {
+    flex: 1;
+    max-width: 48rem;
+  }
+
+  .newsletter__inner--side-by-side .newsletter__form-wrap {
+    flex: 0 0 40rem;
+  }
+}
+
+/* Content */
+.newsletter__label {
+  font-size: 1.1rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin-bottom: 1.2rem;
+}
+
+.newsletter__heading {
+  font-size: clamp(var(--text-h3, 2.8rem), 4vw, var(--text-h2, 3.6rem));
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.newsletter__subtext {
+  font-size: 1.5rem;
+  opacity: 0.65;
+  line-height: 1.65;
+  margin-top: 1rem;
+  max-width: 50ch;
+}
+
+.newsletter__inner--stacked .newsletter__subtext {
+  max-width: none;
+}
+
+/* Form */
+.newsletter__input-wrap {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.newsletter__input {
+  flex: 1;
+  min-width: 0;
+  padding: 1.4rem 1.6rem;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  font-family: var(--font-body--family, sans-serif);
+  color: var(--color-text);
+}
+
+.newsletter__input::placeholder {
+  opacity: 0.45;
+}
+
+.newsletter__input:focus {
+  outline: none;
+}
+
+.newsletter__submit {
+  flex-shrink: 0;
+  border-radius: 0;
+  border-left: 1px solid var(--color-border);
+  padding: 1.4rem 2.4rem;
+  font-size: 1.2rem;
+}
+
+.newsletter__disclaimer {
+  font-size: 1.1rem;
+  opacity: 0.45;
+  margin-top: 1rem;
+  line-height: 1.5;
+}
+
+.newsletter__success {
+  font-size: 1.5rem;
+  line-height: 1.6;
+  padding: 1.6rem;
+  border: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.newsletter__error {
+  font-size: 1.3rem;
+  color: #a93226;
+  margin-bottom: 1rem;
+}
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-3"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "stacked",       "label": "Stacked (centred)" },
+        { "value": "side-by-side",  "label": "Side by side" }
+      ],
+      "default": "stacked"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join our community"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Be the first to know about new arrivals, exclusive offers, and our latest stories."
+    },
+    {
+      "type": "header",
+      "content": "Form"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Input placeholder",
+      "default": "Your email address"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thanks for subscribing — watch your inbox!"
+    },
+    {
+      "type": "text",
+      "id": "disclaimer",
+      "label": "Disclaimer text",
+      "info": "Small print beneath the form. Optional.",
+      "default": "By subscribing you agree to receive marketing emails. Unsubscribe anytime."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter",
+      "settings": {
+        "heading": "Join our community",
+        "subtext": "Be the first to know about new arrivals, exclusive offers, and our latest stories.",
+        "layout": "stacked",
+        "color_scheme": "scheme-3"
+      }
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

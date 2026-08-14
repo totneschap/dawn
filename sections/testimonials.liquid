@@ -1,0 +1,400 @@
+<div class="testimonials full-width color-{{ section.settings.color_scheme }}">
+
+  {%- if section.settings.heading != blank or section.settings.subtext != blank -%}
+    <div class="testimonials__header">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="testimonials__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subtext != blank -%}
+        <p class="testimonials__subtext">{{ section.settings.subtext }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- if section.blocks.size > 0 -%}
+    <div
+      class="testimonials__track-wrap"
+      id="testimonials-wrap-{{ section.id }}"
+      style="--t-cols: {{ section.settings.columns_desktop }};"
+    >
+      <ul
+        class="testimonials__track"
+        id="testimonials-track-{{ section.id }}"
+        role="list"
+      >
+        {%- for block in section.blocks -%}
+          <li class="testimonials__item" {{ block.shopify_attributes }}>
+            <blockquote class="testimonial">
+
+              {%- if section.settings.show_stars -%}
+                <div class="testimonial__stars" aria-label="{{ block.settings.rating }} out of 5 stars">
+                  {%- assign rating = block.settings.rating | default: 5 -%}
+                  {%- for i in (1..5) -%}
+                    <span class="testimonial__star{% if i > rating %} testimonial__star--empty{% endif %}" aria-hidden="true">★</span>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+
+              <p class="testimonial__quote">{{ block.settings.quote }}</p>
+
+              <footer class="testimonial__footer">
+                {%- if block.settings.avatar != blank -%}
+                  {%- assign avatar_alt = block.settings.author | default: '' | escape -%}
+                  {{ block.settings.avatar | image_url: width: 80 | image_tag:
+                    loading: 'lazy',
+                    alt: avatar_alt,
+                    class: 'testimonial__avatar',
+                    width: 40,
+                    height: 40
+                  }}
+                {%- endif -%}
+                <div class="testimonial__author-info">
+                  {%- if block.settings.author != blank -%}
+                    <cite class="testimonial__author">{{ block.settings.author }}</cite>
+                  {%- endif -%}
+                  {%- if block.settings.location != blank -%}
+                    <span class="testimonial__location">{{ block.settings.location }}</span>
+                  {%- endif -%}
+                </div>
+              </footer>
+
+            </blockquote>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      <!-- Nav arrows (only if more blocks than columns) -->
+      {%- if section.blocks.size > section.settings.columns_desktop -%}
+        <button
+          type="button"
+          class="testimonials__nav testimonials__nav--prev"
+          id="t-prev-{{ section.id }}"
+          aria-label="Previous testimonials"
+        >&larr;</button>
+        <button
+          type="button"
+          class="testimonials__nav testimonials__nav--next"
+          id="t-next-{{ section.id }}"
+          aria-label="Next testimonials"
+        >&rarr;</button>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+</div>
+
+{% stylesheet %}
+
+.testimonials {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  padding: var(--section-spacing, 6rem) var(--page-margin, 2rem);
+  overflow: hidden;
+}
+
+.testimonials__header {
+  text-align: left;
+  margin-bottom: 4rem;
+}
+
+.testimonials__heading {
+  font-size: clamp(var(--text-h3, 2.8rem), 4vw, var(--text-h2, 3.6rem));
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: var(--font-heading--letter-spacing, 0);
+}
+
+.testimonials__subtext {
+  font-size: 1.4rem;
+  opacity: 0.55;
+  margin-top: 1rem;
+  line-height: 1.65;
+  max-width: 48ch;
+}
+
+/* Track wrap — relative parent for nav arrows */
+.testimonials__track-wrap {
+  position: relative;
+  max-width: var(--page-width, 1200px);
+  margin: 0 auto;
+}
+
+/* Track — scrollable on mobile, grid on desktop */
+.testimonials__track {
+  display: grid;
+  grid-template-columns: repeat(var(--t-cols, 3), minmax(28rem, 1fr));
+  gap: 2.4rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.testimonials__track::-webkit-scrollbar { display: none; }
+
+@media screen and (min-width: 750px) {
+  .testimonials__track {
+    overflow-x: visible;
+    scroll-snap-type: none;
+    grid-template-columns: repeat(var(--t-cols, 3), 1fr);
+  }
+}
+
+.testimonials__item {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* Testimonial card */
+.testimonial {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  padding: 3.2rem;
+  border: 1px solid var(--color-border);
+  height: 100%;
+}
+
+.testimonial__stars {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.testimonial__star {
+  font-size: 1.6rem;
+  color: var(--color-text);
+}
+
+.testimonial__star--empty {
+  opacity: 0.2;
+}
+
+.testimonial__quote {
+  font-family: var(--font-heading--family, serif);
+  font-size: clamp(1.5rem, 2vw, 1.8rem);
+  line-height: 1.6;
+  font-style: italic;
+  flex: 1;
+}
+
+.testimonial__quote::before { content: '\201C'; }
+.testimonial__quote::after  { content: '\201D'; }
+
+.testimonial__footer {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: auto;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.testimonial__avatar {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.testimonial__author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.testimonial__author {
+  font-size: 1.3rem;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.testimonial__location {
+  font-size: 1.2rem;
+  opacity: 0.5;
+}
+
+/* Nav buttons */
+.testimonials__nav {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4.4rem;
+  height: 4.4rem;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-background);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  font-size: 1.6rem;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  z-index: 2;
+}
+
+.testimonials__nav:hover {
+  background: var(--color-text);
+  color: var(--color-background);
+}
+
+.testimonials__nav--prev { left: -5.6rem; }
+.testimonials__nav--next { right: -5.6rem; }
+
+@media screen and (min-width: 990px) {
+  .testimonials__nav { display: flex; }
+}
+
+{% endstylesheet %}
+
+{% javascript %}
+(function () {
+  var track   = document.getElementById('testimonials-track-{{ section.id }}');
+  var prevBtn = document.getElementById('t-prev-{{ section.id }}');
+  var nextBtn = document.getElementById('t-next-{{ section.id }}');
+
+  if (!track || !prevBtn || !nextBtn) return;
+
+  function getScrollAmount() {
+    var item = track.querySelector('.testimonials__item');
+    if (!item) return 340;
+    var style = window.getComputedStyle(track);
+    var gap = parseFloat(style.columnGap) || 0;
+    return item.offsetWidth + gap;
+  }
+
+  prevBtn.addEventListener('click', function () {
+    track.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+  });
+
+  nextBtn.addEventListener('click', function () {
+    track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+  });
+})();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "max_blocks": 12,
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "The quality is exceptional and the customer service team went above and beyond. I'll definitely be ordering again."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author name",
+          "default": "Sarah M."
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location or title",
+          "default": "Verified buyer"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Star rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "image_picker",
+          "id": "avatar",
+          "label": "Avatar photo"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What our customers say"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Subtext"
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stars",
+      "label": "Show star ratings",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Absolutely love everything about this brand. The quality is outstanding and the packaging is beautiful.",
+            "author": "Emma T.",
+            "location": "Verified buyer",
+            "rating": 5
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Fast delivery, exactly as described, and the fit is perfect. This is my third order and I'm never disappointed.",
+            "author": "James R.",
+            "location": "Verified buyer",
+            "rating": 5
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Exceptional quality and the customer service team went above and beyond when I had a question. Highly recommend.",
+            "author": "Sophie W.",
+            "location": "Verified buyer",
+            "rating": 5
+          }
+        }
+      ],
+      "settings": {
+        "heading": "What our customers say",
+        "columns_desktop": "3",
+        "show_stars": true,
+        "color_scheme": "scheme-2"
+      }
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

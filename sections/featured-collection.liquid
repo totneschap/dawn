@@ -1,0 +1,521 @@
+{%- assign collection = section.settings.collection -%}
+
+<div class="featured-collection full-width color-{{ section.settings.color_scheme }}">
+
+  <!-- Header -->
+  <div class="featured-collection__header">
+    <div class="featured-collection__header-text">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="featured-collection__heading">
+          {{- section.settings.heading -}}
+          {%- if section.settings.view_all and collection != blank -%}
+            <a href="{{ collection.url }}" class="featured-collection__view-all">
+              {{ section.settings.view_all_label | default: 'View collection' }}
+            </a>
+          {%- endif -%}
+        </h2>
+      {%- endif -%}
+      {%- if section.settings.subtext != blank -%}
+        <p class="featured-collection__subtext">{{ section.settings.subtext }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <!-- Carousel -->
+  {%- if collection != blank and collection.products.size > 0 -%}
+    <div class="featured-collection__slider" data-slider>
+      <ul
+        class="featured-collection__track"
+        role="list"
+        style="--fc-cols: {{ section.settings.columns_desktop }};"
+        data-track
+      >
+        {%- assign limit = section.settings.products_to_show -%}
+        {%- for product in collection.products limit: limit -%}
+          <li class="featured-collection__slide">
+            {%- render 'product-card',
+              card_product: product,
+              show_vendor: section.settings.show_vendor
+            -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+
+    <!-- Controls below slider -->
+    <div class="featured-collection__controls">
+      <div class="featured-collection__nav">
+        <button class="featured-collection__nav-btn" data-dir="prev" aria-label="Previous">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="featured-collection__nav-btn" data-dir="next" aria-label="Next">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+  {%- elsif collection == blank -%}
+    <div class="featured-collection__slider" data-slider>
+      <ul
+        class="featured-collection__track"
+        role="list"
+        style="--fc-cols: {{ section.settings.columns_desktop }};"
+        data-track
+      >
+        {%- for i in (1..section.settings.products_to_show) -%}
+          <li class="featured-collection__slide">
+            <div class="featured-collection__placeholder-card">
+              <div class="featured-collection__placeholder-media"></div>
+              <div class="featured-collection__placeholder-info">
+                <div class="featured-collection__placeholder-title"></div>
+                <div class="featured-collection__placeholder-price"></div>
+              </div>
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+    <div class="featured-collection__controls">
+      <div class="featured-collection__nav">
+        <button class="featured-collection__nav-btn" data-dir="prev" aria-label="Previous" disabled>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="featured-collection__nav-btn" data-dir="next" aria-label="Next">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  {%- endif -%}
+
+</div>
+
+{% stylesheet %}
+
+.featured-collection {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  padding: var(--section-spacing, 6rem) var(--page-margin, 2rem);
+}
+
+/* Header */
+.featured-collection__header {
+  margin-bottom: 3.2rem;
+  max-width: var(--page-width, 1200px);
+}
+
+.featured-collection__heading {
+  font-size: clamp(var(--text-h3, 2.8rem), 4vw, var(--text-h2, 3.6rem));
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: var(--font-heading--letter-spacing, 0);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+}
+
+.featured-collection__view-all {
+  font-size: 1.3rem;
+  font-family: var(--font-body--family, sans-serif);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: currentColor;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.15rem;
+  white-space: nowrap;
+  font-weight: 400;
+  transition: opacity 0.2s ease;
+}
+.featured-collection__view-all:hover { opacity: 0.5; }
+
+.featured-collection__subtext {
+  font-size: 1.4rem;
+  opacity: 0.55;
+  margin-top: 1rem;
+  max-width: 48ch;
+}
+
+/* Controls row below slider */
+.featured-collection__controls {
+  margin-top: 2.4rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Nav buttons */
+.featured-collection__nav {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.featured-collection__nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border: 1px solid var(--color-border, currentColor);
+  border-radius: 50%;
+  background: transparent;
+  color: currentColor;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.featured-collection__nav-btn:hover {
+  background: var(--color-text);
+  color: var(--color-background);
+  border-color: var(--color-text);
+}
+
+.featured-collection__nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Slider wrapper — clips overflow */
+.featured-collection__slider {
+  overflow: hidden;
+}
+
+/* Scrollable track */
+.featured-collection__track {
+  display: flex;
+  gap: 2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+}
+
+.featured-collection__track:active { cursor: grabbing; }
+.featured-collection__track::-webkit-scrollbar { display: none; }
+
+/* Each slide — mobile: 1.2 visible, desktop: cols from setting */
+.featured-collection__slide {
+  flex: 0 0 calc(80% - 1rem);
+  scroll-snap-align: start;
+}
+
+@media screen and (min-width: 750px) {
+  .featured-collection__slide {
+    flex: 0 0 calc(
+      (100% - (var(--fc-cols, 4) - 1) * 2rem) / var(--fc-cols, 4)
+    );
+  }
+}
+
+
+/* Product card — matches collection and search */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.product-card__media-link {
+  display: block;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.product-card__media {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: rgba(0,0,0,0.04);
+  border-radius: var(--style-card-radius, 0);
+}
+
+.product-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.product-card__img--secondary {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.product-card__media-wrap:hover .product-card__img--primary  { transform: scale(1.02); }
+.product-card__media-wrap:hover .product-card__img--secondary { opacity: 1; }
+
+.product-card__no-image { width: 100%; height: 100%; background: rgba(0,0,0,0.06); }
+
+.product-card__badge {
+  position: absolute;
+  top: 1.2rem;
+  left: 1.2rem;
+  background: var(--color-text);
+  color: var(--color-background);
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.8rem;
+}
+
+.product-card__badge--sold-out {
+  background: rgba(0,0,0,0.35);
+  color: #fff;
+}
+
+.product-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.product-card__vendor {
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.product-card__title {
+  font-family: var(--font-heading--family, serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: var(--font-heading--letter-spacing, 0);
+}
+
+.product-card__title-link {
+  text-decoration: none;
+  color: currentColor;
+}
+
+.product-card__title-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.product-card__price {
+  font-size: 1.4rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.product-card__price-compare { opacity: 0.5; text-decoration: line-through; }
+.product-card__price-sale    { color: #a93226; }
+
+/* Placeholders */
+.featured-collection__placeholder-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.featured-collection__placeholder-media {
+  aspect-ratio: 1 / 1;
+  background: rgba(0,0,0,0.07);
+  border-radius: var(--style-card-radius, 0);
+}
+
+.featured-collection__placeholder-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.4rem 0;
+}
+
+.featured-collection__placeholder-title {
+  height: 1.4rem;
+  width: 70%;
+  background: rgba(0,0,0,0.07);
+}
+
+.featured-collection__placeholder-price {
+  height: 1.2rem;
+  width: 40%;
+  background: rgba(0,0,0,0.05);
+}
+
+{% endstylesheet %}
+
+{% javascript %}
+(function () {
+
+  /* ── Carousel ── */
+  document.querySelectorAll('.featured-collection').forEach(function (section) {
+    var track = section.querySelector('[data-track]');
+    if (!track) return;
+
+    var prevBtn = section.querySelector('[data-dir="prev"]');
+    var nextBtn = section.querySelector('[data-dir="next"]');
+
+    function slideWidth() {
+      var slide = track.querySelector('.featured-collection__slide');
+      if (!slide) return 0;
+      var gap = parseFloat(getComputedStyle(track).gap) || 0;
+      return slide.offsetWidth + gap;
+    }
+
+    function updateButtons() {
+      if (!prevBtn || !nextBtn) return;
+      prevBtn.disabled = track.scrollLeft <= 1;
+      nextBtn.disabled = track.scrollLeft + track.offsetWidth >= track.scrollWidth - 1;
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', function () {
+        track.scrollBy({ left: -slideWidth(), behavior: 'smooth' });
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function () {
+        track.scrollBy({ left: slideWidth(), behavior: 'smooth' });
+      });
+    }
+
+    track.addEventListener('scroll', updateButtons, { passive: true });
+    updateButtons();
+  });
+
+  /* ── Quick add ── */
+  if (!window.__siennaQuickAdd) {
+    window.__siennaQuickAdd = true;
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('.product-card__quick-add-btn');
+      if (!btn) return;
+      var variantId = btn.dataset.variantId;
+      if (!variantId) return;
+
+      var origText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Adding…';
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        body: JSON.stringify({ id: parseInt(variantId, 10), quantity: 1 })
+      })
+        .then(function (r) {
+          if (!r.ok) throw new Error('Error');
+          return fetch('/cart.js');
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (cart) {
+          document.dispatchEvent(new CustomEvent('cart:updated', { detail: { item_count: cart.item_count } }));
+          document.dispatchEvent(new CustomEvent('cart:open-drawer'));
+          btn.textContent = 'Added!';
+          setTimeout(function () { btn.textContent = origText; btn.disabled = false; }, 1800);
+        })
+        .catch(function () {
+          btn.textContent = 'Error';
+          setTimeout(function () { btn.textContent = origText; btn.disabled = false; }, 2000);
+        });
+    });
+  }
+})();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured collection"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Subtext"
+    },
+    {
+      "type": "header",
+      "content": "Collection"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "options": [
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "view_all",
+      "label": "Show 'View all' button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "Button label",
+      "default": "View all"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured collection",
+      "settings": {
+        "heading": "Featured collection",
+        "products_to_show": 4,
+        "columns_desktop": "4",
+        "view_all": true
+      }
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

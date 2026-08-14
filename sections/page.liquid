@@ -1,0 +1,80 @@
+<div class="page-content full-width color-{{ section.settings.color_scheme }}">
+  <div class="page-content__inner{% if section.settings.content_width == 'narrow' %} page-content__inner--narrow{% endif %}">
+
+    {%- if section.settings.show_title -%}
+      <h1 class="page-content__title">{{ page.title }}</h1>
+    {%- endif -%}
+
+    <div class="rte page-content__rte">
+      {{ page.content }}
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+
+.page-content {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  padding: 5rem 0 7rem;
+}
+
+.page-content__inner {
+  max-width: var(--page-width, 120rem);
+  margin: 0 auto;
+  padding: 0 var(--page-margin, 2rem);
+}
+
+.page-content__inner--narrow {
+  max-width: 72ch;
+}
+
+.page-content__title {
+  font-size: clamp(var(--text-h3, 2.8rem), 5vw, var(--text-h2, 3.6rem));
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: 3.6rem;
+  padding-bottom: 3.2rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.page-content__rte {
+  font-size: 1.6rem;
+  line-height: 1.8;
+}
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Page",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Show page title",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Content width",
+      "options": [
+        { "value": "narrow", "label": "Narrow (reading width)" },
+        { "value": "wide",   "label": "Wide (full page width)" }
+      ],
+      "default": "narrow"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

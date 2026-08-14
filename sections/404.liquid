@@ -1,0 +1,159 @@
+<div class="error-page full-width color-{{ section.settings.color_scheme }}">
+  <div class="error-page__inner">
+
+    <p class="error-page__number" aria-hidden="true">404</p>
+
+    <div class="error-page__content">
+      <h1 class="error-page__title">{{ '404.not_found' | t }}</h1>
+      <p class="error-page__message">
+        The page you were looking for doesn't exist. Try searching for what you need.
+      </p>
+
+      <form
+        action="{{ routes.search_url }}"
+        method="get"
+        role="search"
+        class="error-page__search"
+      >
+        <input type="hidden" name="type" value="product,article,page">
+        <div class="error-page__search-field">
+          <input
+            type="search"
+            name="q"
+            class="error-page__search-input"
+            placeholder="Search our store"
+            aria-label="Search our store"
+            autocomplete="off"
+          >
+          <button type="submit" class="button error-page__search-btn">
+            Search
+          </button>
+        </div>
+      </form>
+
+      <div class="error-page__links">
+        <a href="{{ routes.root_url }}" class="button button--outline">
+          Back to home
+        </a>
+        <a href="{{ routes.all_products_collection_url }}" class="button">
+          Shop all
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+
+.error-page {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  padding: 6rem var(--page-margin, 2rem);
+  min-height: 65vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-page__inner {
+  text-align: center;
+  max-width: 52rem;
+  width: 100%;
+  position: relative;
+}
+
+.error-page__number {
+  font-family: var(--font-heading--family, serif);
+  font-size: clamp(10rem, 22vw, 20rem);
+  font-weight: 400;
+  line-height: 0.85;
+  opacity: 0.07;
+  color: var(--color-text);
+  margin-bottom: -0.5rem;
+  pointer-events: none;
+}
+
+.error-page__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.4rem;
+}
+
+.error-page__title {
+  font-size: clamp(var(--text-h3, 2.8rem), 4vw, var(--text-h2, 3.6rem));
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.error-page__message {
+  font-size: 1.5rem;
+  line-height: 1.7;
+  opacity: 0.65;
+  max-width: 40rem;
+}
+
+/* Search form */
+.error-page__search {
+  width: 100%;
+  max-width: 44rem;
+}
+
+.error-page__search-field {
+  display: flex;
+  border: 1px solid var(--color-border);
+}
+
+.error-page__search-input {
+  flex: 1;
+  height: 5rem;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0 1.4rem;
+  font-family: var(--font-body--family, sans-serif);
+  font-size: 1.4rem;
+  color: var(--color-text);
+  min-width: 0;
+}
+
+.error-page__search-input::placeholder { opacity: 0.45; }
+.error-page__search-input::-webkit-search-cancel-button { display: none; }
+
+.error-page__search-btn {
+  height: 5rem;
+  padding: 0 2rem;
+  font-size: 1.3rem;
+  border-radius: 0;
+  flex-shrink: 0;
+}
+
+/* CTA links */
+.error-page__links {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.8rem;
+}
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "404",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}
